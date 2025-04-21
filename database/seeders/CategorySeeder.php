@@ -15,9 +15,12 @@ class CategorySeeder extends Seeder
     {
         DB::table("categories")->insert([
             ["name" => "Appetizer"],
-            ["name" => "Appetizer"],
-            ["name" => "Appetizer"],
-            ["name" => "Appetizer"],
-        ]);
+            ["name" => "Main Course"],
+            ["name" => "Snack"],
+            ["name" => "Dessert"],
+            ["name" => "Coffee"],
+            ["name" => "Non Coffee"],
+            ["name" => "Healthy Juice"],
+        ]);        
     }
 }

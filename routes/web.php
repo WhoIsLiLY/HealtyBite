@@ -1,7 +1,10 @@
 <?php
 
-use App\Http\Controllers\WelcomeController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\FoodController;
+use App\Http\Controllers\TestController;
+use App\Http\Controllers\WelcomeController;
+use App\Http\Controllers\CategoryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,21 +18,22 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function(){
-    $testimonials = [
-        // Contoh data testimonial
-        [
-            'name' => 'John Doe',
-            'image' => 'https://via.placeholder.com/150',
-            'username' => 'johndoe',
-            'testimonial' => 'Great work!'
-        ],
-        // Tambahkan testimonial lainnya
-    ];
+    // $testimonials = [
+    //     // Contoh data testimonial
+    //     [
+    //         'name' => 'John Doe',
+    //         'image' => 'https://via.placeholder.com/150',
+    //         'username' => 'johndoe',
+    //         'testimonial' => 'Great work!'
+    //     ],
+    //     // Tambahkan testimonial lainnya
+    // ];
 
-    $firstRow = array_slice($testimonials, 0, count($testimonials) / 2);
-    $secondRow = array_slice($testimonials, count($testimonials) / 2);
+    // $firstRow = array_slice($testimonials, 0, count($testimonials) / 2);
+    // $secondRow = array_slice($testimonials, count($testimonials) / 2);
 
-    return view('home', compact('firstRow', 'secondRow'));
+    // return view('home', compact('firstRow', 'secondRow'));
+    return view("index");
 });
 Route::get('/welcome', function () {
     return 'Selamat Datang';
@@ -73,4 +77,71 @@ Route::get('/welcome', function($name){
 });
 
 // Melewati controller terlebih dahulu untuk mengembalikan view
-Route::get('/welcome', [WelcomeController::class, 'index']);
+Route::get('/welcome', [WelcomeController::class, 'index'])->name("home");
+
+Route::get("/welcome", 
+[TestController::class, "welcome"])->name
+("home");
+
+// Route::get("/before_order", function () {
+//     return view("before");
+// });
+
+Route::get("/before_order", 
+    [TestController::class, "beforeOrder"]);
+
+// Route::get("/menu/{type?}", function ($type = "") {
+//     if ($type == "dinein") {
+//         return "tampilan menu-menu yang bisa dipesan dalam dine-in";
+//     } else if ($type == "takeaway") {
+//         return "tampilan menu-menu yang bisa dipesan dalam takeaway.";
+//     }
+//     return "404 not found";
+// })->name(name: "menu");
+
+Route::get("/menu/{type?}",
+[TestController::class, "menu"] )->name
+(name: "menu");
+
+// Route::get("/admin/{type?}", function ($type = "") {
+//     if ($type == "categories") {
+//         //return "daftar kategori menu bentuk table seperti: appetizer, main-course, dessert";
+//         return view("admin", 
+//         ["type" => $type] );
+//     } else if ($type == "order") {
+//         //return "daftar seluruh order bentuk table";
+//         return view("admin", 
+//         ["type" => $type] );
+//     } else if ($type == "members") {
+//         // return "daftar member bentuk table";
+//         return view("admin", 
+//         ["type" => $type] );
+//     }
+//     return "404 not found";
+// });
+
+Route::get("/admin/{type?}", 
+[TestController::class, "admin"]);
+Route::post("/categories/showListFoods", [CategoryController::class, "showListFoods"])->name("category.showListFoods");
+
+// Route::get("/categories/showListFoods", [CategoryController::class, "showListFoods"])->name("category.showListFoods");
+Route::resource("/categories", CategoryController::class);
+
+Route::resource("/food", FoodController::class);
+
+Route::get("/tesquery", 
+[TestController::class,"tesQuery"]);
+
+//Route::get("/categories/showTotalFoods", [CategoryController::class, "showTotalFoods"]);
+
+Route::get("/testemplate/home/", function(){
+    return view("testemplate.home");
+});
+
+Route::get("/testemplate/search/", function(){
+    return view("testemplate.search");
+});
+
+Route::get("/testemplate/produk/{id}", function($id){
+    return view("testemplate.product", ["id" => $id]);
+});

@@ -1,13 +1,9 @@
-@extends('layouts.app')
+<h1>Welcome {{ $nama }} - {{ $angka }}</h1>
 
-@section('title', 'Home Page')
-
-@section('navbar')
-    @include('navbars.navbar-home')
-@endsection
-
-@section('content')
-    <h1 class="text-3xl font-bold text-blue-600">Welcome to Home Page</h1>
-    <p>This is the home page content.</p>
-    @yield()
-@endsection
+@if ($angka > 10)
+    <h1>Angkanya besar</h1>
+@elseif ($angka > 5)
+    <h1>Angkanya agak besar</h1>
+@else
+    <h1>Angkanya nggak besar</h1>
+@endif
