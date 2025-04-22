@@ -135,6 +135,11 @@
                         </button>
                     </div>
                 </form>
+                <div class="flex justify-center w-full mt-4">
+                    <a href="/restaurant/login" class="text-green-600 hover:underline">Login as a Restaurant Partner</a>
+                </div>
+                
+
             </div>
         </div>
     </div>
