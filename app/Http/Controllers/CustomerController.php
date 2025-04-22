@@ -3,6 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+
+;
 
 class CustomerController extends Controller
 {
@@ -20,7 +24,7 @@ class CustomerController extends Controller
 
     public function showOrder($id)
     {
-        $order = Auth::user()->orders()->findOrFail($id);
+        $order = Auth::user()->orders->findOrFail($id);
         return view('customer.orders.show', compact('order'));
     }
 }

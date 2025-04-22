@@ -43,12 +43,17 @@ Route::prefix('customer')->middleware('auth')->group(function () {
 Route::prefix('restaurant')->middleware('auth')->group(function () {
     Route::get('/dashboard', [RestaurantController::class, 'dashboard'])->name('restaurant.dashboard');
     Route::get('/orders', [RestaurantController::class, 'orders'])->name('restaurant.orders');
+    Route::get('/orders/top-order', [RestaurantController::class, 'topOrders'])->name('restaurant.orders.top');
+    Route::get('/orders/payment', [RestaurantController::class, 'orderByPayment'])->name('restaurant.orders.payment');
     Route::get('/menu', [RestaurantController::class, 'menuIndex'])->name('restaurant.menu');
+    Route::get('/menu/top-menu', [RestaurantController::class, 'topMenu'])->name('restaurant.menu.top');
     Route::get('/menu/create', [RestaurantController::class, 'menuCreate'])->name('restaurant.menu.create');
     Route::post('/menu', [RestaurantController::class, 'menuStore'])->name('restaurant.menu.store');
     Route::get('/menu/{id}/edit', [RestaurantController::class, 'menuEdit'])->name('restaurant.menu.edit');
     Route::put('/menu/{id}', [RestaurantController::class, 'menuUpdate'])->name('restaurant.menu.update');
     Route::delete('/menu/{id}', [RestaurantController::class, 'menuDelete'])->name('restaurant.menu.delete');
+    Route::get('review', [RestaurantController::class, 'getReview'])->name('restaurant.reviews');
+    Route::get('revenue', [RestaurantController::class, 'DailyRevenue'])->name('restaurant.revenue');
 });
 
 // ======= MENU & RESTAURANT DETAIL (UMUM / GUEST) ======= //
