@@ -11,6 +11,7 @@ class CustomerController extends Controller
     {
         $orders = [];
         // $orders = Auth::user()->orders;
+        // session()->flush();
         return view('customer.dashboard', compact('orders'));
     }
 

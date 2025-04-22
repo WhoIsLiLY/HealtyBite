@@ -74,7 +74,7 @@ $menus = [
 
                 <!-- Kontrol Penambahan -->
                 <template x-if="!added">
-                    <a href="/test/menus/{{ $id }}/addon/{{ $menu->id }}"
+                    <a href="/menus/{{ $id }}/addon/{{ $menu->id }}"
                     class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition">
                         Tambah
                     </a>
@@ -119,14 +119,14 @@ $menus = [
                                 if (qty <= 1) {
                                     added = false;
                                     qty = 1;
-                                    fetch('/test/menus/{{ $id }}/remove/{{ $menu->id }}')
+                                    fetch('menus/{{ $id }}/remove/{{ $menu->id }}')
                                     {{-- Endpoint hapus session --}}
                                 } else {
                                     qty--
                                 }">-</button>
                                 <span class="w-6 text-center" x-text="qty"></span>
                                 <button class="bg-green-500 text-white px-2 py-1 rounded hover:bg-green-600" @click="qty++">+</button>
-                                <a href="/test/menus/{{ $id }}/addon/{{ $menu->id }}"
+                                <a href="menus/{{ $id }}/addon/{{ $menu->id }}"
                                 class="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600 transition text-sm">
                                     Edit
                                 </a>
