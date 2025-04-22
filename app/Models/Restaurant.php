@@ -12,16 +12,21 @@ class Restaurant extends Authenticatable
 
     public function menus()
     {
-        return $this->hasMany(Menu::class);
+        return $this->hasMany(Menu::class,'menus_id');
     }
 
     public function reviews()
     {
-        return $this->hasMany(Review::class);
+        return $this->hasMany(Review::class, 'restaurants_id');
     }
 
     public function category()
     {
         return $this->belongsTo(RestaurantCategory::class, 'restaurant_categories_id');
+    }
+
+    public function orders()
+    {
+        return $this->hasMany(Order::class, 'restaurants_id');
     }
 }
