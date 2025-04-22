@@ -13,7 +13,7 @@ return new class extends Migration {
         Schema::create('list_orders', function (Blueprint $table) {
             $table->id();
             $table->foreignId('orders_id')->constrained()->onDelete('cascade');
-            $table->foreignId('menus_id')->constrained()->onDelete('cascade');
+            $table->foreignId('menus_id')->constrained('menus')->onDelete('cascade');
             $table->integer('quantity');
             $table->decimal('subtotal', 10, 2);
             $table->timestamps();

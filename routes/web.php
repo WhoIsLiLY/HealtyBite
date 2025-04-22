@@ -15,6 +15,16 @@ use App\Http\Controllers\OrderController;
 |
 */
 
+Route::get('/test', function () {
+    return view('customer.dashboard');
+});
+
+Route::get('/login', function () {
+    return view('auth.login');
+})->name('login');
+
+Route::post('/login', [App\Http\Controllers\LoginController::class, 'login']);
+
 Route::get('/dashboard', function () {
     if (auth()->user()->is_restaurant) {
         return redirect()->route('restaurant.dashboard');
@@ -47,4 +57,3 @@ Route::get('/restaurant/{id}', [RestaurantController::class, 'show'])->name('res
 
 // ======= ORDER (PEMESANAN MENU) ======= //
 Route::post('/order', [OrderController::class, 'store'])->middleware('auth')->name('order.store');
-

@@ -4,6 +4,7 @@
         <div>
             <a href="/menu" class="text-white mx-4">Menu</a>
             <a href="/orders" class="text-white">Orders</a>
+            <a href="/login" class="text-white">Logout</a>
         </div>
     </div>
 </nav>

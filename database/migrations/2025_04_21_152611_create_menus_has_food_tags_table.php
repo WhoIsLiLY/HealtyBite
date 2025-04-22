@@ -12,7 +12,7 @@ return new class extends Migration {
     {
         Schema::create('menus_has_food_tags', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('menus_id')->constrained()->onDelete('cascade');
+            $table->foreignId('menus_id')->constrained('menus')->onDelete('cascade');
             $table->foreignId('food_tags_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
