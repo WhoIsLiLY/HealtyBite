@@ -1,11 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\FoodController;
-use App\Http\Controllers\TestController;
-use App\Http\Controllers\WelcomeController;
-use App\Http\Controllers\CategoryController;
-
+use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\RestaurantController;
+use App\Http\Controllers\OrderController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -17,131 +15,36 @@ use App\Http\Controllers\CategoryController;
 |
 */
 
-Route::get('/', function(){
-    // $testimonials = [
-    //     // Contoh data testimonial
-    //     [
-    //         'name' => 'John Doe',
-    //         'image' => 'https://via.placeholder.com/150',
-    //         'username' => 'johndoe',
-    //         'testimonial' => 'Great work!'
-    //     ],
-    //     // Tambahkan testimonial lainnya
-    // ];
-
-    // $firstRow = array_slice($testimonials, 0, count($testimonials) / 2);
-    // $secondRow = array_slice($testimonials, count($testimonials) / 2);
-
-    // return view('home', compact('firstRow', 'secondRow'));
-    return view("index");
-});
-Route::get('/welcome', function () {
-    return 'Selamat Datang';
-});
-Route::get('/before-order', function () {
-    return 'Pilih DINE-IN atau Take Away';
-});
-Route::get('/menu/dinein/{id?}', function ($id="") {
-    return view('Daftar menu Dine-in');
-});
-Route::get('/menu/takeaway/{id}', function ($id="") {
-    return view('Daftar menu Take-away');
-});
-Route::get('/admin/{page?}/', function ($page="dashboard") {
-    if($page == "dashboard") return view('Portal Management: Daftar Kategori');
+Route::get('/dashboard', function () {
+    if (auth()->user()->is_restaurant) {
+        return redirect()->route('restaurant.dashboard');
+    }
+    return redirect()->route('customer.dashboard');
 });
 
-//name itu biasanya digunakan ketika mengakses route dengan <a href={{ route("home") }}> atau <a href={{ url("welcome") }}>
-Route::get('/welcome', function(){
-    return view('welcome');
-})->name('home');
-
-//name itu biasanya digunakan ketika mengakses route dengan <a href={{ route("home", [type->...]) }}> atau <a href={{ url("welcome") }}>
-Route::get('/welcome/{type}', function($type=""){
-    return view('welcome');
-})->name('home');
-
-
-/* JENIS ROUTING */
-// Langsung kembalikan view sesuai route tertentu menggunakan syntax view
-Route::view('/view', 'welcome');
-
-// Menggunakan http method GET atau yang lainnya untuk mengembalikan view
-Route::get('/welcome', function(){
-    return view('welcome');
+// ======= CUSTOMER ROUTES ======= //
+Route::prefix('customer')->middleware('auth')->group(function () {
+    Route::get('/dashboard', [CustomerController::class, 'dashboard'])->name('customer.dashboard');
+    Route::get('/orders', [CustomerController::class, 'orders'])->name('customer.orders');
+    Route::get('/order/{id}', [CustomerController::class, 'showOrder'])->name('customer.order.show');
 });
 
-// Menyertakan parameter untuk dikembalikan bersama view
-Route::get('/welcome', function($name){
-    return view('welcome', compact($name));
+// ======= RESTAURANT ROUTES ======= //
+Route::prefix('restaurant')->middleware('auth')->group(function () {
+    Route::get('/dashboard', [RestaurantController::class, 'dashboard'])->name('restaurant.dashboard');
+    Route::get('/orders', [RestaurantController::class, 'orders'])->name('restaurant.orders');
+    Route::get('/menu', [RestaurantController::class, 'menuIndex'])->name('restaurant.menu');
+    Route::get('/menu/create', [RestaurantController::class, 'menuCreate'])->name('restaurant.menu.create');
+    Route::post('/menu', [RestaurantController::class, 'menuStore'])->name('restaurant.menu.store');
+    Route::get('/menu/{id}/edit', [RestaurantController::class, 'menuEdit'])->name('restaurant.menu.edit');
+    Route::put('/menu/{id}', [RestaurantController::class, 'menuUpdate'])->name('restaurant.menu.update');
+    Route::delete('/menu/{id}', [RestaurantController::class, 'menuDelete'])->name('restaurant.menu.delete');
 });
 
-// Melewati controller terlebih dahulu untuk mengembalikan view
-Route::get('/welcome', [WelcomeController::class, 'index'])->name("home");
+// ======= MENU & RESTAURANT DETAIL (UMUM / GUEST) ======= //
+Route::get('/restaurants', [RestaurantController::class, 'index'])->name('restaurants.index');
+Route::get('/restaurant/{id}', [RestaurantController::class, 'show'])->name('restaurants.show');
 
-Route::get("/welcome", 
-[TestController::class, "welcome"])->name
-("home");
+// ======= ORDER (PEMESANAN MENU) ======= //
+Route::post('/order', [OrderController::class, 'store'])->middleware('auth')->name('order.store');
 
-// Route::get("/before_order", function () {
-//     return view("before");
-// });
-
-Route::get("/before_order", 
-    [TestController::class, "beforeOrder"]);
-
-// Route::get("/menu/{type?}", function ($type = "") {
-//     if ($type == "dinein") {
-//         return "tampilan menu-menu yang bisa dipesan dalam dine-in";
-//     } else if ($type == "takeaway") {
-//         return "tampilan menu-menu yang bisa dipesan dalam takeaway.";
-//     }
-//     return "404 not found";
-// })->name(name: "menu");
-
-Route::get("/menu/{type?}",
-[TestController::class, "menu"] )->name
-(name: "menu");
-
-// Route::get("/admin/{type?}", function ($type = "") {
-//     if ($type == "categories") {
-//         //return "daftar kategori menu bentuk table seperti: appetizer, main-course, dessert";
-//         return view("admin", 
-//         ["type" => $type] );
-//     } else if ($type == "order") {
-//         //return "daftar seluruh order bentuk table";
-//         return view("admin", 
-//         ["type" => $type] );
-//     } else if ($type == "members") {
-//         // return "daftar member bentuk table";
-//         return view("admin", 
-//         ["type" => $type] );
-//     }
-//     return "404 not found";
-// });
-
-Route::get("/admin/{type?}", 
-[TestController::class, "admin"]);
-Route::post("/categories/showListFoods", [CategoryController::class, "showListFoods"])->name("category.showListFoods");
-
-// Route::get("/categories/showListFoods", [CategoryController::class, "showListFoods"])->name("category.showListFoods");
-Route::resource("/categories", CategoryController::class);
-
-Route::resource("/food", FoodController::class);
-
-Route::get("/tesquery", 
-[TestController::class,"tesQuery"]);
-
-//Route::get("/categories/showTotalFoods", [CategoryController::class, "showTotalFoods"]);
-
-Route::get("/testemplate/home/", function(){
-    return view("testemplate.home");
-});
-
-Route::get("/testemplate/search/", function(){
-    return view("testemplate.search");
-});
-
-Route::get("/testemplate/produk/{id}", function($id){
-    return view("testemplate.product", ["id" => $id]);
-});
