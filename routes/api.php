@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Route;
 
 // AUTH
 Route::post('/register', 'AuthController@register');
-Route::post('/login', 'AuthController@login');
+Route::post('/login', 'LoginController@customerLogin');
 
 // CUSTOMERS
 Route::get('/customers', 'CustomerController@index');

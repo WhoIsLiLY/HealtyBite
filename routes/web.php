@@ -56,3 +56,82 @@ Route::get('/restaurant/{id}', [RestaurantController::class, 'show'])->name('res
 
 // ======= ORDER (PEMESANAN MENU) ======= //
 Route::post('/order', [OrderController::class, 'store'])->middleware('auth')->name('order.store');
+
+
+// PUNYA RAMA
+// Route::get('/test', function () {
+//     session()->flush();
+//     return view('customer.dashboard');
+// });
+
+// Route::get('/test/menus/{id}', function ($id) {
+//     return view('customer.menus.index', ['id' => $id]);
+// });
+
+// Route::get('/test/menus/{idresto}/addon/{idmenu}', function ($idresto, $idmenu) {
+//     // Dummy data menu
+//     $menus = [
+//         (object)[
+//             'id' => '1',
+//             'name' => 'Grilled Chicken Salad',
+//             'description' => 'Salad segar dengan dada ayam panggang rendah lemak.',
+//             'price' => 45000,
+//             'image_url' => 'https://via.placeholder.com/100x100?text=Salad',
+//         ],
+//         (object)[
+//             'id' => '2',
+//             'name' => 'Smoothie Berry',
+//             'description' => 'Minuman sehat dari buah berry alami tanpa gula tambahan.',
+//             'price' => 30000,
+//             'image_url' => 'https://via.placeholder.com/100x100?text=Smoothie',
+//         ],
+//         (object)[
+//             'id' => '3',
+//             'name' => 'Quinoa Bowl',
+//             'description' => 'Semangkuk quinoa dengan sayuran kukus dan saus tahini.',
+//             'price' => 50000,
+//             'image_url' => 'https://via.placeholder.com/100x100?text=Quinoa',
+//         ],
+//     ];
+
+//     // Cari menu berdasarkan ID
+//     $menu = collect($menus)->firstWhere('id', $idmenu);
+
+//     // Kalau nggak ketemu, abort
+//     if (!$menu) {
+//         abort(404, 'Menu tidak ditemukan.');
+//     }
+
+//     return view('customer.menus.addon', [
+//         'id_resto' => $idresto,
+//         'idmenu' => $idmenu,
+//         'menu' => $menu,
+//     ]);
+// });
+
+// Route::post('/test/menu/{resto_id}/addon/{menu_id}', function (Request $request, $resto_id, $menu_id) {
+//     // Ambil addons dari checkbox
+//     $addons = $request->input('addons', []); // default ke array kosong kalau tidak ada
+
+//     // Simpan ke session (contoh)
+//     session()->put("selected_addons.$menu_id", $addons);
+
+//     // Simpan status bahwa menu sudah ditambahkan
+//     $added = session()->get('added_menu_ids', []);
+//     if (!in_array($menu_id, $added)) {
+//         session()->push('added_menu_ids', $menu_id);
+//     }
+
+//     // Redirect kembali ke halaman menu
+//     return redirect("/test/menus/$resto_id");
+// })->name('addon.store');
+
+// //Hapus session addon
+// Route::get('/test/menus/{resto_id}/remove/{menu_id}', function ($resto_id, $menu_id) {
+//     $added = session()->get('added_menu_ids', []);
+//     $filtered = array_filter($added, fn($id) => $id != $menu_id);
+//     session()->put('added_menu_ids', $filtered);
+//     session()->forget("selected_addons.$menu_id");
+
+//     return response()->noContent();
+// });
