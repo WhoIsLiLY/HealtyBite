@@ -1,9 +1,11 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\LoginController;
+use App\Http\Controllers\OrderController;
+use App\Http\Controllers\WelcomeController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\RestaurantController;
-use App\Http\Controllers\OrderController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -15,32 +17,24 @@ use App\Http\Controllers\OrderController;
 |
 */
 
-Route::get('/test', function () {
-    return view('customer.dashboard');
+Route::middleware('guest')->group(function(){
+    Route::get('/', [WelcomeController::class, 'index']);
+    Route::get('/customer/login', [LoginController::class, 'showCustomerLoginForm'])->name('customer.login');
+    Route::post('/customer/login', [LoginController::class, 'customerLogin'])->name('customer.login');
+    Route::get('/restaurant/login', [LoginController::class, 'showAdminLoginForm'])->name('admin.login');
+    Route::post('/restaurant/login', [LoginController::class, 'adminLogin'])->name('admin.login');
 });
-
-Route::get('/login', function () {
-    return view('auth.login');
-})->name('login');
-
-Route::post('/login', [App\Http\Controllers\LoginController::class, 'login']);
-
-Route::get('/dashboard', function () {
-    if (auth()->user()->is_restaurant) {
-        return redirect()->route('restaurant.dashboard');
-    }
-    return redirect()->route('customer.dashboard');
-});
+Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
 // ======= CUSTOMER ROUTES ======= //
-Route::prefix('customer')->middleware('auth')->group(function () {
+Route::prefix('customer')->middleware('auth-customer')->group(function () {
     Route::get('/dashboard', [CustomerController::class, 'dashboard'])->name('customer.dashboard');
     Route::get('/orders', [CustomerController::class, 'orders'])->name('customer.orders');
     Route::get('/order/{id}', [CustomerController::class, 'showOrder'])->name('customer.order.show');
 });
 
 // ======= RESTAURANT ROUTES ======= //
-Route::prefix('restaurant')->middleware('auth')->group(function () {
+Route::prefix('restaurant')->middleware('auth-admin')->group(function () {
     Route::get('/dashboard', [RestaurantController::class, 'dashboard'])->name('restaurant.dashboard');
     Route::get('/orders', [RestaurantController::class, 'orders'])->name('restaurant.orders');
     Route::get('/orders/top-order', [RestaurantController::class, 'topOrders'])->name('restaurant.orders.top');

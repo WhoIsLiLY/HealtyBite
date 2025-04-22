@@ -8,7 +8,15 @@ use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
-    public function login(Request $request)
+    public function showCustomerLoginForm()
+    {
+        return view('customer.login');
+    }
+    public function showAdminLoginForm()
+    {
+        return view('admin.login');
+    }
+    public function customerLogin(Request $request)
     {
         // Validasi input
         $request->validate([
@@ -16,25 +24,36 @@ class LoginController extends Controller
             'password' => 'required',
         ]);
 
-        session(['user' => [
-            'email' => $request->email,
-            'name' => 'Dummy User',
-        ]]);
+        if (Auth::guard('customer')->attempt(['email' => $request->email, 'password' => $request->password])) {
+            return redirect()->route('customer.dashboard');
+        }
 
-        return redirect()->route('restaurant.dashboard');
+        return back()->withErrors([
+            'email' => 'Email atau password yang Anda masukkan salah.',
+        ]);
+    }
+    public function adminLogin(Request $request)
+    {
+        // Validasi input
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required',
+        ]);
 
-        // // Coba autentikasi
-        // $credentials = $request->only('email', 'password');
+        // Coba login dengan email dan password
+        if (Auth::guard('admin')->attempt(['email' => $request->email, 'password' => $request->password])) {
+            // Login berhasil, redirect ke dashboard
+            return redirect()->route('restaurant.dashboard');
+        }
 
-        // if (Auth::attempt($credentials)) {
-        //     // Jika berhasil login
-        //     $request->session()->regenerate();
-        //     return redirect()->route('restaurant.dashboard');
-        // }
-
-        // // Jika gagal login
-        // return back()->withErrors([
-        //     'email' => 'Email atau password salah.',
-        // ])->withInput();
+        // Jika login gagal
+        return back()->withErrors([
+            'email' => 'Email atau password yang Anda masukkan salah.',
+        ]);
+    }
+    public function logout(){
+        Auth::guard('customer')->logout();
+        Auth::guard('admin')->logout();
+        return redirect('/');
     }
 }

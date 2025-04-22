@@ -2,7 +2,7 @@
 
 @section('content')
     <h2 class="text-2xl font-bold mb-6">Login</h2>
-    <form action="{{ route('login') }}" method="POST" class="space-y-4">
+    <form action="{{ route('admin.login') }}" method="POST" class="space-y-4">
         @csrf
         <div>
             <label for="email" class="block text-sm font-medium">Email</label>

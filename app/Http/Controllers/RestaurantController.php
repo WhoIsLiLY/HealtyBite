@@ -2,18 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Order;
+use App\Models\Restaurant;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Models\Restaurant;
-use App\Models\Review;
-use App\Models\Order;
-use Illuminate\Support\Facades\DB;
 
 class RestaurantController extends Controller
 {
     public function dashboard()
     {
-        $restaurant = Auth::user()->restaurant;
+        $restaurant = [];
+        // $restaurant = Auth::user()->restaurant;
         return view('restaurant.dashboard', compact('restaurant'));
     }
 
@@ -114,7 +113,7 @@ class RestaurantController extends Controller
     }
 
     public function index()
-    {
+    {   
         $restaurants = Restaurant::all();
         return view('restaurants.index', compact('restaurants'));
     }

@@ -4,15 +4,13 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
-
-;
 
 class CustomerController extends Controller
 {
     public function dashboard()
     {
-        $orders = Auth::user()->orders;
+        $orders = [];
+        // $orders = Auth::user()->orders;
         return view('customer.dashboard', compact('orders'));
     }
 
