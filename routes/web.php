@@ -46,8 +46,8 @@ Route::prefix('restaurant')->middleware('auth-admin')->group(function () {
     Route::get('/menu/{id}/edit', [RestaurantController::class, 'menuEdit'])->name('restaurant.menu.edit');
     Route::put('/menu/{id}', [RestaurantController::class, 'menuUpdate'])->name('restaurant.menu.update');
     Route::delete('/menu/{id}', [RestaurantController::class, 'menuDelete'])->name('restaurant.menu.delete');
-    Route::get('review', [RestaurantController::class, 'getReview'])->name('restaurant.reviews');
-    Route::get('revenue', [RestaurantController::class, 'DailyRevenue'])->name('restaurant.revenue');
+    Route::get('/review', [RestaurantController::class, 'getReview'])->name('restaurant.reviews');
+    Route::get('/revenue', [RestaurantController::class, 'DailyRevenue'])->name('restaurant.revenue');
 });
 
 // ======= MENU & RESTAURANT DETAIL (UMUM / GUEST) ======= //

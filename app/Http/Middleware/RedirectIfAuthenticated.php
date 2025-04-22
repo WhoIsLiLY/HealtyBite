@@ -21,7 +21,7 @@ class RedirectIfAuthenticated
             return redirect()->route('customer.dashboard');
         }
         else if(Auth::guard('admin')->check()){
-            return redirect()->route('admin.dashboard');
+            return redirect()->route('restaurant.dashboard');
         }
         return $next($request);
     }

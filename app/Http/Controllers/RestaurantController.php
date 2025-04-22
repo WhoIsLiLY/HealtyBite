@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Menu;
 use App\Models\Order;
 use App\Models\Restaurant;
 use Illuminate\Http\Request;
@@ -13,33 +14,49 @@ class RestaurantController extends Controller
     public function dashboard()
     {
         $restaurant = [];
-        // $restaurant = Auth::user()->restaurant;
-        return view('restaurant.dashboard', compact('restaurant'));
+        $dailyRevenue = $this->DailyRevenue();  
+        
+        return view('restaurant.dashboard', compact('restaurant', 'dailyRevenue'));
     }
 
     public function orders()
     {
-        $orders = Auth::user()->restaurant->orders;
+        $orders = Auth::guard('admin')->user()->orders;
         return view('restaurant.orders.index', compact('orders'));
     }
 
 
     public function topOrders()
     {
-        $orders = Auth::user()->restaurant->orders()
-        ->orderByDesc('total_price')
+        $orders = Auth::guard('admin')->user()->orders()
+        ->orderBy('total_price', 'desc')
         ->take(5)
         ->with('customer') 
-        ->get();;
-        return view('restaurant.orders.index', compact('orders'));
+        ->get();
+
+        foreach($orders as $order){
+            echo "Order ID: " . $order->id . "<br>";
+            echo "Customer Name: " . $order->customer->name . "<br>";
+            echo "Total Price: Rp" . number_format($order->total_price, 0, ',', '.') . "<br>";
+            echo "Order Type: " . $order->order_type . "<br>";
+            echo "Status: " . $order->status . "<br>";
+            echo "<hr>";
+        }
     }
 
     public function orderByPayment()
     {
-        $ordersByPaymentMethod = Order::select('payment_method', DB::raw('COUNT(id) as order_count'))
-            ->where('restaurant_id', Auth::user()->restaurant->id)
-            ->groupBy('payment_method')
-            ->get();
+        $ordersByPaymentMethod = DB::table('orders')
+        ->join('payment_methods', 'orders.payment_methods_id', '=', 'payment_methods.id')
+        ->select('payment_methods.name as payment_method_name', DB::raw('COUNT(orders.id) as order_count'))
+        ->where('orders.restaurants_id', Auth::guard('admin')->id())
+        ->groupBy('payment_methods.name')
+        ->get();
+
+        foreach ($ordersByPaymentMethod as $order) {
+            echo "Payment Method: " . $order->payment_method_name . "<br>";
+            echo "Order Count: " . $order->order_count . "<br><br>";
+        }
     }
 
     public function menuIndex()
@@ -89,28 +106,45 @@ class RestaurantController extends Controller
     }
 
     public function topMenu(){
-        $restaurant = Auth::user()->restaurant; 
-        $topMenus = $restaurant->menus() 
-            ->withCount(['listOfOrders as order_count' => function ($query) {
-                $query->join('orders', 'orders.id', '=', 'list_of_orders.orders_id');
-            }])
-            ->orderBy('order_count', 'desc')
-            ->limit(5)
-            ->get(['name', 'order_count']);
+        $topMenus = Menu::where('restaurants_id', Auth::guard('admin')->user()->id)
+        ->withCount('listOrders') 
+        ->orderByDesc('list_orders_count')
+        ->take(5)
+        ->get();
+
+        foreach ($topMenus as $menu) {
+            echo "Menu Name: " . $menu->name . "<br>";
+            echo "Order Count: " . $menu->list_orders_count . "<br><br>";
+        }
+        
     }
 
     public function getReview()
     {
-        $review = Auth::user()->restaurant->reviews();
+        $review = Auth::guard('admin')->user()->reviews;
+        echo "<h3>Reviews</h3>";
+        foreach ($review as $r) {
+            echo "Title: " . $r->title . "<br>";
+            echo "Review: " . $r->comment . "<br>";
+            echo "Rating: " . $r->rating . "<br><br>";
+        }
     }
 
     public function DailyRevenue()
     {
-        $dailyRevenue = Order::selectRaw('DATE(time) as date, SUM(total_price) as total_revenue')
-        ->where('restaurant_id', Auth::user()->restaurant->id)
-        ->groupByRaw('DATE(time)')
+        $dailyRevenue = Order::selectRaw('DATE(created_at) as date, SUM(total_price) as total_revenue')
+        ->where('restaurants_id', Auth::guard('admin')->user()->id)
+        ->groupByRaw('DATE(created_at)')
         ->orderBy('date', 'desc')
         ->get();
+
+        $html ="";
+
+        foreach ($dailyRevenue as $revenue) {
+            $html .=  $revenue->date . " ";
+            $html .= $revenue->total_revenue;
+        }
+        return $html;
     }
 
     public function index()

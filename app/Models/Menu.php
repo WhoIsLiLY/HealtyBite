@@ -16,7 +16,7 @@ class Menu extends Model
 
     public function listOrders()
     {
-        return $this->hasMany(ListOrder::class);
+        return $this->hasMany(ListOrder::class, 'menus_id');
     }
 
     public function addons()
