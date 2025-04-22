@@ -5,11 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Healthy Food Ordering</title>
     @vite('resources/css/app.css') <!-- Gunakan Tailwind atau stylesheet lainnya -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body class="bg-gray-100">
     @include('partials.navbar')
 
-    <div class="container mx-auto py-8">
+    <div class="">>
         @yield('content')
     </div>
 

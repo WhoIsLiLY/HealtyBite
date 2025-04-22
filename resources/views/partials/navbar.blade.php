@@ -20,7 +20,9 @@
                 </form>
             @else
                 <!-- Belum login -->
-                <a href="{{ route('customer.login') }}" class="text-white mx-4">Login</a>
+                <button id="openLoginModal" class="bg-green-700 hover:bg-green-800 text-white font-semibold py-2 px-4 rounded shadow transition duration-300">
+                    Login
+                </button>
             @endif
         </div>
     </div>
