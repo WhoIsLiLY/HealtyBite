@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\LoginController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -18,7 +19,7 @@ use Illuminate\Support\Facades\Route;
 
 // AUTH
 Route::post('/register', 'AuthController@register');
-Route::post('/login', 'LoginController@customerLogin');
+Route::post('/login', [LoginController::class, 'customerLogin']);
 
 // CUSTOMERS
 Route::get('/customers', 'CustomerController@index');

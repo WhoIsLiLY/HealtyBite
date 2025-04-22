@@ -21,7 +21,7 @@ class CustomerAuthenticate
         }
         if (!Auth::guard('customer')->check()) {
             // Redirect ke login kalau belum login
-            return redirect()->route('customer.login');
+            return redirect('/');
         }
         
         return $next($request);
