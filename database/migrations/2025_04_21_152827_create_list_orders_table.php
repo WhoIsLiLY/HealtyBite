@@ -14,6 +14,7 @@ return new class extends Migration {
             $table->id();
             $table->foreignId('orders_id')->constrained()->onDelete('cascade');
             $table->foreignId('menus_id')->constrained('menus')->onDelete('cascade');
+            $table->text('detail');
             $table->integer('quantity');
             $table->decimal('subtotal', 10, 2);
             $table->timestamps();

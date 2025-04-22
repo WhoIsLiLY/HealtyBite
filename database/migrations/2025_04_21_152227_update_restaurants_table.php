@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('restaurants', function (Blueprint $table) {
-            $table->float('rating_avg')->default(0)->after('description');
+           
         });
     }
 
@@ -22,7 +22,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('restaurants', function (Blueprint $table) {
-            $table->dropColumn('rating_avg');
+           
         });
     }
 };

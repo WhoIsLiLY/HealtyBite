@@ -6,6 +6,7 @@ use App\Models\Order;
 use App\Models\Restaurant;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class RestaurantController extends Controller
 {
@@ -25,7 +26,7 @@ class RestaurantController extends Controller
 
     public function topOrders()
     {
-        $orders =  $orders = Auth::user()->restaurant->orders()
+        $orders = Auth::user()->restaurant->orders()
         ->orderByDesc('total_price')
         ->take(5)
         ->with('customer') 

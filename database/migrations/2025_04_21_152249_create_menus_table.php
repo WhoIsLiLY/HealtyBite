@@ -18,7 +18,7 @@ return new class extends Migration
             $table->decimal('price', 10, 2);
             $table->string('menu_image')->nullable();
             $table->integer('calorie')->nullable();
-            $table->json('nutrition_facts')->nullable();
+            $table->text('nutrition_facts')->nullable();
             $table->boolean('isAvailable')->default(true);
             $table->timestamps();
         });

@@ -13,8 +13,11 @@ return new class extends Migration {
         Schema::create('restaurants', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('address');
-            $table->text('description')->nullable();
+            $table->string('location');
+            $table->text('description')->nullable(); 
+            $table->string('email')->unique();
+            $table->string('password'); 
+            $table->string('phone_number');
             $table->foreignId('restaurant_categories_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });

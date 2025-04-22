@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('addons', function (Blueprint $table) {
-            $table->boolean('is_default')->default(false)->after('price');
+           
         });
     }
 
@@ -22,7 +22,6 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('addons', function (Blueprint $table) {
-            $table->dropColumn('is_default');
         });
     }
 };

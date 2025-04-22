@@ -17,7 +17,7 @@ return new class extends Migration {
             $table->foreignId('payment_methods_id')->constrained()->onDelete('cascade');
             $table->decimal('total_price', 10, 2);
             $table->enum('order_type', ['dine-in', 'take-away']);
-            $table->enum('status', ['pending', 'processing', 'ready', 'completed', 'cancelled'])->default('pending');
+            $table->enum('status', ['preparing', 'delivering', 'ready', 'completed', 'cancelled'])->default('preparing');
             $table->timestamps();
         });
     }

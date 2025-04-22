@@ -12,8 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('list_orders', function (Blueprint $table) {
-            $table->unsignedBigInteger('addons_id')->nullable()->after('menus_id');
-            $table->foreign('addons_id')->references('id')->on('addons')->onDelete('set null');
+        
         });
     }
 
@@ -23,8 +22,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('list_orders', function (Blueprint $table) {
-            $table->dropForeign(['addons_id']);
-            $table->dropColumn('addons_id');
+          
         });
     }
 };

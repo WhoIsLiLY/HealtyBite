@@ -12,9 +12,12 @@ return new class extends Migration {
     {
         Schema::create('addons', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('menus_id')->constrained('menus')->onDelete('cascade');
             $table->string('name');
             $table->decimal('price', 10, 2);
+            $table->enum('type', ['topping', 'extra'])->nullable(); 
+            $table->boolean('isAvailable')->default(true); 
+            $table->unsignedBigInteger('menu_id');
+            $table->foreign('menu_id')->references('id')->on('menus');
             $table->timestamps();
         });
     }
