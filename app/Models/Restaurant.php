@@ -12,7 +12,7 @@ class Restaurant extends Authenticatable
 
     public function menus()
     {
-        return $this->hasMany(Menu::class,'menus_id');
+        return $this->hasMany(Menu::class,'restaurants_id');
     }
 
     public function reviews()

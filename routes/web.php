@@ -5,6 +5,7 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\WelcomeController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\MenuController;
 use App\Http\Controllers\RestaurantController;
 /*
 |--------------------------------------------------------------------------
@@ -17,7 +18,7 @@ use App\Http\Controllers\RestaurantController;
 |
 */
 
-Route::middleware('guest')->group(function(){
+Route::middleware('guest')->group(function () {
     Route::get('/', [WelcomeController::class, 'index']);
     Route::get('/customer/login', [LoginController::class, 'showCustomerLoginForm'])->name('customer.login');
     Route::post('/customer/login', [LoginController::class, 'customerLogin'])->name('customer.login');
@@ -29,8 +30,13 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 // ======= CUSTOMER ROUTES ======= //
 Route::prefix('customer')->middleware('auth-customer')->group(function () {
     Route::get('/dashboard', [CustomerController::class, 'dashboard'])->name('customer.dashboard');
-    Route::get('/orders', [CustomerController::class, 'orders'])->name('customer.orders');
-    Route::get('/order/{id}', [CustomerController::class, 'showOrder'])->name('customer.order.show');
+    // ======= MENU & RESTAURANT DETAIL (UMUM / GUEST) ======= //
+    Route::get('/restaurants', [RestaurantController::class, 'index'])->name('restaurants.index');
+    Route::get('/restaurant/{id}', [RestaurantController::class, 'show'])->name('restaurants.show');
+    Route::get('/addons/menu/{id}', [MenuController::class, 'getAddons'])->name('addons.menu');
+    Route::get('/basket', [CustomerController::class, 'getBasketInfo'])->name('customer.basket');
+    Route::post('/basket', [CustomerController::class, 'insertDataBasket'])->name('customer.basket.add');
+    Route::get('/checkout', [CustomerController::class, 'getCheckout'])->name('customer.checkout');
 });
 
 // ======= RESTAURANT ROUTES ======= //
@@ -50,59 +56,17 @@ Route::prefix('restaurant')->middleware('auth-admin')->group(function () {
     Route::get('/revenue', [RestaurantController::class, 'DailyRevenue'])->name('restaurant.revenue');
 });
 
-// ======= MENU & RESTAURANT DETAIL (UMUM / GUEST) ======= //
-Route::get('/restaurants', [RestaurantController::class, 'index'])->name('restaurants.index');
-Route::get('/restaurant/{id}', [RestaurantController::class, 'show'])->name('restaurants.show');
+
 
 // ======= ORDER (PEMESANAN MENU) ======= //
 Route::post('/order', [OrderController::class, 'store'])->middleware('auth')->name('order.store');
 
 
-// PUNYA RAMA
-Route::get('/menus/{id}', function ($id) {
-    return view('customer.menus.index', ['id' => $id]);
-});
+// // PUNYA RAMA
+// Route::get('/menus/{id}', function ($id) {
+//     return view('customer.menus.index', ['id' => $id]);
+// });
 
-Route::get('/menus/{idresto}/addon/{idmenu}', function ($idresto, $idmenu) {
-    // Dummy data menu
-    $menus = [
-        (object)[
-            'id' => '1',
-            'name' => 'Grilled Chicken Salad',
-            'description' => 'Salad segar dengan dada ayam panggang rendah lemak.',
-            'price' => 45000,
-            'image_url' => 'https://via.placeholder.com/100x100?text=Salad',
-        ],
-        (object)[
-            'id' => '2',
-            'name' => 'Smoothie Berry',
-            'description' => 'Minuman sehat dari buah berry alami tanpa gula tambahan.',
-            'price' => 30000,
-            'image_url' => 'https://via.placeholder.com/100x100?text=Smoothie',
-        ],
-        (object)[
-            'id' => '3',
-            'name' => 'Quinoa Bowl',
-            'description' => 'Semangkuk quinoa dengan sayuran kukus dan saus tahini.',
-            'price' => 50000,
-            'image_url' => 'https://via.placeholder.com/100x100?text=Quinoa',
-        ],
-    ];
-
-    // Cari menu berdasarkan ID
-    $menu = collect($menus)->firstWhere('id', $idmenu);
-
-    // Kalau nggak ketemu, abort
-    if (!$menu) {
-        abort(404, 'Menu tidak ditemukan.');
-    }
-
-    return view('customer.menus.addon', [
-        'id_resto' => $idresto,
-        'idmenu' => $idmenu,
-        'menu' => $menu,
-    ]);
-});
 
 Route::post('/menu/{resto_id}/addon/{menu_id}', function (Request $request, $resto_id, $menu_id) {
     // Ambil addons dari checkbox

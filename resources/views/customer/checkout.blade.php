@@ -9,4 +9,5 @@
     </div>
 
     <a href="/payment" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Proceed to Payment</a>
+    
 @endsection

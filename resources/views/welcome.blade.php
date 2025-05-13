@@ -101,7 +101,7 @@
 
             <!-- Login Form -->
             <div class="mt-8">
-                <form id="/customerLoginForm" class="space-y-6" action="{{ route('customer.login') }}" method="POST">
+                <form id="customerLoginForm" class="space-y-6" action="#" method="POST">
                     @csrf
 
                     <!-- Email Input -->
@@ -178,7 +178,7 @@
                 formData.type = "user";
 
                 $.ajax({
-                    url: '/api/login',
+                    url: '/customer/login',
                     type: 'POST',
                     data: JSON.stringify(formData),
                     contentType: 'application/json',

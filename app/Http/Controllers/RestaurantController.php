@@ -11,6 +11,17 @@ use Illuminate\Support\Facades\DB;
 
 class RestaurantController extends Controller
 {
+    public function index()
+    {   
+        $restaurants = Restaurant::all();
+        return view('customer.restaurants.index', compact('restaurants'));
+    }
+
+    public function show($id)
+    {
+        $restaurant = Restaurant::with('menus')->findOrFail($id);
+        return view('customer.menus.index', compact('restaurant'));
+    }
     public function dashboard()
     {
         $restaurant = [];
@@ -145,17 +156,5 @@ class RestaurantController extends Controller
             $html .= $revenue->total_revenue;
         }
         return $html;
-    }
-
-    public function index()
-    {   
-        $restaurants = Restaurant::all();
-        return view('restaurants.index', compact('restaurants'));
-    }
-
-    public function show($id)
-    {
-        $restaurant = Restaurant::with('menus')->findOrFail($id);
-        return view('restaurants.show', compact('restaurant'));
     }
 }
