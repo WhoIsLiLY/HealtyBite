@@ -127,7 +127,7 @@
 
                     <!-- Submit Button -->
                     <div>
-                        <button type="submit"
+                        <button type="submit" id="loginButton"
                             class="w-full flex justify-center rounded-md bg-green-600 px-4 py-2 text-base 
                         font-semibold text-white shadow-sm hover:bg-green-500 
                         focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-600">
@@ -138,7 +138,7 @@
                 <div class="flex justify-center w-full mt-4">
                     <a href="/restaurant/login" class="text-green-600 hover:underline">Login as a Restaurant Partner</a>
                 </div>
-                
+
 
             </div>
         </div>
@@ -174,8 +174,17 @@
                     formData[item.name] = item.value;
                 });
 
-                // Tambahkan type jika dibutuhkan
                 formData.type = "user";
+
+                var $signInBtn = $('#loginButton');
+                var originalText = $signInBtn.html();
+
+                $signInBtn.html(`
+                    <svg class="animate-spin h-5 w-5 mx-auto text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4l3-3-3-3v4a8 8 0 00-8 8h4z"></path>
+                    </svg>
+                `).attr('disabled', true);
 
                 $.ajax({
                     url: '/customer/login',
@@ -196,25 +205,26 @@
                         }
                         var errorMessage = JSON.parse(jqXHR.responseText);
                         if (jqXHR.status == 400) {
-                            // Create the error message element
                             var errorMessageCss = $(
                                 '<div id="errMessage" class="bg-red-100 border border-red-400 text-red-700 px-4 py-2 rounded relative" role="alert">' +
                                 '<span class="block sm:inline">' + errorMessage.message +
                                 '</span>' +
                                 '</div>');
 
-                            // Append the error message element to the form
                             if (!$('#errMessage').is(':Visible')) {
                                 $('form').prepend(errorMessageCss);
-                                // Hide the error message after a delay (e.g., 5 seconds)
                                 setTimeout(function() {
                                     $('#errMessage').fadeOut('slow', function() {
                                         $('#errMessage').remove();
                                         errorMessageCss = null;
                                     });
-                                }, 4000); // 5000 milliseconds = 5 seconds
+                                }, 4000);
                             }
                         }
+                    },
+                    complete: function() {
+                        // Kembalikan tombol ke kondisi semula
+                        $signInBtn.html(originalText).attr('disabled', false);
                     }
                 });
             });

@@ -110,16 +110,16 @@
 
                 <div class="flex items-center border border-gray-300 rounded-lg w-fit overflow-hidden shadow-sm">
                     <button type="button" class="bg-gray-100 text-gray-700 px-3 py-2 hover:bg-gray-200"
-                            onclick="adjustQuantity(-1)">
+                        onclick="adjustQuantity(-1)">
                         –
                     </button>
 
                     <input type="number" id="quantityMenu" name="quantity" value="1" min="1"
-                           class="w-14 text-center text-gray-800 outline-none border-0 focus:ring-0 bg-white"
-                           oninput="updateTotalPrice()">
+                        class="w-14 text-center text-gray-800 outline-none border-0 focus:ring-0 bg-white"
+                        oninput="updateTotalPrice()">
 
                     <button type="button" class="bg-gray-100 text-gray-700 px-3 py-2 hover:bg-gray-200"
-                            onclick="adjustQuantity(1)">
+                        onclick="adjustQuantity(1)">
                         +
                     </button>
                 </div>
@@ -163,7 +163,7 @@
             <div class="mb-4">
                 <label class="block mb-2 font-medium">Your Orders:</label>
                 @csrf
-                <div id="basketList" class="space-y-3">
+                <div id="basketList" class="space-y-3 max-h-[450px] overflow-y-auto pr-1">
                     <!-- Akan diisi oleh jQuery AJAX -->
                     <p class="text-gray-500 text-sm" id="loadingOrder">Memuat Order...</p>
                 </div>
@@ -189,6 +189,19 @@
 
         let menuId = 0;
         let menuName = "";
+
+        function reset() {
+            $('#addonModal').addClass('hidden');
+            $("#totalMenuPrice").text(0);
+            $('#quantityMenu').val(1);
+            $('#note').val('');
+            totalMenuPrice = 0;
+            defaultMenuPrice = 0;
+            currentMenuPrice = 0;
+            addonsPrice = 0;
+            selectedAddons = [];
+            $('#addonList').html('');
+        }
 
         function openAddonModal(id, name) {
             menuId = id;
@@ -292,16 +305,7 @@
 
         $('#closeAddonModal, #addonModal').on('click', function(e) {
             if (e.target.id === 'addonModal' || e.target.id === 'closeAddonModal') {
-                $('#addonModal').addClass('hidden');
-                $("#totalMenuPrice").text(0);
-                $('#quantityMenu').val(1);
-                $('#note').val('');
-                totalMenuPrice = 0;
-                defaultMenuPrice = 0;
-                currentMenuPrice = 0;
-                addonsPrice = 0;
-                selectedAddons = [];
-                $('#addonList').html('');
+                reset();
             }
             // alert(totalMenuPrice);
         });
@@ -353,6 +357,7 @@
                 }
             });
             alert("Order berhasil ditambahkan");
+            reset();
             $('#addonModal').addClass('hidden');
         }
 
@@ -380,19 +385,19 @@
                     let html = '';
                     basket.forEach(function(menu) {
                         html += `
-        <div class="border rounded-xl p-4 mb-4 shadow-sm bg-white">
-            <div class="flex justify-between items-center">
-                <div>
-                    <div class="text-lg font-semibold text-gray-900">${menu.name}</div>
-                    <div class="text-sm text-gray-500">${menu.description ?? ''}</div>
-                    <div class="text-sm text-gray-600 mt-1">Jumlah: <span class="font-medium">${menu.quantity ?? 1}</span></div>
-                    ${menu.note ? `<div class="text-xs mt-1 text-yellow-600 italic">Note: ${menu.note}</div>` : ''}
-                </div>
-                <div class="text-right">
-                    <div class="text-base text-green-600 font-medium">Rp ${(Number(menu.price) * (menu.quantity ?? 1)).toLocaleString('id-ID')}</div>
-                </div>
-            </div>
-    `;
+                                    <div class="border rounded-xl p-4 mb-4 shadow-sm bg-white">
+                                        <div class="flex justify-between items-center">
+                                            <div>
+                                                <div class="text-lg font-semibold text-gray-900">${menu.name}</div>
+                                                <div class="text-sm text-gray-500">${menu.description ?? ''}</div>
+                                                <div class="text-sm text-gray-600 mt-1">Jumlah: <span class="font-medium">${menu.quantity ?? 1}</span></div>
+                                                ${menu.note ? `<div class="text-xs mt-1 text-yellow-600 italic">Note: ${menu.note}</div>` : ''}
+                                            </div>
+                                            <div class="text-right">
+                                                <div class="text-base text-green-600 font-medium">Rp ${(Number(menu.price) * (menu.quantity ?? 1)).toLocaleString('id-ID')}</div>
+                                            </div>
+                                        </div>
+                            `;
                         totalPrice += parseFloat((menu.price) * (menu.quantity ?? 1));
                         if (menu.addons.length > 0) {
                             html += `<div class="mt-3 border-t pt-2 space-y-1">`;
@@ -407,9 +412,8 @@
                                 }
                                 totalPrice += parseFloat(addon.price);
                             });
-                            html += `</div></div>`;
-
                         }
+                        html += `</div></div>`;
                     });
                     $('#basketList').html(html);
                     $('#totalPriceBasket').text(totalPrice.toLocaleString('id-ID'));
@@ -448,18 +452,20 @@
                 $('#basketModal').addClass('hidden');
             }
         });
-        function updateTotalMenuPrice(){
+
+        function updateTotalMenuPrice() {
             totalMenuPrice = currentMenuPrice + addonsPrice;
             $('#totalMenuPrice').text(totalMenuPrice.toLocaleString('id-ID'));
         }
-        function adjustQuantity(num){
+
+        function adjustQuantity(num) {
             const quantityMenu = document.getElementById('quantityMenu');
             const newQuantity = parseInt(quantityMenu.value) + num;
             if (newQuantity < 1) {
                 return;
             }
             quantityMenu.value = newQuantity.toString();
-        
+
             currentMenuPrice = newQuantity * defaultMenuPrice;
             updateTotalMenuPrice();
         }

@@ -41,6 +41,7 @@ class CustomerController extends Controller
         $menuId = $request->input('menu_id');
         $quantity = $request->input('quantity');
         $addons = $request->input('addons'); // Ini adalah array dari JavaScript
+        if($addons == null) $addons = [];
         $note = $request->input('note');
 
         $menuDetail = Menu::findOrFail($menuId)->toArray();
