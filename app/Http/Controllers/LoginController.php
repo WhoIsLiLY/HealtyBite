@@ -78,10 +78,11 @@ class LoginController extends Controller
             'email' => $request->email,
             'password' => $request->password
         ])) {
-            return response()->json([
-                'message' => 'Login berhasil',
-                'redirect_url' => route('restaurant.dashboard')
-            ]);
+            // return response()->json([
+            //     'message' => 'Login berhasil',
+            //     'redirect_url' => route('restaurant.dashboard')
+            // ]);
+            return redirect()->route('restaurant.dashboard');
         }
 
         return response()->json([
