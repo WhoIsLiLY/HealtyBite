@@ -13,10 +13,12 @@ class LoginController extends Controller
     {
         return view('customer.login');
     }
+
     public function showAdminLoginForm()
     {
         return view('admin.login');
     }
+
     public function customerLogin(Request $request)
     {
         // // Validasi input
@@ -58,25 +60,35 @@ class LoginController extends Controller
             'message' => 'Email atau password salah.',
         ], 400);
     }
+
     public function adminLogin(Request $request)
     {
-        // Validasi input
-        $request->validate([
+        $validator = Validator::make($request->all(), [
             'email' => 'required|email',
             'password' => 'required',
         ]);
 
-        // Coba login dengan email dan password
-        if (Auth::guard('admin')->attempt(['email' => $request->email, 'password' => $request->password])) {
-            // Login berhasil, redirect ke dashboard
-            return redirect()->route('restaurant.dashboard');
+        if ($validator->fails()) {
+            return response()->json([
+                'message' => $validator->errors()->first(),
+            ], 400);
         }
 
-        // Jika login gagal
-        return back()->withErrors([
-            'email' => 'Email atau password yang Anda masukkan salah.',
-        ]);
+        if (Auth::guard('admin')->attempt([
+            'email' => $request->email,
+            'password' => $request->password
+        ])) {
+            return response()->json([
+                'message' => 'Login berhasil',
+                'redirect_url' => route('restaurant.dashboard')
+            ]);
+        }
+
+        return response()->json([
+            'message' => 'Email atau password salah.',
+        ], 400);
     }
+
     public function logout()
     {
         Auth::guard('customer')->logout();
