@@ -20,7 +20,7 @@ class AdminAuthenticate
             abort(403, 'You are already logged in as a customer.');
         }
         if (!Auth::guard('admin')->check()) {
-            return redirect()->route('restaurant.login');
+            return redirect()->route('admin.login');
         }
 
 

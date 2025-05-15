@@ -7,6 +7,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Admin Dashboard</title>
     @vite('resources/css/app.css')
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 
 <body class="bg-gray-800 text-white">
@@ -34,7 +35,7 @@
 
                 <!-- Submit Button -->
                 <div>
-                    <button type="submit"
+                    <button type="submit" id ="loginButton"
                         class="w-full py-3 bg-green-600 text-white text-lg font-semibold rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-600 transition duration-300">
                         Sign in
                     </button>
@@ -48,5 +49,77 @@
         </div>
     </div>
 </body>
+
+<script>
+    $(document).ready(function () {
+        $('form').on('submit', function (e) {
+            e.preventDefault();
+
+            var formArray = $(this).serializeArray();
+            var formData = {};
+            formArray.forEach(function (item) {
+                formData[item.name] = item.value;
+            });
+
+            formData.type = "admin";
+
+            var $signInBtn = $('#loginButton');
+            var originalText = $signInBtn.html();
+
+            $signInBtn.html(`
+                <svg class="animate-spin h-5 w-5 mx-auto text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4l3-3-3-3v4a8 8 0 00-8 8h4z"></path>
+                </svg>
+            `).attr('disabled', true);
+
+            $.ajax({
+                url: '/restaurant/login',
+                type: 'POST',
+                data: JSON.stringify(formData),
+                contentType: 'application/json',
+                dataType: 'json',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function (response) {
+                    console.log(response);
+                    window.location.href = response.redirect_url;
+                },
+                error: function (jqXHR) {
+                    if (jqXHR.responseText) {
+                        console.error(jqXHR.responseText);
+                    }
+                    let errorMessage = {};
+                    try {
+                        errorMessage = JSON.parse(jqXHR.responseText);
+                    } catch (e) {
+                        errorMessage.message = "Login failed. Please try again.";
+                    }
+
+                    if (jqXHR.status === 400 || jqXHR.status === 401) {
+                        let errorHtml = `
+                            <div id="errMessage" class="bg-red-100 border border-red-400 text-red-700 px-4 py-2 rounded relative mb-4" role="alert">
+                                <span class="block sm:inline">${errorMessage.message}</span>
+                            </div>
+                        `;
+
+                        if (!$('#errMessage').is(':visible')) {
+                            $('form').prepend(errorHtml);
+                            setTimeout(function () {
+                                $('#errMessage').fadeOut('slow', function () {
+                                    $(this).remove();
+                                });
+                            }, 4000);
+                        }
+                    }
+                },
+                complete: function () {
+                    $signInBtn.html(originalText).attr('disabled', false);
+                }
+            });
+        });
+    });
+</script>
 
 </html>
