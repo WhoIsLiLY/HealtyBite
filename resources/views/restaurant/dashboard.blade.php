@@ -58,9 +58,10 @@
             <div>
                 <h2 class="text-2xl font-bold text-green-600">Menu Anda</h2>
             </div>
-            <button class="bg-green-600 text-white px-4 py-2 text-sm rounded-full hover:bg-green-700 transition">
+            <a href="{{ route('restaurant.menus') }}" 
+            class="inline-block bg-green-600 text-white px-4 py-2 text-sm rounded-full hover:bg-green-700 transition">
                 Selengkapnya
-            </button>
+            </a>
         </div>
 
         <!-- Menu Cards -->
@@ -99,7 +100,7 @@
                                 class="bg-green-600 text-white font-semibold px-5 py-3 rounded-xl hover:bg-green-700 transition">
                                 Top Order
                             </a>
-                            <a href="{{ route('restaurant.menu.top') }}"
+                            <a href="{{ route('restaurant.menus.top') }}"
                                 class="bg-green-600 text-white font-semibold px-5 py-3 rounded-xl hover:bg-green-700 transition">
                                 Top Menu
                             </a>

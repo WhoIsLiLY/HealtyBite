@@ -74,13 +74,13 @@ class RestaurantController extends Controller
 
     public function menuIndex()
     {
-        $menus = Auth::user()->restaurant->menus;
-        return view('restaurant.menu.index', compact('menus'));
+        $menus = Auth::guard('admin')->user()->menus;
+        return view('restaurant.menus.index', compact('menus'));
     }
 
     public function menuCreate()
     {
-        return view('restaurant.menu.create');
+        return view('restaurant.menus.create');
     }
 
     public function menuStore(Request $request)
@@ -93,13 +93,14 @@ class RestaurantController extends Controller
 
         Auth::user()->restaurant->menus()->create($request->all());
 
-        return redirect()->route('restaurant.menu')->with('success', 'Menu added.');
+        return redirect()->route('restaurant.menus')->with('success', 'Menu added.');
     }
 
     public function menuEdit($id)
     {
-        $menu = Auth::user()->restaurant->menus()->findOrFail($id);
-        return view('restaurant.menu.edit', compact('menu'));
+        $menus = Auth::guard('admin')->user()->menus()->findOrFail($id);
+        // $menu = Auth::user()->restaurant->menus()->findOrFail($id);
+        return view('restaurant.menus.edit', compact('menus'));
     }
 
     public function menuUpdate(Request $request, $id)
@@ -107,7 +108,7 @@ class RestaurantController extends Controller
         $menu = Auth::user()->restaurant->menus()->findOrFail($id);
         $menu->update($request->all());
 
-        return redirect()->route('restaurant.menu')->with('success', 'Menu updated.');
+        return redirect()->route('restaurant.menus')->with('success', 'Menu updated.');
     }
 
     public function menuDelete($id)
@@ -115,7 +116,7 @@ class RestaurantController extends Controller
         $menu = Auth::user()->restaurant->menus()->findOrFail($id);
         $menu->delete();
 
-        return redirect()->route('restaurant.menu')->with('success', 'Menu deleted.');
+        return redirect()->route('restaurant.menus')->with('success', 'Menu deleted.');
     }
 
     public function topMenu(){

@@ -11,6 +11,6 @@ class FoodTag extends Model
 
     public function menus()
     {
-        return $this->belongsToMany(Menu::class, 'menu_tag');
+        return $this->belongsToMany(Menu::class, 'menus_has_food_tags', 'food_tags_id', 'menus_id');
     }
 }
