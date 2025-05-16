@@ -24,10 +24,12 @@ class RestaurantController extends Controller
     }
     public function dashboard()
     {
-        $restaurant = [];
-        $dailyRevenue = $this->DailyRevenue();  
+        // $restaurant = [];
+        $restaurant = Auth::guard('admin')->user();
+        $dailyRevenue = $this->DailyRevenue();
+        $menus = $restaurant->menus;
         
-        return view('restaurant.dashboard', compact('restaurant', 'dailyRevenue'));
+        return view('restaurant.dashboard', compact('restaurant', 'dailyRevenue', 'menus'));
     }
 
     public function orders()
