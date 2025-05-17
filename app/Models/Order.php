@@ -21,6 +21,6 @@ class Order extends Model
 
     public function listOrders()
     {
-        return $this->hasMany(ListOrder::class);
+        return $this->hasMany(ListOrder::class, 'orders_id');
     }
 }

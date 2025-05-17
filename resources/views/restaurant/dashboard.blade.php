@@ -64,6 +64,17 @@
             </a>
         </div>
 
+        <!-- Order Title -->
+        <div class="bg-white rounded-xl shadow p-4 mb-6 flex items-center justify-between">
+            <div>
+                <h2 class="text-2xl font-bold text-green-600">Order Anda</h2>
+            </div>
+            <a href="{{ route('restaurant.orders') }}" 
+            class="inline-block bg-green-600 text-white px-4 py-2 text-sm rounded-full hover:bg-green-700 transition">
+                Selengkapnya
+            </a>
+        </div>
+
         <!-- Menu Cards -->
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-6">
             @forelse ($menus as $menu)
