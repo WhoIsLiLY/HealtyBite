@@ -28,4 +28,20 @@ class OrderController extends Controller
 
         return redirect()->route('customer.orders')->with('success', 'Order placed.');
     }
+
+    public function accept(Order $order)
+    {
+        $order->status = 'delivering'; // or whatever the next status is
+        $order->save();
+
+        return back()->with('success', 'Order accepted!');
+    }
+
+    public function decline(Order $order)
+    {
+        $order->status = 'cancelled';
+        $order->save();
+
+        return back()->with('error', 'Order declined.');
+    }
 }

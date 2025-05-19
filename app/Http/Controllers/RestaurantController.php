@@ -29,7 +29,13 @@ class RestaurantController extends Controller
         $dailyRevenue = $this->DailyRevenue();
         $menus = $restaurant->menus;
 
-        return view('restaurant.dashboard', compact('restaurant', 'dailyRevenue', 'menus'));
+        $orders = Order::where('restaurants_id', $restaurant->id)
+        ->where('status', 'completed')
+        ->with(['customer', 'listOrders.menu']) // eager load for better performance
+        ->latest()
+        ->get();
+
+        return view('restaurant.dashboard', compact('restaurant', 'dailyRevenue', 'menus', 'orders'));
     }
 
     public function orders()
