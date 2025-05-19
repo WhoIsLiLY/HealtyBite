@@ -18,7 +18,7 @@
                 <div class="flex items-start bg-white rounded-xl shadow-sm hover:shadow-md transition p-4">
 
                     <!-- Gambar Menu -->
-                    <img src="{{ $menu->image_url }}" alt="{{ $menu->name }}"
+                    <img src="{{ asset('storage/' . $menu->menu_image) }}" alt="{{ $menu->name }}"
                         class="w-24 h-24 object-cover rounded-lg mr-4 border border-gray-200">
 
                     <!-- Info Menu -->
@@ -44,7 +44,7 @@
                         'name' => $menu->name,
                         'description' => $menu->description,
                         'price' => $menu->price,
-                        'image_url' => asset('storage/' . $menu->image), // Sesuaikan path gambar
+                        'menu_image' => asset('storage/' . $menu->menu_image),
                         'calorie' => $menu->calorie,
                         'nutrition_facts' => $menu->nutrition_facts,
                         'stock' => $menu->isAvailable,
@@ -63,28 +63,24 @@
             <button onclick="closeDetailModal()" class="absolute top-2 right-2 text-gray-500 hover:text-gray-700 text-xl font-bold">
                 &times;
             </button>
-            <div class="flex flex-col md:flex-row gap-6">
+            <div class="flex flex-col md:flex-row">
                 <!-- Kiri -->
-                <div class="md:w-1/2 space-y-3">
-                    <h2 id="modalMenuName" class="text-2xl font-bold text-green-600 mb-2"></h2>
-                    <img id="modalMenuImage" src="" alt="Gambar Menu" class="w-full h-48 object-cover rounded mb-4">
-                    <p id="modalMenuDescription" class="text-gray-700 mb-2"></p>
+                <div class="md:w-1/2 space-y-2">
+                    <h2 id="modalMenuName" class="text-2xl font-bold text-green-600"></h2>
+                    <img id="modalMenuImage" src="" alt="Gambar Menu" class="w-full h-48 object-cover rounded">
+                    <p id="modalMenuDescription"></p>
                     <p id="modalMenuPrice" class="text-green-700 font-semibold"></p>
-                    <a id="modalMenuEditBtn"
-                    href="#"
-                    class="inline-block bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded">
-                    Edit
-                    </a>
                 </div>
 
-                <!-- Garis Vertikal -->
-                <div class="hidden md:block w-px bg-gray-300"></div>
+                <!-- Garis Adaptif -->
+                <div class="block md:hidden h-px bg-gray-300 my-2"></div>
+                <div class="hidden md:block w-px bg-gray-300 mx-2"></div>
 
                 <!-- Kanan -->
                 <div class="md:w-1/2 space-y-2">
-                    <p id="modalMenuCalories"><strong>Calorie</strong> = </p>
+                    <p id="modalMenuCalories"><strong>Kalori</strong> = </p>
                     <p id="modalMenuNutrition"><strong>Nutrition Facts</strong> = </p>
-                    <p id="modalMenuStock"><strong>Stock</strong> = </p>
+                    <p id="modalMenuStock"><strong>Tersedia</strong> = </p>
                     <div id="modalMenuTags">
                         <strong>Tags</strong> =
                         <ul class="list-disc list-inside text-sm mt-1" id="modalMenuTagsList"></ul>
@@ -95,6 +91,11 @@
                     </div>
                 </div>
             </div>
+            <a id="modalMenuEditBtn"
+                href="#"
+                class="inline-block bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 mt-3 rounded">
+                Edit
+            </a>
         </div>
     </div>
 
@@ -110,13 +111,14 @@
                 document.getElementById('modalMenuName').textContent = menu.name;
                 document.getElementById('modalMenuDescription').textContent = menu.description;
                 document.getElementById('modalMenuPrice').textContent = 'Rp ' + parseInt(menu.price).toLocaleString();
-                document.getElementById('modalMenuImage').src = menu.image_url;
+                document.getElementById('modalMenuImage').src = menu.menu_image;
+                document.getElementById('modalMenuImage').alt = menu.name;
                 document.getElementById('modalMenuEditBtn').href = `/restaurant/menu/${menuId}/edit`;
 
                 // Kanan
-                document.getElementById('modalMenuCalories').innerHTML = `<strong>Calorie</strong> = ${menu.calorie ?? '-'}`;
+                document.getElementById('modalMenuCalories').innerHTML = `<strong>Kalori</strong> = ${menu.calorie ?? '-'}`;
                 document.getElementById('modalMenuNutrition').innerHTML = `<strong>Nutrition Facts</strong> = ${menu.nutrition_facts ?? '-'}`;
-                document.getElementById('modalMenuStock').innerHTML = `<strong>Stock</strong> = ${menu.stock ?? '-'}`;
+                document.getElementById('modalMenuStock').innerHTML = `<strong>Tersedia</strong> = ${menu.stock == 1 ? 'Iya' : 'Tidak'}`;
 
                 const tagList = document.getElementById('modalMenuTagsList');
                 tagList.innerHTML = '';

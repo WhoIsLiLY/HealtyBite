@@ -7,6 +7,16 @@ use Illuminate\Database\Eloquent\Model;
 
 class Menu extends Model
 {
+    protected $fillable = [
+        'name',
+        'price',
+        'description',
+        'calorie',
+        'nutrition_facts',
+        'isAvailable',
+        'menu_image',
+    ];
+    
     use HasFactory;
 
     public function restaurant()
