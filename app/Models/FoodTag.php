@@ -7,6 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class FoodTag extends Model
 {
+    protected $fillable = [
+        'name',
+        'description',
+    ];
+
     use HasFactory;
 
     public function menus()

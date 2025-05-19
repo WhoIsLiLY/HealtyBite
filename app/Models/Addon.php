@@ -7,6 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class Addon extends Model
 {
+    protected $fillable = [
+        'name',
+        'price',
+        'type',
+        'isAvailable'
+    ];
+
     use HasFactory;
 
     public function menu()
