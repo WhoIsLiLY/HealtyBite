@@ -2,6 +2,15 @@
 
 @section('content')
     <div class="min-h-screen bg-gray-100 px-4 pt-4 pb-20">
+        <!-- Success Tabs -->
+        @if (session('success'))
+            <div class="mb-4 px-4">
+                <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">
+                    <strong class="font-bold">Sukses!</strong><span class="block sm:inline">{{ session('success') }}</span>
+                </div>
+            </div>
+        @endif
+
         <!-- Header -->
         <div class="w-full mb-4 lg:mb-0 align-left p-4 flex justify-between items-center">
             <h1 class="text-2xl font-bold text-green-600">Menu Anda</h1>
@@ -91,21 +100,54 @@
                     </div>
                 </div>
             </div>
-            <a id="modalMenuEditBtn"
-                href="#"
-                class="inline-block bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 mt-3 rounded">
-                Edit
-            </a>
+            <!-- Button Edit & Delete -->
+            <div class="flex space-x-2 mt-3">
+                <a id="modalMenuEditBtn"
+                    href="#"
+                    class="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded">
+                    Edit
+                </a>
+                <form id="deleteMenuForm" method="POST" action="#">
+                    @csrf
+                    @method('DELETE')
+                    <button id="deleteMenuButton"
+                        type="submit"
+                        class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded">
+                        Hapus
+                    </button>
+                </form>
+            </div>
         </div>
     </div>
 
     @push('scripts')
         <script>
+            let currentMenu = null;
+            document.getElementById('deleteMenuButton').addEventListener('click', function (event) {
+                let tagList = currentMenu.tags && currentMenu.tags.length ? `Termasuk tags "${currentMenu.tags.join(', ')}" ` : "";
+                let addonList = "";
+                if(tagList!=""){
+                    addonList = currentMenu.addons && currentMenu.addons.length ? `dan addons "${currentMenu.addons.join(', ')}".` : "";
+                } else {
+                    addonList = currentMenu.addons && currentMenu.addons.length ? `Termasuk addons "${currentMenu.addons.join(', ')}".` : "";
+                }
+
+                let confirmed = confirm(
+                    `Apakah Anda yakin ingin menghapus menu "${currentMenu.name}"?\n` +
+                    `${tagList}${addonList}`
+                );
+
+                if (!confirmed) {
+                    event.preventDefault();
+                }
+            });
+
             function openDetailModal(menuId) {
                 const menuDataEl = document.getElementById(`menu-data-${menuId}`);
                 if (!menuDataEl) return;
 
                 const menu = JSON.parse(menuDataEl.textContent);
+                currentMenu = menu;
 
                 // Kiri
                 document.getElementById('modalMenuName').textContent = menu.name;
@@ -113,12 +155,15 @@
                 document.getElementById('modalMenuPrice').textContent = 'Rp ' + parseInt(menu.price).toLocaleString();
                 document.getElementById('modalMenuImage').src = menu.menu_image;
                 document.getElementById('modalMenuImage').alt = menu.name;
-                document.getElementById('modalMenuEditBtn').href = `/restaurant/menu/${menuId}/edit`;
 
                 // Kanan
                 document.getElementById('modalMenuCalories').innerHTML = `<strong>Kalori</strong> = ${menu.calorie ?? '-'}`;
                 document.getElementById('modalMenuNutrition').innerHTML = `<strong>Nutrition Facts</strong> = ${menu.nutrition_facts ?? '-'}`;
                 document.getElementById('modalMenuStock').innerHTML = `<strong>Tersedia</strong> = ${menu.stock == 1 ? 'Iya' : 'Tidak'}`;
+
+                // Button
+                document.getElementById('modalMenuEditBtn').href = `/restaurant/menu/${menuId}/edit`;
+                document.getElementById('deleteMenuForm').action = `/restaurant/menu/${menuId}`;
 
                 const tagList = document.getElementById('modalMenuTagsList');
                 tagList.innerHTML = '';

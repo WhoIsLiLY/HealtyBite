@@ -55,7 +55,7 @@
 
         <!-- Menu Title -->
         <div class="bg-white rounded-xl shadow p-4 mb-6 flex items-center justify-between items-start relative">
-            <div>
+            <div class="w-full">
                 <h2 class="text-2xl font-bold text-green-600">Menu Anda</h2>
                 <!-- Menu Cards -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-6">

@@ -10,6 +10,7 @@ use App\Models\Addon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\AuthController;
 
 class RestaurantController extends Controller
 {
@@ -24,9 +25,9 @@ class RestaurantController extends Controller
         $restaurant = Restaurant::with('menus')->findOrFail($id);
         return view('customer.menus.index', compact('restaurant'));
     }
+
     public function dashboard()
     {
-        // $restaurant = [];
         $restaurant = Auth::guard('admin')->user();
         $dailyRevenue = $this->DailyRevenue();
         $menus = $restaurant->menus;
@@ -178,7 +179,6 @@ class RestaurantController extends Controller
             }
         }
 
-        // dd($request->addons_name, $request->addons_price, $request->addons_type, $request->addons_available);
         // Simpan addons (jika ada)
         if ($request->filled('addons_name') && $request->filled('addons_price') && $request->filled('addons_type') && $request->filled('addons_available')) {
             foreach ($request->addons_name as $index => $addonName) {
@@ -197,24 +197,136 @@ class RestaurantController extends Controller
     public function menuEdit($id)
     {
         $menus = Auth::guard('admin')->user()->menus()->findOrFail($id);
-        // $menu = Auth::user()->restaurant->menus()->findOrFail($id);
         return view('restaurant.menus.edit', compact('menus'));
     }
 
     public function menuUpdate(Request $request, $id)
     {
-        $menu = Auth::user()->restaurant->menus()->findOrFail($id);
-        $menu->update($request->all());
+        // Validasi input
+        $request->validate([
+            'nama' => 'required|string|max:255',
+            'harga' => 'required|numeric',
+            'deskripsi' => 'required|string',
+            'kalori' => 'required|integer',
+            'nutrition_facts' => 'required|string',
+            'tersedia' => 'required|boolean',
+            'gambar' => 'nullable|image|max:2048', // max 2MB
+            // Tags validation (arrays)
+            'tags_name' => 'nullable|array',
+            'tags_name.*' => 'required_with:tags_description|string|max:255',
+            'tags_description' => 'nullable|array',
+            'tags_description.*' => 'required_with:tags_name|string|max:500',
+            // Addons validation (arrays)
+            'addons_name' => 'nullable|array',
+            'addons_name.*' => 'required_with_all:addons_price,addons_type,addons_available|string|max:255',
+            'addons_price' => 'nullable|array',
+            'addons_price.*' => 'required_with_all:addons_name,addons_type,addons_available|numeric|min:0',
+            'addons_type' => 'nullable|array',
+            'addons_type.*' => 'required_with_all:addons_name,addons_price,addons_available|in:extra,topping',
+            'addons_available' => 'nullable|array',
+            'addons_available.*' => 'required_with_all:addons_name,addons_price,addons_type|boolean',
+        ]);
 
-        return redirect()->route('restaurant.menus')->with('success', 'Menu updated.');
+        $menus = Auth::guard('admin')->user()->menus()->findOrFail($id);
+        $menus->update([
+            'name' => $request->nama,
+            'price' => $request->harga,
+            'description' => $request->deskripsi,
+            'calorie' => $request->kalori,
+            'nutrition_facts' => $request->nutrition_facts,
+            'isAvailable' => $request->tersedia,
+        ]);
+
+        // Ambil tag-tag lama yang terhubung ke menu
+        $existingTags = $menus->foodTags()->get(); // Kumpulan tag yang sudah ada
+        $updatedTagIds = []; // Untuk menyimpan ID tag yang akan tetap terhubung
+
+        // Loop semua inputan tag dari form
+        if ($request->filled('tags_name') && $request->filled('tags_description')) {
+            foreach ($request->tags_name as $index => $tagName) {
+                $tagDesc = $request->tags_description[$index] ?? '';
+
+                // Cari tag berdasarkan name & description
+                $tag = FoodTag::where('name', $tagName)
+                            ->where('description', $tagDesc)
+                            ->first();
+
+                // Jika tidak ada, buat tag baru
+                if (!$tag) {
+                    $tag = FoodTag::create([
+                        'name' => $tagName,
+                        'description' => $tagDesc,
+                    ]);
+                }
+
+                // Tambahkan ke daftar tag yang harus tetap terhubung
+                $updatedTagIds[] = $tag->id;
+            }
+
+            // Sinkronisasi tag yang aktif saja, yang lainnya akan ter-detach otomatis
+            $menus->foodTags()->sync($updatedTagIds);
+        } else {
+            // Jika tidak ada input tag sama sekali, detach semua
+            $menus->foodTags()->detach();
+        }
+
+        // Ambil semua ID addon lama yang terhubung dengan menu
+        $existingAddons = $menus->addons()->get();
+        $existingAddonIds = $existingAddons->pluck('id')->toArray();
+
+        // Untuk menyimpan ID yang akan tetap ada (update atau tetap)
+        $processedIds = [];
+
+        // Proses inputan addon jika ada
+        if ($request->filled('addons_name')) {
+            foreach ($request->addons_name as $index => $addonName) {
+                $addonPrice = $request->addons_price[$index] ?? 0;
+                $addonType = $request->addons_type[$index] ?? 'extra';
+                $addonAvailable = $request->input("addons_available.$index", 1);
+                $addonId = $request->addons_id[$index] ?? null; // hanya ada kalau addon lama
+
+                if ($addonId && in_array($addonId, $existingAddonIds)) {
+                    // Update existing addon
+                    $addon = Addon::find($addonId);
+                    if ($addon) {
+                        $addon->update([
+                            'name' => $addonName,
+                            'price' => $addonPrice,
+                            'type' => $addonType,
+                            'isAvailable' => $addonAvailable,
+                        ]);
+                        $processedIds[] = $addon->id;
+                    }
+                } else {
+                    // Tambahkan addon baru
+                    $newAddon = $menus->addons()->create([
+                        'name' => $addonName,
+                        'price' => $addonPrice,
+                        'type' => $addonType,
+                        'isAvailable' => $addonAvailable,
+                    ]);
+                    $processedIds[] = $newAddon->id;
+                }
+            }
+
+            // Hapus semua addon yang tidak termasuk dalam request (berarti dihapus)
+            $menus->addons()->whereNotIn('id', $processedIds)->delete();
+        } else {
+            // Jika input kosong, hapus semua addon
+            $menus->addons()->delete();
+        }
+
+        return redirect()->route('restaurant.menus')->with('success', 'Menu berhasil diubah.');
     }
 
     public function menuDelete($id)
     {
-        $menu = Auth::user()->restaurant->menus()->findOrFail($id);
+        $menu = Auth::guard('admin')->user()->menus()->findOrFail($id);
+        $menu->addons()->delete();
+        $menu->foodTags()->detach();
         $menu->delete();
 
-        return redirect()->route('restaurant.menus')->with('success', 'Menu deleted.');
+        return redirect()->route('restaurant.menus')->with('success', 'Menu berhasil dihapus beserta addons dan tags-nya.');
     }
 
     public function topMenu()
