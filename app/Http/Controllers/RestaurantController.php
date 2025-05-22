@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\AuthController;
+use Illuminate\Support\Facades\Storage;
 
 class RestaurantController extends Controller
 {
@@ -314,6 +315,23 @@ class RestaurantController extends Controller
         } else {
             // Jika input kosong, hapus semua addon
             $menus->addons()->delete();
+        }
+
+        if ($request->hasFile('gambar')) {
+            // Gambar
+            if ($menus->menu_image && Storage::disk('public')->exists($menus->menu_image)) {
+                Storage::disk('public')->delete($menus->menu_image);
+            }
+
+            // Buat nama file berdasarkan ID menu + ekstensi file asli
+            $extension = $request->file('gambar')->getClientOriginalExtension();
+            $filename = 'menu_' . $menus->id . '.' . $extension;
+
+            // Simpan gambar ke folder storage/app/public/menus dengan nama baru
+            $path = $request->file('gambar')->storeAs('menus', $filename, 'public');
+
+            // Update kolom menu_image di database
+            $menus->update(['menu_image' => $path]);
         }
 
         return redirect()->route('restaurant.menus')->with('success', 'Menu berhasil diubah.');
