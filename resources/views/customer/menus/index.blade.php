@@ -17,6 +17,7 @@
             </div>
 
             <div class="flex-1">
+                <input type="hidden" name="restaurant_id" id="restaurant_id" value="{{ $restaurant->id }}">
                 <!-- Restaurant Name -->
                 <h1 class="text-2xl font-bold text-gray-900">{{ $restaurant->name }}</h1>
 
@@ -168,14 +169,24 @@
                     <p class="text-gray-500 text-sm" id="loadingOrder">Memuat Order...</p>
                 </div>
             </div>
+            <div class="flex w-full justify-between" id="basketModalFooter">
+                <!-- Delete Basket -->
+                <div class="text-left">
+                    <button id="deleteBasket" onclick="deleteBasket()" type="submit"
+                        class="bg-red-500 hover:bg-red-600 text-white font-semibold px-4 py-2 rounded">
+                        Delete All
+                    </button>
+                </div>
 
-            <!-- Submit -->
-            <div class="text-right">
-                <button id="submitOrderToBasket" onclick="submitToCheckout()" type="submit"
-                    class="bg-green-500 hover:bg-green-600 text-white font-semibold px-4 py-2 rounded">Lanjutkan
-                    ke Checkout - Rp <span id="totalPriceBasket">0</span>
-                </button>
+                <!-- Submit -->
+                <div class="text-right">
+                    <button id="submitToCheckout" onclick="submitToCheckout()" type="submit"
+                        class="bg-green-500 hover:bg-green-600 text-white font-semibold px-4 py-2 rounded">Lanjutkan
+                        ke Checkout - Rp <span id="totalPriceBasket">0</span>
+                    </button>
+                </div>
             </div>
+
         </div>
     </div>
 @endsection
@@ -226,6 +237,7 @@
                     }
                     defaultMenuPrice = parseFloat(menu.price);
                     totalMenuPrice = defaultMenuPrice;
+                    currentMenuPrice = defaultMenuPrice
                     $('#totalMenuPrice').text(totalMenuPrice.toLocaleString('id-ID'));
 
                     let html = '';
@@ -282,8 +294,9 @@
                 // alert(totalMenuPrice);
                 // alert(addonPrice);
                 if (checkbox.is(':checked')) {
+
                     addonsPrice += addonPrice;
-                    // alert(totalMenuPrice);
+
                     selectedAddons.push({
                         id: addonId,
                         name: addonName,
@@ -320,6 +333,7 @@
                 url: `/customer/basket/`,
                 method: 'POST',
                 data: {
+                    restaurant_id: $('#restaurant_id').val(),
                     menu_id: $('#menu_id').val(),
                     quantity: $('#quantityMenu').val(),
                     addons: selectedAddons,
@@ -369,10 +383,18 @@
             $('#basketModal').removeClass('hidden');
 
             $.ajax({
-                url: `/customer/basket/`,
+                url: `/customer/basket/` + $('#restaurant_id').val().toString(),
                 method: 'GET',
                 success: function(response) {
-                    const basket = response.basket;
+                    if(response.basket == null){
+                        $('#basketList').html(
+                            '<p class="text-gray-500 text-sm">Kamu belum memesan apapun... Pesan dulu yuk!</p>'
+                        );
+                        $('#basketModalFooter').addClass('hidden');
+
+                        return;
+                    }
+                    const basket = response.basket.items;
                     let totalPrice = 0;
                     console.table(basket);
                     if (basket.length === 0) {
@@ -383,34 +405,34 @@
                     }
 
                     let html = '';
-                    basket.forEach(function(menu) {
+                    basket.forEach(function(item) {
                         html += `
                                     <div class="border rounded-xl p-4 mb-4 shadow-sm bg-white">
                                         <div class="flex justify-between items-center">
                                             <div>
-                                                <div class="text-lg font-semibold text-gray-900">${menu.name}</div>
-                                                <div class="text-sm text-gray-500">${menu.description ?? ''}</div>
-                                                <div class="text-sm text-gray-600 mt-1">Jumlah: <span class="font-medium">${menu.quantity ?? 1}</span></div>
-                                                ${menu.note ? `<div class="text-xs mt-1 text-yellow-600 italic">Note: ${menu.note}</div>` : ''}
+                                                <div class="text-lg font-semibold text-gray-900">${item.menu.name}</div>
+                                                <div class="text-sm text-gray-500">${item.menu.description ?? ''}</div>
+                                                <div class="text-sm text-gray-600 mt-1">Jumlah: <span class="font-medium">${item.quantity ?? 1}</span></div>
+                                                ${item.note ? `<div class="text-xs mt-1 text-yellow-600 italic">Note: ${item.note}</div>` : ''}
                                             </div>
                                             <div class="text-right">
-                                                <div class="text-base text-green-600 font-medium">Rp ${(Number(menu.price) * (menu.quantity ?? 1)).toLocaleString('id-ID')}</div>
+                                                <div class="text-base text-green-600 font-medium">Rp ${(Number(item.menu.price) * (item.quantity ?? 1)).toLocaleString('id-ID')}</div>
                                             </div>
                                         </div>
                             `;
-                        totalPrice += parseFloat((menu.price) * (menu.quantity ?? 1));
-                        if (menu.addons.length > 0) {
+                        totalPrice += parseFloat((item.menu.price) * (item.quantity ?? 1));
+                        if (item.addons.length > 0) {
                             html += `<div class="mt-3 border-t pt-2 space-y-1">`;
-                            menu.addons.forEach(function(addon) {
+                            item.addons.forEach(function(addon) {
                                 if (addon) {
                                     html += `<div class="flex justify-between text-sm text-gray-700">
                                                 <div class="flex items-center space-x-2">
-                                                    <span class="text-green-500">+ ${addon.name}</span>
+                                                    <span class="text-green-500">+ ${addon.addon.name}</span>
                                                 </div>
-                                                <div>Rp ${Number(addon.price).toLocaleString('id-ID')}</div>
+                                                <div>Rp ${Number(addon.addon.price).toLocaleString('id-ID')}</div>
                                             </div>`;
                                 }
-                                totalPrice += parseFloat(addon.price);
+                                totalPrice += parseFloat(addon.addon.price);
                             });
                         }
                         html += `</div></div>`;
@@ -447,6 +469,56 @@
             });
         }
 
+        function deleteBasket() {
+            if (!confirm("Apakah kamu yakin ingin menghapus semua pesanan di keranjang?")) return;
+
+            $.ajax({
+                url: "{{ route('customer.basket.delete') }}",
+                type: "DELETE",
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                data: {
+                    'restaurant_id': $('#restaurant_id').val()
+                },
+                success: function(response) {
+                    alert('Keranjang berhasil dikosongkan.');
+                    // Kosongkan tampilan basket di halaman
+                    $('#basketList').html(
+                        '<p class="text-gray-500 text-sm">Kamu belum memesan apapun... Pesan dulu yuk!</p>'
+                    );
+                    $('#totalPriceBasket').text('0');
+                },
+                error: function(jqXHR) {
+                    if (jqXHR.responseText) {
+                        console.error(jqXHR.responseText);
+                    }
+                    var errorMessage = JSON.parse(jqXHR.responseText);
+                    if (jqXHR.status == 400) {
+
+                        var errorMessageCss = $(
+                            '<div id="errMessage" class="bg-red-100 border border-red-400 text-red-700 px-4 py-2 rounded relative" role="alert">' +
+                            '<span class="block sm:inline">' + errorMessage.message +
+                            '</span>' +
+                            '</div>');
+
+
+                        if (!$('#errMessage').is(':Visible')) {
+                            $('form').prepend(errorMessageCss);
+
+                            setTimeout(function() {
+                                $('#errMessage').fadeOut('slow', function() {
+                                    $('#errMessage').remove();
+                                    errorMessageCss = null;
+                                });
+                            }, 4000);
+                        }
+                    }
+                }
+            });
+        }
+
+
         $('#closeBasketModal, #basketModal').on('click', function(e) {
             if (e.target.id === 'basketModal' || e.target.id === 'closeBasketModal') {
                 $('#basketModal').addClass('hidden');
@@ -468,6 +540,10 @@
 
             currentMenuPrice = newQuantity * defaultMenuPrice;
             updateTotalMenuPrice();
+        }
+
+        function submitToCheckout() {
+            window.location.href = '/customer/checkout';
         }
     </script>
 @endpush

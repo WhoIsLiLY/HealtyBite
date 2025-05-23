@@ -34,8 +34,9 @@ Route::prefix('customer')->middleware('auth-customer')->group(function () {
     Route::get('/restaurants', [RestaurantController::class, 'index'])->name('restaurants.index');
     Route::get('/restaurant/{id}', [RestaurantController::class, 'show'])->name('restaurants.show');
     Route::get('/addons/menu/{id}', [MenuController::class, 'getAddons'])->name('addons.menu');
-    Route::get('/basket', [CustomerController::class, 'getBasketInfo'])->name('customer.basket');
+    Route::get('/basket/{id}', [CustomerController::class, 'getBasketInfo'])->name('customer.basket');
     Route::post('/basket', [CustomerController::class, 'insertDataBasket'])->name('customer.basket.add');
+    Route::delete('/basket', [CustomerController::class, 'deleteDataBasket'])->name('customer.basket.delete');
     Route::get('/checkout', [CustomerController::class, 'getCheckout'])->name('customer.checkout');
 });
 
