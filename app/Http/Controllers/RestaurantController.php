@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\AuthController;
+use App\Models\Basket;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
@@ -21,12 +22,19 @@ class RestaurantController extends Controller
     public function index()
     {
         $restaurants = Restaurant::all();
-        return view('customer.restaurants.index', compact('restaurants'));
+        $basket = Basket::where('user_id', Auth::guard('customer')->id())->first();
+        return view('customer.restaurants.index', compact('restaurants', 'basket'));
     }
 
     public function show($id)
     {
         $restaurant = Restaurant::with('menus')->findOrFail($id);
+        $basket = Basket::with(['items.menu', 'items.addons.addon'])->where('user_id', Auth::guard('customer')->id())->first();
+        if ($basket != null && $basket->restaurant_id != $id) {
+            $controller = new CustomerController();
+            $controller->deleteDataBasket();
+        }
+        // return response()->json($basket);
         return view('customer.menus.index', compact('restaurant'));
     }
 
@@ -361,7 +369,6 @@ class RestaurantController extends Controller
             echo "Menu Name: " . $menu->name . "<br>";
             echo "Order Count: " . $menu->list_orders_count . "<br><br>";
         }
-
     }
 
     public function getReview()

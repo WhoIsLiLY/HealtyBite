@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Menu;
+use App\Models\Basket;
+use Carbon\Traits\ToStringFormat;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -27,35 +29,97 @@ class CustomerController extends Controller
         $order = Auth::user()->orders->findOrFail($id);
         return view('customer.orders.show', compact('order'));
     }
-    public function getBasketInfo()
+    public function getBasketInfo($restaurant_id)
     {
-        $selectedMenus = json_decode(request()->cookie('selectedMenus'), true);
-        if($selectedMenus == null) $selectedMenus = [];
+        $basket = Basket::with(['items.menu', 'items.addons.addon'])->where('user_id', Auth::guard('customer')->id())
+            ->where('restaurant_id', $restaurant_id)->first();
         return response()->json([
-            'basket' => $selectedMenus
+            'basket' => $basket
         ]);
     }
 
     public function insertDataBasket(Request $request)
     {
+        $restaurantId = $request->input('restaurant_id');
         $menuId = $request->input('menu_id');
         $quantity = $request->input('quantity');
         $addons = $request->input('addons'); // Ini adalah array dari JavaScript
-        if($addons == null) $addons = [];
+        if ($addons == null) $addons = [];
         $note = $request->input('note');
 
-        $menuDetail = Menu::findOrFail($menuId)->toArray();
-        $selectedMenu = array_merge($menuDetail, ['quantity' => $quantity, 'addons' => $addons]);
-        $selectedOrder = array_merge($selectedMenu, ['note' => $note]);
+        // Tambah item ke basket
+        $basket = Basket::firstOrCreate([
+            'user_id' => Auth::guard('customer')->id(),
+            'restaurant_id' => $restaurantId
+        ]);
 
-        $selectedMenus = json_decode(request()->cookie('selectedMenus'), true);
-        if($selectedMenus == null) $selectedMenus = [];
-        array_push($selectedMenus, $selectedOrder);
-        $cookie = cookie('selectedMenus', json_encode($selectedMenus), 60); // 60 menit
+        // Tambah item ke basket
+        $item = $basket->items()->create([
+            'menu_id' => $menuId,
+            'quantity' => $quantity,
+            'note' => $note
+        ]);
+
+        // Tambah addons
+        foreach ($addons as $addon) {
+            $item->addons()->create([
+                'addon_id' => $addon['id'],
+            ]);
+        }
+
+
+        // $menuDetail = Menu::findOrFail($menuId)->toArray();
+        // $selectedMenu = array_merge($menuDetail, ['quantity' => $quantity, 'addons' => $addons]);
+        // $selectedOrder = array_merge($selectedMenu, ['note' => $note]);
+
+        // $selectedMenus = json_decode(request()->cookie('selectedMenus'), true);
+        // if ($selectedMenus == null) $selectedMenus = [];
+        // array_push($selectedMenus, $selectedOrder);
+        // $cookie = cookie('selectedMenus', json_encode($selectedMenus), 60); // 60 menit
 
         return response()->json([
             'message' => 'Data inserted into basket',
             'menus_received' => $addons,
-        ])->cookie($cookie);
+        ]);
+    }
+    public function deleteDataBasket()
+    {
+        $userId = Auth::guard('customer')->id();
+
+        // echo $currentRestaurantId . "<br>" . $userId;
+        $baskets = Basket::where('user_id', $userId)
+            ->with('items.addons')
+            ->get();
+
+        foreach ($baskets as $basket) {
+            foreach ($basket->items as $item) {
+                $item->addons()->delete();
+            }
+            $basket->items()->delete();
+            $basket->delete();
+        }
+
+        return response()->json(['message' => 'Semua basket berhasil dihapus']);
+    }
+    public function deleteDataBasketItem(Request $request)
+    {
+        $userId = Auth::guard('customer')->id();
+        $menuId = $request->input('menu_id');
+        // echo $currentRestaurantId . "<br>" . $userId;
+        $baskets = Basket::where('user_id', $userId)
+            ->with('items.addons')
+            ->get();
+
+        foreach ($baskets as $basket) {
+            foreach ($basket->items as $item) {
+                if ($item->id == $menuId) {
+                    $item->addons()->delete();
+                    $item->delete();
+                    return response()->json(['message' => 'Item berhasil dihapus'], 200);
+                }
+            }
+        }
+
+        return response()->json(['message' => 'Item gagal dihapus. menuId: ' . $menuId], 500);
     }
 }
