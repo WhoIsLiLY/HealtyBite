@@ -17,6 +17,8 @@ use App\Http\Controllers\RestaurantController;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+Route::get('/restaurant/register', [RestaurantController::class, 'showRegisterForm'])->name('admin.register');
+Route::post('/restaurant/register/create', [RestaurantController::class, 'register'])->name('admin.register.create');
 
 Route::middleware('guest')->group(function () {
     Route::get('/', [WelcomeController::class, 'index']);

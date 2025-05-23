@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Menu;
 use App\Models\Order;
 use App\Models\Restaurant;
+use App\Models\RestaurantCategory;
 use App\Models\FoodTag;
 use App\Models\Addon;
 use Illuminate\Http\Request;
@@ -12,6 +13,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Hash;
 
 class RestaurantController extends Controller
 {
@@ -34,10 +37,10 @@ class RestaurantController extends Controller
         $menus = $restaurant->menus;
 
         $orders = Order::where('restaurants_id', $restaurant->id)
-        ->where('status', 'completed')
-        ->with(['customer', 'listOrders.menu']) // eager load for better performance
-        ->latest()
-        ->get();
+            ->where('status', 'completed')
+            ->with(['customer', 'listOrders.menu']) // eager load for better performance
+            ->latest()
+            ->get();
 
         return view('restaurant.dashboard', compact('restaurant', 'dailyRevenue', 'menus', 'orders'));
     }
@@ -63,7 +66,6 @@ class RestaurantController extends Controller
 
         return view('restaurant.orders.index', compact('orders'));
     }
-
 
     public function topOrders()
     {
@@ -166,8 +168,8 @@ class RestaurantController extends Controller
                 $tagDesc = $request->tags_description[$index] ?? '';
 
                 $tag = FoodTag::where('name', $tagName)
-                  ->where('description', $tagDesc)
-                  ->first();
+                    ->where('description', $tagDesc)
+                    ->first();
 
                 if (!$tag) {
                     $tag = FoodTag::create([
@@ -175,7 +177,7 @@ class RestaurantController extends Controller
                         'description' => $tagDesc,
                     ]);
                 }
-                        
+
                 $menu->foodTags()->syncWithoutDetaching($tag->id);
             }
         }
@@ -249,8 +251,8 @@ class RestaurantController extends Controller
 
                 // Cari tag berdasarkan name & description
                 $tag = FoodTag::where('name', $tagName)
-                            ->where('description', $tagDesc)
-                            ->first();
+                    ->where('description', $tagDesc)
+                    ->first();
 
                 // Jika tidak ada, buat tag baru
                 if (!$tag) {
@@ -388,5 +390,43 @@ class RestaurantController extends Controller
             $html .= $revenue->total_revenue;
         }
         return $html;
+    }
+
+    public function showRegisterForm()
+    {
+        return view('admin.register');
+    }
+
+    public function register(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'location' => 'required|string|max:255',
+            'restaurant_category' => 'required|string|max:255',
+            'email' => 'required|email|unique:restaurants,email',
+            'phone_number' => 'required|string|max:20',
+            'password' => 'required|string|min:6',
+        ]);
+
+        $category = RestaurantCategory::firstOrCreate([
+            'name' => $request->restaurant_category,
+        ]);
+
+        $restaurant = Restaurant::create([
+            'name' => $request->name,
+            'location' => $request->location,
+            'restaurant_categories_id' => $category->id,
+            'email' => $request->email,
+            'phone_number' => $request->phone_number,
+            'password' => Hash::make($request->password),
+        ]);
+
+        dd($restaurant);
+
+        if ($restaurant) {
+            return redirect()->route('admin.login')->with('success', 'Registration successful. Please login.');
+        }
+
+        return redirect()->back()->with('error', 'Registration failed. Please try again.')->withInput();
     }
 }

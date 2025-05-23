@@ -10,9 +10,18 @@ class Restaurant extends Authenticatable
 {
     use HasFactory;
 
+    protected $fillable = [
+        'name',
+        'location',
+        'restaurant_categories_id',
+        'email',
+        'phone_number',
+        'password',
+    ];
+
     public function menus()
     {
-        return $this->hasMany(Menu::class,'restaurants_id');
+        return $this->hasMany(Menu::class, 'restaurants_id');
     }
 
     public function reviews()

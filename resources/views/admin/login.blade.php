@@ -35,7 +35,7 @@
 
                 <!-- Submit Button -->
                 <div>
-                    <button type="submit" id ="loginButton"
+                    <button type="submit" id="loginButton"
                         class="w-full py-3 bg-green-600 text-white text-lg font-semibold rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-600 transition duration-300">
                         Sign in
                     </button>
@@ -44,6 +44,12 @@
                 <!-- Forgot Password Link -->
                 <div class="text-center text-sm">
                     <a href="/" class="text-green-600 hover:underline">Login as a Customer?</a>
+                </div>
+
+                <!-- Register Link -->
+                <div class="text-center text-sm mt-2">
+                    <a href="{{ route('admin.register') }}" class="text-blue-600 hover:underline">Don't have an
+                        account? Register here.</a>
                 </div>
             </form>
         </div>
