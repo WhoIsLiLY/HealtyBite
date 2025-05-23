@@ -82,14 +82,12 @@ class CustomerController extends Controller
             'menus_received' => $addons,
         ]);
     }
-    public function deleteDataBasket(Request $request)
+    public function deleteDataBasket()
     {
         $userId = Auth::guard('customer')->id();
-        $currentRestaurantId = $request->input('restaurant_id');
 
         // echo $currentRestaurantId . "<br>" . $userId;
         $baskets = Basket::where('user_id', $userId)
-            ->where('restaurant_id', $currentRestaurantId)
             ->with('items.addons')
             ->get();
 
@@ -103,12 +101,26 @@ class CustomerController extends Controller
 
         return response()->json(['message' => 'Semua basket berhasil dihapus']);
     }
-    public function getCheckout()
+    public function deleteDataBasketItem(Request $request)
     {
-        $selectedMenus = json_decode(request()->cookie('selectedMenus'), true);
-        if ($selectedMenus == null) {
-            return redirect()->route('restaurants.index');
+        $userId = Auth::guard('customer')->id();
+        $menuId = $request->input('menu_id');
+        // echo $currentRestaurantId . "<br>" . $userId;
+        $baskets = Basket::where('user_id', $userId)
+            ->with('items.addons')
+            ->get();
+
+        foreach ($baskets as $basket) {
+            foreach ($basket->items as $item) {
+                if ($item->menu_id == $menuId) {
+                    $item->addons()->delete();
+                    $item->delete();
+                    return response()->json(['message' => 'Item berhasil dihapus'], 200);
+                }
+            }
         }
-        return view('customer.checkout');
+
+        return response()->json(['message' => 'Item gagal dihapus'], 500);
     }
+
 }
