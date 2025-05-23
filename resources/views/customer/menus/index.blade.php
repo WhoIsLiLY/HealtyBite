@@ -389,7 +389,7 @@
             $('#basketModal').removeClass('hidden');
 
             $.ajax({
-                url: `/customer/basket/`,
+                url: `/customer/basket/` + $('#restaurant_id').val().toString(),
                 method: 'GET',
                 success: function(response) {
                     if (response.basket == null) {
@@ -595,7 +595,6 @@
             });
         }
         function deleteBasketItem(menuId) {
-            alert(menuId);
             if (!confirm("Apakah kamu yakin ingin menghapus semua pesanan di keranjang?")) return;
 
             $.ajax({

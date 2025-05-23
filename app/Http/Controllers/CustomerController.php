@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Menu;
 use App\Models\Basket;
+use Carbon\Traits\ToStringFormat;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -32,7 +33,6 @@ class CustomerController extends Controller
     {
         $basket = Basket::with(['items.menu', 'items.addons.addon'])->where('user_id', Auth::guard('customer')->id())
             ->where('restaurant_id', $restaurant_id)->first();
-        // dd($basket);
         return response()->json([
             'basket' => $basket
         ]);
@@ -112,7 +112,7 @@ class CustomerController extends Controller
 
         foreach ($baskets as $basket) {
             foreach ($basket->items as $item) {
-                if ($item->menu_id == $menuId) {
+                if ($item->id == $menuId) {
                     $item->addons()->delete();
                     $item->delete();
                     return response()->json(['message' => 'Item berhasil dihapus'], 200);
@@ -120,7 +120,6 @@ class CustomerController extends Controller
             }
         }
 
-        return response()->json(['message' => 'Item gagal dihapus'], 500);
+        return response()->json(['message' => 'Item gagal dihapus. menuId: ' . $menuId], 500);
     }
-
 }
