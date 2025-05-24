@@ -16,6 +16,7 @@ use App\Models\Basket;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class RestaurantController extends Controller
 {
@@ -413,6 +414,8 @@ class RestaurantController extends Controller
             'email' => 'required|email|unique:restaurants,email',
             'phone_number' => 'required|string|max:20',
             'password' => 'required|string',
+            'description' => 'nullable|string',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
         $category = RestaurantCategory::firstOrCreate([
@@ -422,11 +425,23 @@ class RestaurantController extends Controller
         $restaurant = Restaurant::create([
             'name' => $request->name,
             'location' => $request->location,
+            'description' => $request->description,
             'restaurant_categories_id' => $category->id,
             'email' => $request->email,
             'phone_number' => $request->phone_number,
             'password' => Hash::make($request->password),
         ]);
+
+        if ($request->hasFile('image')) {
+            $extension = $request->file('image')->getClientOriginalExtension();
+            $filename = 'restaurant_' . $restaurant->id . '.' . $extension;
+
+            // Store the image in storage/app/public/restaurants/
+            $path = $request->file('image')->storeAs('restaurants', $filename, 'public');
+
+            // Update the image column with the path
+            $restaurant->update(['image' => $path]);
+        }
 
         if ($restaurant) {
             return redirect()->route('admin.login')->with('success', 'Registrasi berhasil, silahkan login');
@@ -434,4 +449,5 @@ class RestaurantController extends Controller
 
         return redirect()->back()->with('error', 'Registrasi gagal, Silahkan coba lagi')->withInput();
     }
+
 }

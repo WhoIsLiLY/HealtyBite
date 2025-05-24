@@ -11,9 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('restaurant_categories', function (Blueprint $table) {
-            $table->string('image')->nullable()->after('name');
-        });
+        
     }
 
     /**
@@ -21,8 +19,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('restaurant_categories', function (Blueprint $table) {
-            $table->dropColumn('image');
-        });
+        
     }
 };

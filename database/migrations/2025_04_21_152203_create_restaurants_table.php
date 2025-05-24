@@ -18,6 +18,7 @@ return new class extends Migration {
             $table->string('email')->unique();
             $table->string('password'); 
             $table->string('phone_number');
+            $table->string('image', 255)->nullable();
             $table->foreignId('restaurant_categories_id')->nullable()->constrained()->onDelete('cascade');
             $table->timestamps();
         });
