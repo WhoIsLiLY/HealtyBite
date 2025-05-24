@@ -22,47 +22,53 @@
             </a>
         </div>
 
-        <div class="space-y-4">
-            @foreach ($menus as $menu)
-                <div class="flex items-start bg-white rounded-xl shadow-sm hover:shadow-md transition p-4">
+        @if($menus->count())
+            <div class="space-y-4">
+                @foreach ($menus as $menu)
+                    <div class="flex items-start bg-white rounded-xl shadow-sm hover:shadow-md transition p-4">
 
-                    <!-- Gambar Menu -->
-                    <img src="{{ asset('storage/' . $menu->menu_image) }}" alt="{{ $menu->name }}"
-                        class="w-24 h-24 object-cover rounded-lg mr-4 border border-gray-200">
+                        <!-- Gambar Menu -->
+                        <img src="{{ asset('storage/' . $menu->menu_image) }}" alt="{{ $menu->name }}"
+                            class="w-24 h-24 object-cover rounded-lg mr-4 border border-gray-200">
 
-                    <!-- Info Menu -->
-                    <div class="flex-1">
-                        <h3 class="text-lg font-semibold text-gray-900">{{ $menu->name }}</h3>
-                        <p class="text-sm text-gray-500 mb-2">{{ $menu->description ?? 'Tidak ada deskripsi.' }}</p>
-                        <p class="text-green-600 font-semibold">Rp {{ number_format($menu->price, 0, ',', '.') }}</p>
+                        <!-- Info Menu -->
+                        <div class="flex-1">
+                            <h3 class="text-lg font-semibold text-gray-900">{{ $menu->name }}</h3>
+                            <p class="text-sm text-gray-500 mb-2">{{ $menu->description ?? 'Tidak ada deskripsi.' }}</p>
+                            <p class="text-green-600 font-semibold">Rp {{ number_format($menu->price, 0, ',', '.') }}</p>
+                        </div>
+
+                        <!-- Tombol Detail -->
+                        <div class="h-24 flex items-center justify-center">
+                            <button type="button"
+                                class="bg-green-500 hover:bg-green-600 text-white font-medium px-4 py-2 rounded-lg transition"
+                                onclick="openDetailModal({{ $menu->id }})">
+                                Detail
+                            </button>
+                        </div>
                     </div>
 
-                    <!-- Tombol Detail -->
-                    <div class="h-24 flex items-center justify-center">
-                        <button type="button"
-                            class="bg-green-500 hover:bg-green-600 text-white font-medium px-4 py-2 rounded-lg transition"
-                            onclick="openDetailModal({{ $menu->id }})">
-                            Detail
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Menambah Data Menu -->
-                <script type="application/json" id="menu-data-{{ $menu->id }}">
-                    {!! json_encode([
-                        'name' => $menu->name,
-                        'description' => $menu->description,
-                        'price' => $menu->price,
-                        'menu_image' => asset('storage/' . $menu->menu_image),
-                        'calorie' => $menu->calorie,
-                        'nutrition_facts' => $menu->nutrition_facts,
-                        'stock' => $menu->isAvailable,
-                        'tags' => $menu->foodTags->pluck('name'),
-                        'addons' => $menu->addons->pluck('name')
-                    ]) !!}
-                </script>
-            @endforeach
-        </div>
+                    <!-- Menambah Data Menu -->
+                    <script type="application/json" id="menu-data-{{ $menu->id }}">
+                        {!! json_encode([
+                            'name' => $menu->name,
+                            'description' => $menu->description,
+                            'price' => $menu->price,
+                            'menu_image' => asset('storage/' . $menu->menu_image),
+                            'calorie' => $menu->calorie,
+                            'nutrition_facts' => $menu->nutrition_facts,
+                            'stock' => $menu->isAvailable,
+                            'tags' => $menu->foodTags->pluck('name'),
+                            'addons' => $menu->addons->pluck('name')
+                        ]) !!}
+                    </script>
+                @endforeach
+            </div>
+        @else
+            <div class="flex items-start bg-white rounded-xl shadow-sm hover:shadow-md transition p-4">
+                Silahkan menambahkan menu melalui tombol tambah menu.
+            </div>
+        @endif
     </div>
 
     <!-- Halaman Modal -->

@@ -18,6 +18,9 @@
                                 Nama Menu <span class="text-red-500">*</span>
                             </label>
                             <input type="text" name="nama" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-green-500 focus:outline-none focus:ring-2 px-3 py-2" required>
+                            @error('nama')
+                                <div class="text-red-500">{{ $message }}</div>
+                            @enderror
                         </div>
 
                         <!-- Deskripsi -->
@@ -26,6 +29,9 @@
                                 Deskripsi <span class="text-red-500">*</span>
                             </label>
                             <textarea name="deskripsi" rows="4" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-green-500 focus:outline-none focus:ring-2 px-3 py-2" required></textarea>
+                            @error('deskripsi')
+                                <div class="text-red-500">{{ $message }}</div>
+                            @enderror
                         </div>
 
                         <!-- Harga -->
@@ -34,6 +40,9 @@
                                 Harga (Rp) <span class="text-red-500">*</span>
                             </label>
                             <input type="number" name="harga" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-green-500 focus:outline-none focus:ring-2 px-3 py-2" required>
+                            @error('harga')
+                                <div class="text-red-500">{{ $message }}</div>
+                            @enderror
                         </div>
 
                         <!-- Gambar -->
@@ -42,6 +51,9 @@
                                 Gambar
                             </label>
                             <input type="file" name="gambar" accept="image/*" class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:bg-green-100 file:text-green-700 hover:file:bg-green-200">
+                            @error('gambar')
+                                <div class="text-red-500">{{ $message }}</div>
+                            @enderror
                         </div>
 
                         <!-- Kalori -->
@@ -50,6 +62,9 @@
                                 Kalori <span class="text-red-500">*</span>
                             </label>
                             <input type="number" name="kalori" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 px-3 py-2" required>
+                            @error('kalori')
+                                <div class="text-red-500">{{ $message }}</div>
+                            @enderror
                         </div>
 
                         <!-- Nutrition Facts -->
@@ -58,6 +73,9 @@
                                 Nutrition Facts <span class="text-red-500">*</span>
                             </label>
                             <textarea name="nutrition_facts" rows="3" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-green-500 focus:outline-none focus:ring-2 px-3 py-2" placeholder="Contoh: Protein 10g, Lemak 5g, Karbohidrat 20g" required></textarea>
+                            @error('nutrition_facts')
+                                <div class="text-red-500">{{ $message }}</div>
+                            @enderror
                         </div>
 
                         <!-- Tersedia -->
@@ -75,6 +93,9 @@
                                     <span class="ml-2 text-gray-700">Tidak</span>
                                 </label>
                             </div>
+                            @error('tersedia')
+                                <div class="text-red-500">{{ $message }}</div>
+                            @enderror
                         </div>
 
                         <!-- Tags -->
