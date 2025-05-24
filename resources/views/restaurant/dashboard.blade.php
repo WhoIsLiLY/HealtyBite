@@ -58,30 +58,31 @@
             <div class="w-full">
                 <h2 class="text-2xl font-bold text-green-600">Menu Anda</h2>
                 <!-- Menu Cards -->
-                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-6">
-                    @forelse ($menus as $menu)
-                        <div
-                            class="bg-white border border-gray-200 rounded-xl overflow-hidden shadow hover:shadow-lg transition">
-                            <img src="{{ asset('storage/' . $menu->menu_image) }}" alt="{{ $menu->name }}"
-                                class="w-full h-40 object-cover">
-                            <div class="p-4">
-                                <div class="flex items-center justify-between mb-2">
-                                    <h3 class="text-lg font-bold text-green-800">{{ $menu->name }}</h3>
-                                    <span class="text-xs px-2 py-1 rounded-full font-semibold
-                                {{ $menu->isAvailable ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700' }}">
-                                        {{ $menu->isAvailable ? 'Tersedia' : 'Tidak Tersedia' }}
-                                    </span>
+                @if ($menus->count())
+                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-6">
+                        @foreach ($menus as $menu)
+                            <div
+                                class="bg-white border border-gray-200 rounded-xl overflow-hidden shadow hover:shadow-lg transition">
+                                <img src="{{ asset('storage/' . $menu->menu_image) }}" alt="{{ $menu->name }}"
+                                    class="w-full h-40 object-cover">
+                                <div class="p-4">
+                                    <div class="flex items-center justify-between mb-2">
+                                        <h3 class="text-lg font-bold text-green-800">{{ $menu->name }}</h3>
+                                        <span class="text-xs px-2 py-1 rounded-full font-semibold
+                                    {{ $menu->isAvailable ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700' }}">
+                                            {{ $menu->isAvailable ? 'Tersedia' : 'Tidak Tersedia' }}
+                                        </span>
+                                    </div>
+                                    <p class="text-green-700 font-semibold mt-2">
+                                        Rp {{ number_format($menu->price, 0, ',', '.') }}
+                                    </p>
                                 </div>
-                                <p class="text-green-700 font-semibold mt-2">
-                                    Rp {{ number_format($menu->price, 0, ',', '.') }}
-                                </p>
                             </div>
-                        </div>
-                    @empty
-                        <p class="col-span-full text-center text-gray-500">No menu items available.</p>
-                    @endforelse
-                </div>
-
+                        @endforeach
+                    </div>
+                @else
+                    <p class="text-sm text-gray-500 mt-2">Belum ada menu yang dibuat.</p>
+                @endif
             </div>
             <a href="{{ route('restaurant.menus') }}"
                 class="absolute top-4 right-4 bg-green-600 text-white px-4 py-2 text-sm rounded-full hover:bg-green-700 transition">

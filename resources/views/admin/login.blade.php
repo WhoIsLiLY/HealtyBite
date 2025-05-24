@@ -13,6 +13,15 @@
 <body class="bg-gray-800 text-white">
     <div class="flex justify-center items-center min-h-screen bg-gradient-to-r from-green-400 to-blue-500">
         <div class="bg-white rounded-lg shadow-lg p-8 w-full max-w-md">
+            <!-- Success Tabs -->
+            @if (session('success'))
+                <div class="mb-4 px-4">
+                    <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">
+                        <strong class="font-bold">Sukses! </strong><span class="block sm:inline">{{ session('success') }}</span>
+                    </div>
+                </div>
+            @endif
+
             <h2 class="text-3xl font-bold text-center text-gray-800 mb-8">Login</h2>
             <form action="{{ route('admin.login') }}" method="POST" class="space-y-6">
                 @csrf

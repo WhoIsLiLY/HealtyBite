@@ -412,7 +412,7 @@ class RestaurantController extends Controller
             'restaurant_category' => 'required|string|max:255',
             'email' => 'required|email|unique:restaurants,email',
             'phone_number' => 'required|string|max:20',
-            'password' => 'required|string|min:6',
+            'password' => 'required|string',
         ]);
 
         $category = RestaurantCategory::firstOrCreate([
@@ -428,12 +428,10 @@ class RestaurantController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
-        dd($restaurant);
-
         if ($restaurant) {
-            return redirect()->route('admin.login')->with('success', 'Registration successful. Please login.');
+            return redirect()->route('admin.login')->with('success', 'Registrasi berhasil, silahkan login');
         }
 
-        return redirect()->back()->with('error', 'Registration failed. Please try again.')->withInput();
+        return redirect()->back()->with('error', 'Registrasi gagal, Silahkan coba lagi')->withInput();
     }
 }
