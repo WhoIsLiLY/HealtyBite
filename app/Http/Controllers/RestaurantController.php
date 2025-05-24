@@ -350,11 +350,32 @@ class RestaurantController extends Controller
     public function menuDelete($id)
     {
         $menu = Auth::guard('admin')->user()->menus()->findOrFail($id);
-        $menu->addons()->delete();
-        $menu->foodTags()->detach();
+        $hasAddons = $menu->addons()->exists();
+        $hasTags = $menu->foodTags()->exists();
+
+        // Hapus relasi jika ada
+        if ($hasAddons) {
+            $menu->addons()->delete();
+        }
+
+        if ($hasTags) {
+            $menu->foodTags()->detach();
+        }
+
         $menu->delete();
 
-        return redirect()->route('restaurant.menus')->with('success', 'Menu berhasil dihapus beserta addons dan tags-nya.');
+        // Tentukan pesan sesuai kondisi
+        if ($hasAddons && $hasTags) {
+            $message = 'Menu berhasil dihapus beserta addons dan tags-nya.';
+        } elseif ($hasAddons) {
+            $message = 'Menu berhasil dihapus beserta addons-nya.';
+        } elseif ($hasTags) {
+            $message = 'Menu berhasil dihapus beserta tags-nya.';
+        } else {
+            $message = 'Menu berhasil dihapus.';
+        }
+
+        return redirect()->route('restaurant.menus')->with('success', $message);
     }
 
     public function topMenu()
