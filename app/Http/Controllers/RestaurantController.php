@@ -471,4 +471,69 @@ class RestaurantController extends Controller
         return redirect()->back()->with('error', 'Registrasi gagal, Silahkan coba lagi')->withInput();
     }
 
+    public function showEditForm($id)
+    {
+        $restaurant = Restaurant::with('category')->findOrFail($id);
+        return view('restaurant.edit', compact('restaurant'));
+    }
+
+    public function updateRestaurant(Request $request, $id)
+    {
+        $restaurant = Restaurant::findOrFail($id);
+
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'location' => 'required|string|max:255',
+            'restaurant_category' => 'required|string|max:255',
+            'email' => 'required|email|unique:restaurants,email,' . $restaurant->id,
+            'phone_number' => 'required|string|max:20',
+            'description' => 'nullable|string',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
+        $category = RestaurantCategory::firstOrCreate([
+            'name' => $request->restaurant_category,
+        ]);
+
+        $restaurant->update([
+            'name' => $request->name,
+            'location' => $request->location,
+            'description' => $request->description,
+            'restaurant_categories_id' => $category->id,
+            'email' => $request->email,
+            'phone_number' => $request->phone_number,
+        ]);
+
+        if ($request->hasFile('image')) {
+            $extension = $request->file('image')->getClientOriginalExtension();
+            $filename = 'restaurant_' . $restaurant->id . '.' . $extension;
+
+            $path = $request->file('image')->storeAs('restaurants', $filename, 'public');
+
+            $restaurant->update(['image' => $path]);
+        }
+
+        return redirect()->route('restaurant.dashboard', $restaurant->id)
+            ->with('success', 'Profil restoran berhasil diperbarui.');
+    }
+
+    public function destroy($id)
+    {
+        // Find the restaurant by ID or fail with 404
+        $restaurant = Restaurant::findOrFail($id);
+
+        // Optional: delete the restaurant image file from storage if exists
+        if ($restaurant->image && \Storage::disk('public')->exists($restaurant->image)) {
+            \Storage::disk('public')->delete($restaurant->image);
+        }
+
+        // Delete the restaurant record from DB
+        $restaurant->delete();
+
+        // Redirect back with success message
+        return redirect()->route('restaurant.dashboard')->with('success', 'Restoran berhasil dihapus.');
+    }
+
+
+
 }

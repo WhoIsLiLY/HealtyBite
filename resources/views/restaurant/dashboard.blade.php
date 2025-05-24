@@ -1,7 +1,7 @@
 @extends('layouts.main')
 
 @section('content')
-    <div class="min-h-screen bg-gray-100 px-4 pt-4 pb-20">
+    <div class="min-h-screen bg-gray-100 px-4 pt-4 pb-20" x-data="{ showModal: false }">
 
         <!-- Header -->
         <div class="bg-white rounded-xl shadow p-4 mb-6 flex flex-col lg:items-center lg:justify-between">
@@ -12,6 +12,16 @@
             </div>
             <!-- Wallet Info -->
             <div class="w-full flex-1 lg:ml-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+
+                <!-- Detail Button -->
+                <div class="bg-green-50 border border-green-200 rounded-xl p-4 flex items-center justify-between">
+                    <p class="text-sm text-gray-700">Lihat Detail Restoran</p>
+                    <button @click="showModal = true"
+                        class="bg-green-600 text-white px-3 py-1 text-sm rounded-full hover:bg-green-700 transition">
+                        Detail
+                    </button>
+                </div>
+
                 <!-- Saldo -->
                 <div class="bg-green-50 border border-green-200 rounded-xl p-4 flex items-center justify-between">
                     <div>
@@ -68,8 +78,9 @@
                                 <div class="p-4">
                                     <div class="flex items-center justify-between mb-2">
                                         <h3 class="text-lg font-bold text-green-800">{{ $menu->name }}</h3>
-                                        <span class="text-xs px-2 py-1 rounded-full font-semibold
-                                    {{ $menu->isAvailable ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700' }}">
+                                        <span
+                                            class="text-xs px-2 py-1 rounded-full font-semibold
+                                                                        {{ $menu->isAvailable ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700' }}">
                                             {{ $menu->isAvailable ? 'Tersedia' : 'Tidak Tersedia' }}
                                         </span>
                                     </div>
@@ -146,34 +157,73 @@
 
         <!-- <div class="max-w-4xl mx-auto text-center">
 
-                                    <h2 class="text-4xl font-extrabold text-green-800 mb-4">
-                                        Welcome to Healthy Food Ordering
-                                    </h2>
-                                    <p class="text-lg text-green-900 mb-6">
-                                        Order healthy and delicious food easily!
-                                    </p>
-                                    <p class="text-md text-gray-700 font-medium mb-8">
-                                        <span class="font-semibold text-green-700">Today's Revenue:</span> Rp {{ $dailyRevenue }}
-                                    </p>
+                                                <h2 class="text-4xl font-extrabold text-green-800 mb-4">
+                                                    Welcome to Healthy Food Ordering
+                                                </h2>
+                                                <p class="text-lg text-green-900 mb-6">
+                                                    Order healthy and delicious food easily!
+                                                </p>
+                                                <p class="text-md text-gray-700 font-medium mb-8">
+                                                    <span class="font-semibold text-green-700">Today's Revenue:</span> Rp {{ $dailyRevenue }}
+                                                </p>
 
-                                    <div class="flex flex-wrap justify-center gap-4">
-                                        <a href="{{ route('restaurant.orders.top') }}"
-                                            class="bg-green-600 text-white font-semibold px-5 py-3 rounded-xl hover:bg-green-700 transition">
-                                            Top Order
-                                        </a>
-                                        <a href="{{ route('restaurant.menus.top') }}"
-                                            class="bg-green-600 text-white font-semibold px-5 py-3 rounded-xl hover:bg-green-700 transition">
-                                            Top Menu
-                                        </a>
-                                        <a href="{{ route('restaurant.reviews') }}"
-                                            class="bg-green-600 text-white font-semibold px-5 py-3 rounded-xl hover:bg-green-700 transition">
-                                            Reviews
-                                        </a>
-                                        <a href="{{ route('restaurant.orders.payment') }}"
-                                            class="bg-green-600 text-white font-semibold px-5 py-3 rounded-xl hover:bg-green-700 transition">
-                                            Orders by Payment
-                                        </a>
-                                    </div>
-                                </div> -->
+                                                <div class="flex flex-wrap justify-center gap-4">
+                                                    <a href="{{ route('restaurant.orders.top') }}"
+                                                        class="bg-green-600 text-white font-semibold px-5 py-3 rounded-xl hover:bg-green-700 transition">
+                                                        Top Order
+                                                    </a>
+                                                    <a href="{{ route('restaurant.menus.top') }}"
+                                                        class="bg-green-600 text-white font-semibold px-5 py-3 rounded-xl hover:bg-green-700 transition">
+                                                        Top Menu
+                                                    </a>
+                                                    <a href="{{ route('restaurant.reviews') }}"
+                                                        class="bg-green-600 text-white font-semibold px-5 py-3 rounded-xl hover:bg-green-700 transition">
+                                                        Reviews
+                                                    </a>
+                                                    <a href="{{ route('restaurant.orders.payment') }}"
+                                                        class="bg-green-600 text-white font-semibold px-5 py-3 rounded-xl hover:bg-green-700 transition">
+                                                        Orders by Payment
+                                                    </a>
+                                                </div>
+                                            </div> -->
+        <!-- Modal -->
+        <div x-show="showModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div class="bg-white rounded-xl shadow-lg p-6 w-full max-w-md relative">
+                <!-- Close Button -->
+                <button @click="showModal = false"
+                    class="absolute top-2 right-2 text-gray-600 hover:text-gray-800 text-xl">&times;</button>
+
+                <!-- Restaurant Image -->
+                @if ($restaurant->image)
+                    <img src="{{ asset('storage/' . $restaurant->image) }}" alt="Restaurant Image"
+                        class="w-full h-40 object-cover rounded-lg mb-4">
+                @endif
+
+                <h2 class="text-xl font-bold mb-2 text-green-700">{{ $restaurant->name }}</h2>
+
+                <p class="mb-1"><strong>Deskripsi:</strong> {{ $restaurant->description ?? '-' }}</p>
+                <p class="mb-1"><strong>Alamat:</strong> {{ $restaurant->location }}</p>
+                <p class="mb-1"><strong>Kategori:</strong> {{ $restaurant->category->name ?? 'Tidak diketahui' }}</p>
+                <p class="mb-1"><strong>No. Telepon:</strong> {{ $restaurant->phone_number }}</p>
+                <p class="mb-4"><strong>Email:</strong> {{ $restaurant->email }}</p>
+
+                <div class="flex justify-end space-x-3">
+                    <a href="{{ route('restaurant.edit', $restaurant->id) }}"
+                        class="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600">
+                        Edit
+                    </a>
+
+                    <form action="{{ route('restaurant.delete', $restaurant->id) }}" method="POST"
+                        onsubmit="return confirm('Yakin ingin menghapus restoran ini?')">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">
+                            Hapus
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
     </div>
 @endsection
