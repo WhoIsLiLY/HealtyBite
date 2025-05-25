@@ -364,6 +364,7 @@ class RestaurantController extends Controller
         }
 
         $menu->delete();
+<<<<<<< HEAD
 
         // Tentukan pesan sesuai kondisi
         if ($hasAddons && $hasTags) {
@@ -377,6 +378,9 @@ class RestaurantController extends Controller
         }
 
         return redirect()->route('restaurant.menus')->with('success', $message);
+=======
+        return redirect()->route('restaurant.menus')->with('success', 'Menu berhasil dihapus beserta addons dan tags-nya.');
+>>>>>>> 3e4d442 (add new feature)
     }
 
     public function topMenu()
