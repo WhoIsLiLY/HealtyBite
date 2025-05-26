@@ -364,23 +364,7 @@ class RestaurantController extends Controller
         }
 
         $menu->delete();
-<<<<<<< HEAD
-
-        // Tentukan pesan sesuai kondisi
-        if ($hasAddons && $hasTags) {
-            $message = 'Menu berhasil dihapus beserta addons dan tags-nya.';
-        } elseif ($hasAddons) {
-            $message = 'Menu berhasil dihapus beserta addons-nya.';
-        } elseif ($hasTags) {
-            $message = 'Menu berhasil dihapus beserta tags-nya.';
-        } else {
-            $message = 'Menu berhasil dihapus.';
-        }
-
-        return redirect()->route('restaurant.menus')->with('success', $message);
-=======
         return redirect()->route('restaurant.menus')->with('success', 'Menu berhasil dihapus beserta addons dan tags-nya.');
->>>>>>> 3e4d442 (add new feature)
     }
 
     public function topMenu()
