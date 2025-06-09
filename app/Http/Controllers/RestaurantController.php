@@ -3,20 +3,21 @@
 namespace App\Http\Controllers;
 
 use App\Models\Menu;
-use App\Models\Order;
-use App\Models\Restaurant;
-use App\Models\RestaurantCategory;
-use App\Models\FoodTag;
 use App\Models\Addon;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
-use App\Http\Controllers\AuthController;
+use App\Models\Order;
 use App\Models\Basket;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\Hash;
+use App\Models\FoodTag;
+use App\Models\Restaurant;
 use Illuminate\Support\Str;
+use Illuminate\Http\Request;
+use App\Models\RestaurantCategory;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\FacadesStorage;
+use Illuminate\Support\Facades\Storage;
+use App\Http\Controllers\AuthController;
+use Illuminate\Support\Facades\Validator;
 
 class RestaurantController extends Controller
 {
@@ -364,7 +365,23 @@ class RestaurantController extends Controller
         }
 
         $menu->delete();
+<<<<<<< HEAD
         return redirect()->route('restaurant.menus')->with('success', 'Menu berhasil dihapus beserta addons dan tags-nya.');
+=======
+
+        // Tentukan pesan sesuai kondisi
+        if ($hasAddons && $hasTags) {
+            $message = 'Menu berhasil dihapus beserta addons dan tags-nya.';
+        } elseif ($hasAddons) {
+            $message = 'Menu berhasil dihapus beserta addons-nya.';
+        } elseif ($hasTags) {
+            $message = 'Menu berhasil dihapus beserta tags-nya.';
+        } else {
+            $message = 'Menu berhasil dihapus.';
+        }
+
+        return redirect()->route('restaurant.menus')->with('success', $message);
+>>>>>>> 79da79e (fix bugs)
     }
 
     public function topMenu()
@@ -511,8 +528,8 @@ class RestaurantController extends Controller
         $restaurant = Restaurant::findOrFail($id);
 
         // Optional: delete the restaurant image file from storage if exists
-        if ($restaurant->image && \Storage::disk('public')->exists($restaurant->image)) {
-            \Storage::disk('public')->delete($restaurant->image);
+        if ($restaurant->image && Storage::disk('public')->exists($restaurant->image)) {
+            Storage::disk('public')->delete($restaurant->image);
         }
 
         // Delete the restaurant record from DB
