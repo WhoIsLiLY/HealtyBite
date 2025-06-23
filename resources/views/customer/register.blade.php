@@ -4,16 +4,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Restaurant Registration</title>
+    <title>Customer Registration</title>
     @vite('resources/css/app.css')
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
 </head>
 
 <body class="bg-gradient-to-br from-green-500 to-blue-600 min-h-screen flex items-center justify-center p-4">
+        @if(session('error'))
+            <div class="bg-red-50 border-l-4 border-red-500 text-red-700 p-4 mb-6 rounded-lg flex items-center">
+                <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path>
+                </svg>
+                {{ session('error') }}
+            </div>
+        @endif
     <div class="bg-white rounded-2xl shadow-xl overflow-hidden w-full max-w-2xl animate__animated animate__fadeIn">
         <!-- Header Section -->
         <div class="bg-gradient-to-r from-blue-600 to-green-600 p-6 text-center">
-            <h2 class="text-3xl font-bold text-white">Register Your Restaurant</h2>
+            <h2 class="text-3xl font-bold text-white">Register Your Customer</h2>
             <p class="text-blue-100 mt-2">Join our platform and grow your business</p>
         </div>
 
@@ -38,18 +46,18 @@
 
         <!-- Form Section -->
         <div class="p-6">
-            <form method="POST" action="{{ route('admin.register.create') }}" enctype="multipart/form-data" class="space-y-6">
+            <form method="POST" action="{{ route('customer.register.create') }}" enctype="multipart/form-data" class="space-y-6">
                 @csrf
 
                 <!-- Grid Layout for Form Fields -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <!-- Restaurant Name -->
+                    <!-- Customer Name -->
                     <div>
-                        <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Restaurant Name</label>
+                        <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Customer Name</label>
                         <div class="relative">
                             <input id="name" type="text" name="name" required value="{{ old('name') }}"
                                 class="w-full bg-white pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                                placeholder="Your restaurant name">
+                                placeholder="Your Customer name">
                             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                 <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
@@ -60,12 +68,12 @@
 
                     <!-- Category -->
                     <div>
-                        <label for="restaurant_category" class="block text-sm font-medium text-gray-700 mb-1">Category</label>
+                        <label for="Customer_category" class="block text-sm font-medium text-gray-700 mb-1">Category</label>
                         <div class="relative">
-                            <input id="restaurant_category" type="text" name="restaurant_category" required
-                                value="{{ old('restaurant_category') }}"
+                            <input id="Customer_category" type="text" name="Customer_category" required
+                                value="{{ old('Customer_category') }}"
                                 class="w-full bg-white pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                                placeholder="Restaurant category">
+                                placeholder="Customer category">
                             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                 <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 19a2 2 0 01-2-2V7a2 2 0 012-2h4l2-2h4l2 2h4a2 2 0 012 2v1M5 19h14a2 2 0 002-2v-5a2 2 0 00-2-2H9a2 2 0 00-2 2v5a2 2 0 01-2 2z"></path>
@@ -80,7 +88,7 @@
                         <div class="relative">
                             <input id="location" type="text" name="location" required value="{{ old('location') }}"
                                 class="w-full bg-white pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                                placeholder="Restaurant address">
+                                placeholder="Customer address">
                             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                 <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
@@ -106,7 +114,7 @@
                     </div>
 
                     <!-- Email -->
-                    <div class="md:col-span-2">
+                    <div>
                         <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
                         <div class="relative">
                             <input id="email" type="email" name="email" required value="{{ old('email') }}"
@@ -135,30 +143,12 @@
                         </div>
                     </div>
 
-                    <!-- Image Upload -->
-                    <div>
-                        <label for="image" class="block text-sm font-medium text-gray-700 mb-1">Restaurant Image</label>
-                        <div class="relative">
-                            <input id="image" type="file" name="image" accept="image/*"
-                                class="w-full opacity-0 absolute inset-0 z-10 cursor-pointer">
-                            <div class="border border-gray-300 rounded-lg p-3 bg-white">
-                                <div class="flex items-center justify-center">
-                                    <svg class="h-10 w-10 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                                    </svg>
-                                    <span class="ml-2 text-sm text-gray-600">Upload image</span>
-                                </div>
-                                <div id="file-name" class="text-xs text-gray-500 mt-1 text-center">No file selected</div>
-                            </div>
-                        </div>
-                    </div>
-
                     <!-- Description -->
                     <div class="md:col-span-2">
                         <label for="description" class="block text-sm font-medium text-gray-700 mb-1">Description</label>
                         <textarea id="description" name="description" rows="3"
                             class="w-full bg-white p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                            placeholder="Tell us about your restaurant">{{ old('description') }}</textarea>
+                            placeholder="Tell us about your Customer">{{ old('description') }}</textarea>
                     </div>
                 </div>
 
@@ -166,7 +156,7 @@
                 <div class="pt-4">
                     <button type="submit"
                         class="w-full py-3 px-4 bg-gradient-to-r from-blue-600 to-green-600 text-white font-semibold rounded-lg shadow-md hover:from-blue-700 hover:to-green-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-200">
-                        Register Restaurant
+                        Register Customer
                     </button>
                 </div>
             </form>
@@ -174,7 +164,7 @@
             <!-- Login Link -->
             <div class="mt-6 text-center text-sm text-gray-600">
                 Already have an account?
-                <a href="{{ route('admin.login') }}" class="font-medium text-blue-600 hover:text-blue-500">Login here</a>
+                <a href="/" class="font-medium text-blue-600 hover:text-blue-500">Login here</a>
             </div>
         </div>
     </div>

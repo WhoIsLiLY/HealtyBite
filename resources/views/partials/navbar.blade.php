@@ -28,6 +28,29 @@
                     <span
                         class="absolute bottom-0 left-0 w-0 h-0.5 bg-green-600 transition-all duration-300 group-hover:w-full"></span>
                 </a>
+                <!-- User Dropdown -->
+                <div class="relative ml-4">
+                    <button id="user-menu-button" class="flex items-center space-x-2 focus:outline-none">
+                        <span class="text-gray-700 font-medium">{{ Auth::guard('customer')->user()->name }}</span>
+                        <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7">
+                            </path>
+                        </svg>
+                    </button>
+
+                    <!-- Dropdown Menu -->
+                    <div id="user-dropdown"
+                        class="hidden absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50">
+                        <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+                            <button type="submit"
+                                class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition duration-300">
+                                Logout
+                            </button>
+                        </form>
+                    </div>
+                </div>
             @elseif(auth('admin')->check())
                 <a href="/"
                     class="text-gray-700 hover:text-green-600 font-medium transition duration-300 relative group">
@@ -47,40 +70,42 @@
                     <span
                         class="absolute bottom-0 left-0 w-0 h-0.5 bg-green-600 transition-all duration-300 group-hover:w-full"></span>
                 </a>
-            @endif
+                <!-- User Dropdown -->
+                <div class="relative ml-4">
+                    <button id="user-menu-button" class="flex items-center space-x-2 focus:outline-none">
+                        <span class="text-gray-700 font-medium">{{ Auth::guard('admin')->user()->name }}</span>
+                        <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7">
+                            </path>
+                        </svg>
+                    </button>
 
-            <!-- User Dropdown -->
-            <div class="relative ml-4">
-                <button id="user-menu-button" class="flex items-center space-x-2 focus:outline-none">
-                    <span class="text-gray-700 font-medium">{{ Auth::guard('customer')->user()->name }}</span>
-                    <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                        xmlns="http://www.w3.org/2000/svg">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                    </svg>
-                </button>
-
-                <!-- Dropdown Menu -->
-                <div id="user-dropdown"
-                    class="hidden absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50">
-                    <form method="POST" action="{{ route('logout') }}">
-                        @csrf
-                        <button type="submit"
-                            class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition duration-300">
-                            Logout
-                        </button>
-                    </form>
+                    <!-- Dropdown Menu -->
+                    <div id="user-dropdown"
+                        class="hidden absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50">
+                        <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+                            <button type="submit"
+                                class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition duration-300">
+                                Logout
+                            </button>
+                        </form>
+                    </div>
                 </div>
-            </div>
+            @endif
         @else
             <!-- Guest Links -->
             <button id="openLoginModal"
                 class="hidden md:block px-4 py-2 text-gray-700 hover:text-green-600 font-medium transition">
                 Login
             </button>
-            <button
-                class="px-4 py-2 bg-gradient-to-r from-green-500 to-blue-500 text-white rounded-full font-medium hover:shadow-lg transition-all transform hover:scale-105">
-                Sign Up
-            </button>
+            <a href="/customer/register">
+                <button
+                    class="px-4 py-2 bg-gradient-to-r from-green-500 to-blue-500 text-white rounded-full font-medium hover:shadow-lg transition-all transform hover:scale-105">
+                    Sign Up
+                </button></a>
+
         @endif
     </div>
 

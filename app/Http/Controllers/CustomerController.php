@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Menu;
 use App\Models\Basket;
-use Carbon\Traits\ToStringFormat;
+use App\Models\Customer;
 use Illuminate\Http\Request;
+use Carbon\Traits\ToStringFormat;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class CustomerController extends Controller
 {
@@ -28,6 +30,40 @@ class CustomerController extends Controller
     {
         $order = Auth::user()->orders->findOrFail($id);
         return view('customer.orders.show', compact('order'));
+    }
+    public function showRegisterForm()
+    {
+        return view('customer.register');
+    }
+
+    public function register(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:customers,email',
+            'password' => 'required|string',
+            'balance' => 'required|numeric',
+            'point' => 'required|numeric',
+            'phone_number' => 'required|string|max:20',
+            'description' => 'nullable|string',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
+        $customer = Customer::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'phone_number' => $request->phone_number,
+            'balance' => $request->balance,
+            'point' => $request->point,
+            'password' => Hash::make($request->password),
+            'created_at' => now(),
+        ]);
+
+        if ($customer) {
+            return redirect()->route('customer.dashboard')->with('success', 'Registrasi berhasil, silahkan login');
+        }
+
+        return redirect()->back()->with('error', 'Registrasi gagal, Silahkan coba lagi')->withInput();
     }
     public function getBasketInfo($restaurant_id)
     {
