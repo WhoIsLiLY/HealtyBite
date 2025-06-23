@@ -43,6 +43,9 @@ Route::prefix('customer')->middleware('auth-customer')->group(function () {
     Route::delete('/basket/item', [CustomerController::class, 'deleteDataBasketItem'])->name('customer.basket.item.delete');
     Route::get('/checkout', [CheckoutController::class, 'getCheckout'])->name('customer.checkout');
     Route::post('/checkout/process', [CheckoutController::class, 'processCheckout'])->name('checkout.process');
+    Route::get('/order/process/{order}', [CheckoutController::class, 'showOrderProcessPage'])->name('order.process');
+    Route::get('/order/status/{order}', [CheckoutController::class, 'getOrderStatus'])->name('order.status');
+    Route::post('/order/cancel/{order}', [CheckoutController::class, 'cancelOrder'])->name('order.cancel');
 });
 
 // ======= RESTAURANT ROUTES ======= //

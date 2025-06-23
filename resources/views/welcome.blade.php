@@ -29,7 +29,7 @@
                         sehat tanpa ribet!
                     </p>
                     <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
-                        <button
+                        <button id="openLoginModal2"
                             class="px-8 py-3 bg-gradient-to-r from-green-500 to-blue-500 text-white rounded-full font-semibold hover:shadow-lg transition-all transform hover:scale-105 flex items-center justify-center">
                             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                                 xmlns="http://www.w3.org/2000/svg">
@@ -122,16 +122,16 @@
             <div class="container mx-auto px-6">
                 <p class="text-center text-gray-500 mb-8">Bekerja sama dengan mitra terbaik</p>
                 <div class="flex flex-wrap justify-center items-center gap-8 md:gap-16">
-                    <img src="https://via.placeholder.com/120x40?text=Organic+Farm" alt="Partner"
-                        class="h-8 opacity-60 hover:opacity-100 transition">
-                    <img src="https://via.placeholder.com/120x40?text=Green+Chef" alt="Partner"
-                        class="h-8 opacity-60 hover:opacity-100 transition">
-                    <img src="https://via.placeholder.com/120x40?text=Healthy+Kitchen" alt="Partner"
-                        class="h-8 opacity-60 hover:opacity-100 transition">
-                    <img src="https://via.placeholder.com/120x40?text=Nature's+Best" alt="Partner"
-                        class="h-8 opacity-60 hover:opacity-100 transition">
-                    <img src="https://via.placeholder.com/120x40?text=Farm+To+Table" alt="Partner"
-                        class="h-8 opacity-60 hover:opacity-100 transition">
+                    <img src="/storage/assets/img/logos/gopay.png" alt="Partner"
+                        class="h-20 opacity-60 hover:opacity-100 transition">
+                    <img src="/storage/assets/img/logos/ovo.png" alt="Partner"
+                        class="h-10 opacity-60 hover:opacity-100 transition">
+                    <img src="/storage/assets/img/logos/gopay.png" alt="Partner"
+                        class="h-20 opacity-60 hover:opacity-100 transition">
+                    <img src="/storage/assets/img/logos/ovo.png" alt="Partner"
+                        class="h-10 opacity-60 hover:opacity-100 transition">
+                    <img src="/storage/assets/img/logos/gopay.png" alt="Partner"
+                        class="h-20 opacity-60 hover:opacity-100 transition">
                 </div>
             </div>
         </section>
@@ -585,66 +585,116 @@
             scrollbar-width: none;
         }
     </style>
-    <div id="overlay" class="fixed inset-0 bg-black bg-opacity-25 z-[9999] hidden overlay"></div>
-    <div id="loginUI"
-        class="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-[10000] hidden
-    w-full max-w-[500px] min-h-[55vh] bg-white rounded-lg shadow-lg flex justify-center items-center p-6">
-        <!-- Close Button -->
-        <button id="closeLoginModal"
-            class="absolute top-2 right-2 text-gray-500 hover:text-gray-700 text-xl font-bold">&times;</button>
+    <div id="overlay" class="fixed inset-0 bg-black bg-opacity-30 backdrop-blur-sm z-[9999] hidden overlay transition-opacity duration-300"></div>
 
-        <!-- Login Content -->
-        <div class="flex flex-col justify-center w-full pt-6">
-            <!-- Logo & Title -->
-            <div class="text-center">
-                <img class="mx-auto h-20 w-auto" src="/assets/img/logo.png" alt="Your Company">
-                <h1 class="mt-2 text-4xl font-bold tracking-tight text-gray-900">Welcome Back!</h1>
-            </div>
+<div id="loginUI"
+    class="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-[10000] hidden
+    w-full max-w-md bg-white rounded-xl shadow-2xl overflow-hidden p-0">
+    
+    <!-- Close Button -->
+    <button id="closeLoginModal"
+        class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors duration-200
+        rounded-full p-1 bg-gray-100 hover:bg-gray-200">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+    </button>
 
-            <!-- Login Form -->
-            <div class="mt-8">
-                <form id="customerLoginForm" class="space-y-6" action="#" method="POST">
-                    @csrf
+    <!-- Login Content -->
+    <div class="flex flex-col w-full">
+        <!-- Header with gradient -->
+        <div class="bg-gradient-to-r from-green-500 to-blue-500 py-6 px-8 text-center">
+            <img class="mx-auto h-16 w-auto" src="/assets/img/logo.png" alt="HealthyBite">
+            <h1 class="mt-4 text-2xl font-bold text-white">Welcome Back!</h1>
+            <p class="mt-1 text-white/90">Sign in to continue your healthy journey</p>
+        </div>
 
-                    <!-- Email Input -->
-                    <div>
-                        <label for="email" class="block text-sm font-medium text-gray-900">Email address</label>
-                        <input type="email" id="email" name="email"
-                            class="w-full p-3 mt-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-600 bg-white text-gray-800"
-                            required>
-                    </div>
+        <!-- Form Container -->
+        <div class="px-8 py-8">
+            <form id="customerLoginForm" class="space-y-6" action="#" method="POST">
+                @csrf
 
-                    <!-- Password Input -->
-                    <div>
-                        <div class="flex items-center justify-between">
-                            <label for="password" class="block text-sm font-medium text-gray-900">Password</label>
-                            <a href="#" class="text-sm font-semibold text-indigo-600 hover:text-indigo-500">
-                                Forgot password?
-                            </a>
+                <!-- Email Input -->
+                <div>
+                    <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email address</label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
+                                <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
+                            </svg>
                         </div>
-                        <input type="password" id="password" name="password"
-                            class="w-full p-3 mt-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-600 bg-white text-gray-800"
-                            required>
+                        <input type="email" id="email" name="email" autocomplete="email"
+                            class="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg 
+                            focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500
+                            transition duration-200"
+                            placeholder="your@email.com" required>
                     </div>
-
-                    <!-- Submit Button -->
-                    <div>
-                        <button type="submit" id="loginButton"
-                            class="w-full flex justify-center rounded-md bg-green-600 px-4 py-2 text-base 
-                        font-semibold text-white shadow-sm hover:bg-green-500 
-                        focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-600">
-                            Sign in
-                        </button>
-                    </div>
-                </form>
-                <div class="flex justify-center w-full mt-4">
-                    <a href="/restaurant/login" class="text-green-600 hover:underline">Login as a Restaurant Partner</a>
                 </div>
 
+                <!-- Password Input -->
+                <div>
+                    <div class="flex items-center justify-between mb-1">
+                        <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+                        <a href="#" class="text-sm font-medium text-green-600 hover:text-green-500 transition-colors">
+                            Forgot password?
+                        </a>
+                    </div>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd" />
+                            </svg>
+                        </div>
+                        <input type="password" id="password" name="password" autocomplete="current-password"
+                            class="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg 
+                            focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500
+                            transition duration-200"
+                            placeholder="••••••••" required>
+                    </div>
+                </div>
 
+                <!-- Submit Button -->
+                <div>
+                    <button type="submit" id="loginButton"
+                        class="w-full flex justify-center items-center py-3 px-4 border border-transparent rounded-lg
+                        shadow-sm text-white bg-gradient-to-r from-green-600 to-green-500
+                        hover:from-green-700 hover:to-green-600
+                        focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500
+                        transition-all duration-200 font-medium">
+                        <span class="mr-2">Sign in</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+                        </svg>
+                    </button>
+                </div>
+            </form>
+
+            <!-- Alternative Login -->
+            <div class="mt-6">
+                <div class="relative">
+                    <div class="absolute inset-0 flex items-center">
+                        <div class="w-full border-t border-gray-300"></div>
+                    </div>
+                    <div class="relative flex justify-center text-sm">
+                        <span class="px-2 bg-white text-gray-500">Or login as</span>
+                    </div>
+                </div>
+
+                <div class="mt-4 text-center">
+                    <a href="/restaurant/login" 
+                        class="inline-flex items-center text-green-600 hover:text-green-700 font-medium
+                        transition-colors duration-200">
+                        <span>Restaurant Partner</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-1" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+                        </svg>
+                    </a>
+                </div>
             </div>
         </div>
     </div>
+</div>
 @endsection
 
 @push('scripts')
@@ -655,6 +705,9 @@
         }
         $(document).ready(function() {
             $('#openLoginModal').click(function() {
+                toggleUI();
+            });
+            $('#openLoginModal2').click(function() {
                 toggleUI();
             });
 

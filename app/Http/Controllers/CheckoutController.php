@@ -17,7 +17,7 @@ class CheckoutController extends Controller
         if ($basket->items->count() === 0) {
             return redirect()->route('restaurants.index');
         }
-        return view('customer.checkout', compact('basket'));
+        return view('customer.transaction.checkout', compact('basket'));
     }
     public function processCheckout(Request $request)
     {
@@ -29,7 +29,7 @@ class CheckoutController extends Controller
 
         // Pastikan keranjang ada dan tidak kosong
         if (!$basket || $basket->items->isEmpty()) {
-            return redirect()->route('home')->with('error', 'Your basket is empty.');
+            return redirect()->route('customer.dashboard')->with('error', 'Your basket is empty.');
         }
 
         // Gunakan Database Transaction
@@ -107,7 +107,7 @@ class CheckoutController extends Controller
 
             // 6. Redirect ke halaman sukses
             // Anda perlu membuat route dan view untuk 'order.success'
-            return redirect()->route('customer.dashboard', $order->id)->with('success', 'Your order has been placed successfully!');
+            return redirect()->route('order.process', $order->id)->with('success', 'Your order has been placed successfully!');
         } catch (\Exception $e) {
             // Jika terjadi error, batalkan semua query
             DB::rollBack();
@@ -125,6 +125,52 @@ class CheckoutController extends Controller
         }
 
         // Tampilkan view konfirmasi pesanan
-        return view('order.success', compact('order'));
+        return view('customer.transaction.success', compact('order'));
+    }
+    public function showOrderProcessPage(Order $order)
+    {
+        // Otorisasi: Pastikan pelanggan hanya bisa melihat pesanannya sendiri
+        if ($order->customers_id !== Auth::guard('customer')->id()) {
+            abort(403, 'Unauthorized Access');
+        }
+        $order->load(['listOrders.menu']);
+
+        // Kirim data order ke view
+        return view('customer.transaction.process', compact('order'));
+    }
+    public function getOrderStatus(Order $order)
+    {
+        // Otorisasi: Keamanan ekstra untuk endpoint API
+        if ($order->customers_id !== Auth::guard('customer')->id()) {
+            return response()->json(['error' => 'Unauthorized'], 403);
+        }
+
+        // Kembalikan hanya statusnya
+        return response()->json(['status' => $order->status]);
+    }
+    public function cancelOrder(Order $order)
+    {
+        // 1. Otorisasi: Pastikan pelanggan hanya bisa membatalkan pesanannya sendiri
+        if ($order->customers_id !== Auth::guard('customer')->id()) {
+            abort(403, 'Unauthorized Access');
+        }
+
+        // 2. Logika Bisnis: Hanya izinkan pembatalan jika status masih 'preparing'
+        if ($order->status !== 'preparing') {
+            return redirect()->back()->with('error', 'Pesanan sudah tidak dapat dibatalkan.');
+        }
+
+        // 3. Ubah Status Pesanan
+        $order->status = 'cancelled';
+        $order->save();
+
+        // 4. (PENTING) Logika Tambahan
+        // TODO: Di sinilah Anda akan memicu proses pengembalian dana (refund)
+        // ke payment gateway yang Anda gunakan.
+        // Contoh: PaymentGateway::refund($order->payment_id);
+
+        // 5. Redirect kembali ke halaman proses dengan pesan sukses
+        // Halaman akan otomatis menampilkan tampilan 'cancelled' karena statusnya sudah berubah.
+        return redirect()->route('order.process', $order->id)->with('success', 'Pesanan Anda telah berhasil dibatalkan.');
     }
 }

@@ -486,10 +486,10 @@
         </div>`;
                     });
 
-                    // Add delivery fee and tax calculations
-                    const deliveryFee = 10000;
+                    // Add service fee and tax calculations
+                    const serviceFee = 10000;
                     const tax = totalPrice * 0.1;
-                    const grandTotal = totalPrice + deliveryFee + tax;
+                    const grandTotal = totalPrice + serviceFee + tax;
 
                     html += `
     <div class="bg-gray-50 rounded-lg p-4 mt-6 border border-gray-200">
@@ -500,7 +500,7 @@
             </div>
             <div class="flex justify-between">
                 <span class="text-sm text-gray-600">Biaya Pengiriman</span>
-                <span class="text-sm font-medium text-gray-900">Rp ${deliveryFee.toLocaleString('id-ID')}</span>
+                <span class="text-sm font-medium text-gray-900">Rp ${serviceFee.toLocaleString('id-ID')}</span>
             </div>
             <div class="flex justify-between">
                 <span class="text-sm text-gray-600">Pajak (10%)</span>

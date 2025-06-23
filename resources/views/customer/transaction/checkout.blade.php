@@ -140,7 +140,7 @@
                                 {{ number_format($subtotal, 0, ',', '.') }}</span>
                         </div>
                         <div class="flex justify-between">
-                            <span class="text-sm font-medium text-gray-500">Delivery Fee</span>
+                            <span class="text-sm font-medium text-gray-500">Service Fee</span>
                             <span class="text-sm font-medium text-gray-900">Rp 10.000</span>
                         </div>
                         <div class="flex justify-between">
