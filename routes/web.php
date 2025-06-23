@@ -42,6 +42,7 @@ Route::prefix('customer')->middleware('auth-customer')->group(function () {
     Route::delete('/basket', [CustomerController::class, 'deleteDataBasket'])->name('customer.basket.delete');
     Route::delete('/basket/item', [CustomerController::class, 'deleteDataBasketItem'])->name('customer.basket.item.delete');
     Route::get('/checkout', [CheckoutController::class, 'getCheckout'])->name('customer.checkout');
+    Route::post('/checkout/process', [CheckoutController::class, 'processCheckout'])->name('checkout.process');
 });
 
 // ======= RESTAURANT ROUTES ======= //

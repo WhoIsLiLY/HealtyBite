@@ -73,7 +73,7 @@
                         @foreach ($menus as $menu)
                             <div
                                 class="bg-white border border-gray-200 rounded-xl overflow-hidden shadow hover:shadow-lg transition">
-                                <img src="{{ asset('storage/' . $menu->menu_image) }}" alt="{{ $menu->name }}"
+                                <img src="/storage/assets/img/menus/{{ $menu->menu_image}}" alt="{{ $menu->name }}"
                                     class="w-full h-40 object-cover">
                                 <div class="p-4">
                                     <div class="flex items-center justify-between mb-2">

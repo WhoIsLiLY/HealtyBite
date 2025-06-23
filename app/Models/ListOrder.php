@@ -8,6 +8,14 @@ use Illuminate\Database\Eloquent\Model;
 class ListOrder extends Model
 {
     use HasFactory;
+        protected $fillable = [
+        'orders_id',
+        'menus_id',
+        'detail',
+        'quantity',
+        'subtotal',
+    ];
+    public $timestamps = true;
 
     public function order()
     {
