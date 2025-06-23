@@ -28,7 +28,7 @@
                     <div class="flex items-start bg-white rounded-xl shadow-sm hover:shadow-md transition p-4">
 
                         <!-- Gambar Menu -->
-                        <img src="{{ asset('storage/' . $menu->menu_image) }}" alt="{{ $menu->name }}"
+                        <img src="/storage/assets/img/menus/{{ $menu->menu_image }}" alt="{{ $menu->name }}"
                             class="w-24 h-24 object-cover rounded-lg mr-4 border border-gray-200">
 
                         <!-- Info Menu -->
@@ -54,7 +54,7 @@
                             'name' => $menu->name,
                             'description' => $menu->description,
                             'price' => $menu->price,
-                            'menu_image' => asset('storage/' . $menu->menu_image),
+                            'menu_image' => $menu->menu_image,
                             'calorie' => $menu->calorie,
                             'nutrition_facts' => $menu->nutrition_facts,
                             'stock' => $menu->isAvailable,
@@ -159,7 +159,7 @@
                 document.getElementById('modalMenuName').textContent = menu.name;
                 document.getElementById('modalMenuDescription').textContent = menu.description;
                 document.getElementById('modalMenuPrice').textContent = 'Rp ' + parseInt(menu.price).toLocaleString();
-                document.getElementById('modalMenuImage').src = menu.menu_image;
+                document.getElementById('modalMenuImage').src = "/storage/assets/img/menus/" + menu.menu_image;
                 document.getElementById('modalMenuImage').alt = menu.name;
 
                 // Kanan

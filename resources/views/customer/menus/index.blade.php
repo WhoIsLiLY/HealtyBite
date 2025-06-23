@@ -60,7 +60,7 @@
             <div class="flex items-start bg-white rounded-xl shadow-sm hover:shadow-md transition p-4">
 
                 <!-- Gambar Menu -->
-                <img src="{{ $menu->image_url }}" alt="{{ $menu->name }}"
+                <img src="/storage/assets/img/menus/{{ $menu->menu_image }}" alt="{{ $menu->name }}"
                     class="w-24 h-24 object-cover rounded-lg mr-4 border border-gray-200">
 
                 <!-- Info Menu -->

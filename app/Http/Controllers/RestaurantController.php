@@ -23,8 +23,14 @@ class RestaurantController extends Controller
 {
     public function index()
     {
-        $restaurants = Restaurant::all();
+        $restaurants = Restaurant::with(['reviews', 'category'])->get();
+        $restaurants = $restaurants->map(function ($restaurant) {
+            $restaurant->rating = $restaurant->reviews->avg('rating') ?? 0;
+            $restaurant->review_count = $restaurant->reviews->count();
+            return $restaurant;
+        });
         $basket = Basket::where('user_id', Auth::guard('customer')->id())->first();
+        // dd($restaurants);
         return view('customer.restaurants.index', compact('restaurants', 'basket'));
     }
 
@@ -166,12 +172,11 @@ class RestaurantController extends Controller
             $filename = 'menu_' . $menu->id . '.' . $extension;
 
             // Simpan gambar ke folder public/menus dengan nama baru
-            $path = $request->file('gambar')->storeAs('menus', $filename, 'public');
+            $request->file('gambar')->storeAs('public/assets/img/menus', $filename);
 
             // Update kolom gambar di menu dengan path file
-            $menu->update(['menu_image' => $path]);
+            $menu->update(['menu_image' => $filename]);
         }
-
         // Simpan tags (jika ada)
         if ($request->filled('tags_name') && $request->filled('tags_description')) {
             foreach ($request->tags_name as $index => $tagName) {
@@ -331,19 +336,19 @@ class RestaurantController extends Controller
 
         if ($request->hasFile('gambar')) {
             // Gambar
-            if ($menus->menu_image && Storage::disk('public')->exists($menus->menu_image)) {
-                Storage::disk('public')->delete($menus->menu_image);
+            if ($menus->menu_image && Storage::disk('public')->exists('assets/img/menus/' . $menus->menu_image)) {
+                Storage::disk('public')->delete('assets/img/menus/' . $menus->menu_image);
             }
 
             // Buat nama file berdasarkan ID menu + ekstensi file asli
             $extension = $request->file('gambar')->getClientOriginalExtension();
             $filename = 'menu_' . $menus->id . '.' . $extension;
 
-            // Simpan gambar ke folder storage/app/public/menus dengan nama baru
-            $path = $request->file('gambar')->storeAs('menus', $filename, 'public');
+            // Simpan gambar ke folder storage/app/public/assets/img/menus dengan nama baru
+            $request->file('gambar')->storeAs('public/assets/img/menus', $filename);
 
             // Update kolom menu_image di database
-            $menus->update(['menu_image' => $path]);
+            $menus->update(['menu_image' => $filename]);
         }
 
         return redirect()->route('restaurant.menus')->with('success', 'Menu berhasil diubah.');
@@ -365,9 +370,6 @@ class RestaurantController extends Controller
         }
 
         $menu->delete();
-<<<<<<< HEAD
-        return redirect()->route('restaurant.menus')->with('success', 'Menu berhasil dihapus beserta addons dan tags-nya.');
-=======
 
         // Tentukan pesan sesuai kondisi
         if ($hasAddons && $hasTags) {
@@ -381,7 +383,6 @@ class RestaurantController extends Controller
         }
 
         return redirect()->route('restaurant.menus')->with('success', $message);
->>>>>>> 79da79e (fix bugs)
     }
 
     public function topMenu()
@@ -462,11 +463,11 @@ class RestaurantController extends Controller
             $extension = $request->file('image')->getClientOriginalExtension();
             $filename = 'restaurant_' . $restaurant->id . '.' . $extension;
 
-            // Store the image in storage/app/public/restaurants/
-            $path = $request->file('image')->storeAs('restaurants', $filename, 'public');
+            // Store the image in storage/app/public/assets/img/restaurants/
+            $request->file('image')->storeAs('public/assets/img/restaurants', $filename);
 
-            // Update the image column with the path
-            $restaurant->update(['image' => $path]);
+            $restaurant->update(['restaurant_image' => $filename]);
+
         }
 
         if ($restaurant) {
@@ -513,9 +514,8 @@ class RestaurantController extends Controller
             $extension = $request->file('image')->getClientOriginalExtension();
             $filename = 'restaurant_' . $restaurant->id . '.' . $extension;
 
-            $path = $request->file('image')->storeAs('restaurants', $filename, 'public');
-
-            $restaurant->update(['image' => $path]);
+            $request->file('image')->storeAs('public/assets/img/restaurants', $filename);
+            $restaurant->update(['restaurant_image' => $filename]);
         }
 
         return redirect()->route('restaurant.dashboard', $restaurant->id)
@@ -538,7 +538,4 @@ class RestaurantController extends Controller
         // Redirect back with success message
         return redirect()->route('restaurant.dashboard')->with('success', 'Restoran berhasil dihapus.');
     }
-
-
-
 }

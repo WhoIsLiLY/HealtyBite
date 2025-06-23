@@ -18,7 +18,7 @@ class Restaurant extends Authenticatable
         'phone_number',
         'password',
         'description',
-        'image'
+        'restaurant_image',
     ];
 
     public function menus()

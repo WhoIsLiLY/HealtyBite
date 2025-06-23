@@ -50,7 +50,7 @@
                             <label class="block text-sm font-medium text-gray-700">
                                 Gambar
                             </label>
-                            <input type="file" name="gambar" accept="image/*" class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:bg-green-100 file:text-green-700 hover:file:bg-green-200">
+                            <input type="file" name="gambar" accept="image/png" class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:bg-green-100 file:text-green-700 hover:file:bg-green-200">
                             @error('gambar')
                                 <div class="text-red-500">{{ $message }}</div>
                             @enderror

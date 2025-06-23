@@ -58,7 +58,7 @@
                                 <!-- Tampilkan gambar saat ini jika ada -->
                                 @if ($menus->menu_image)
                                     <div class="mb-2">
-                                        <img src="{{ asset('storage/' . $menus->menu_image) }}" alt="Belum ada gambar menu"
+                                        <img src="/storage/assets/img/menus/{{ $menus->menu_image}}" alt="Belum ada gambar menu"
                                             class="w-32 h-32 object-cover rounded-md border">
                                     </div>
                                 @endif

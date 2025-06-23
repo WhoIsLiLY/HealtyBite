@@ -21,6 +21,7 @@ return new class extends Migration {
             $table->string('image', 255)->nullable();
             $table->foreignId('restaurant_categories_id')->nullable()->constrained()->onDelete('cascade');
             $table->timestamps();
+            $table->string('restaurant_image')->nullable();
         });
     }
 
