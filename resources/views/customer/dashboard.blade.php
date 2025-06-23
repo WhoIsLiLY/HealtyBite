@@ -1,97 +1,135 @@
 @extends('layouts.main')
 
 @section('content')
-    <div class="min-h-screen bg-gray-100 px-4 pt-4 pb-20">
-        <!-- Header -->
-        <div class="bg-white rounded-xl shadow p-4 mb-6 flex flex-col lg:items-center lg:justify-between">
-            <!-- User Greeting -->
-            <div class="w-full mb-4 lg:mb-0 align-left p-4">
-                <h2 class="text-sm text-gray-500">Selamat Datang,</h2>
-                <h1 class="text-2xl font-bold text-green-600">Willy 👋</h1>
-            </div>
-            
-            <!-- Wallet Info -->
-            <div class="w-full flex-1 lg:ml-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                <!-- Saldo -->
-                <div class="bg-green-50 border border-green-200 rounded-xl p-4 flex items-center justify-between">
-                    <div>
-                        <p class="text-sm text-gray-600">Saldo</p>
-                        <p class="text-lg font-bold text-green-700">Rp 125.000</p>
+    <div class="min-h-screen bg-gray-50 px-4 pt-6 pb-20">
+        <!-- Header Section -->
+        <div class="bg-white rounded-2xl shadow-sm p-6 mb-6">
+            <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+                <!-- User Greeting -->
+                <div class="flex-1">
+                    <h2 class="text-sm text-gray-500 font-medium">Selamat Datang,</h2>
+                    <div class="flex items-center mt-1">
+                        <h1 class="text-2xl font-bold text-gray-800">Willy</h1>
+                        <span class="ml-2 text-2xl">👋</span>
                     </div>
-                    <button class="bg-green-600 text-white px-3 py-1 text-sm rounded-full hover:bg-green-700 transition">
-                        Top Up
-                    </button>
                 </div>
-
-                <!-- Poin -->
-                <div class="bg-green-50 border border-green-200 rounded-xl p-4 flex items-center justify-between">
-                    <div>
-                        <p class="text-sm text-gray-600">Poin</p>
-                        <p class="text-lg font-bold text-green-700">320 Poin</p>
+                
+                <!-- Wallet Info Cards -->
+                <div class="flex-1 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <!-- Balance Card -->
+                    <div class="bg-gradient-to-r from-green-50 to-emerald-50 border border-green-100 rounded-xl p-4 flex items-center justify-between shadow-sm">
+                        <div>
+                            <p class="text-xs text-gray-600 font-medium">Saldo</p>
+                            <p class="text-lg font-bold text-gray-800 mt-1">Rp 125.000</p>
+                        </div>
+                        <button class="bg-green-600 text-white px-3 py-1.5 text-xs rounded-lg hover:bg-green-700 transition-all shadow-sm">
+                            Top Up
+                        </button>
                     </div>
-                    <button class="bg-green-600 text-white px-3 py-1 text-sm rounded-full hover:bg-green-700 transition">
-                        Tukar
-                    </button>
-                </div>
 
-                <!-- Notifikasi -->
-                <div class="bg-white border border-gray-200 rounded-xl p-4 flex items-center justify-between">
-                    <div class="text-gray-600">
-                        <p class="text-sm">Notifikasi</p>
-                        <p class="text-lg font-semibold">3 Pesan Baru</p>
+                    <!-- Points Card -->
+                    <div class="bg-gradient-to-r from-amber-50 to-yellow-50 border border-amber-100 rounded-xl p-4 flex items-center justify-between shadow-sm">
+                        <div>
+                            <p class="text-xs text-gray-600 font-medium">Poin</p>
+                            <p class="text-lg font-bold text-gray-800 mt-1">320 Poin</p>
+                        </div>
+                        <button class="bg-amber-500 text-white px-3 py-1.5 text-xs rounded-lg hover:bg-amber-600 transition-all shadow-sm">
+                            Tukar
+                        </button>
                     </div>
-                    <button class="relative">
-                        <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" stroke-width="2"
-                            viewBox="0 0 24 24">
-                            <path
-                                d="M15 17h5l-1.405-1.405M19 13v-2a7 7 0 10-14 0v2l-1.405 1.595A1 1 0 005 17h5m4 0v1a3 3 0 11-6 0v-1m6 0H9">
-                            </path>
-                        </svg>
-                        <span class="absolute top-0 right-0 bg-red-500 text-white text-xs rounded-full px-1">3</span>
-                    </button>
+
+                    <!-- Notification Card -->
+                    <div class="bg-white border border-gray-200 rounded-xl p-4 flex items-center justify-between shadow-sm">
+                        <div>
+                            <p class="text-xs text-gray-600 font-medium">Notifikasi</p>
+                            <p class="text-lg font-semibold text-gray-800 mt-1">3 Pesan Baru</p>
+                        </div>
+                        <button class="relative">
+                            <div class="relative">
+                                <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0"></path>
+                                </svg>
+                                <span class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">3</span>
+                            </div>
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
 
-
-        <!-- Search -->
-        <div class="mb-4">
-            <form action="{{ route('restaurants.index') }}" method="get">
+        <!-- Search Section -->
+        <div class="mb-6">
+            <form action="{{ route('restaurants.index') }}" method="get" class="relative">
                 <input type="text" placeholder="Cari makanan atau minuman..."
-                    class="w-full p-3 rounded-xl border border-gray-300 focus:ring-green-500 focus:outline-none bg-white">
+                    class="w-full p-4 pr-12 rounded-xl border border-gray-200 focus:ring-2 focus:ring-green-400 focus:border-green-400 focus:outline-none bg-white shadow-sm transition-all">
+                <button type="submit" class="absolute right-3 top-3.5 text-gray-400 hover:text-green-600">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                    </svg>
+                </button>
             </form>
         </div>
 
-        <!-- Categories -->
-        <div class="flex overflow-x-auto space-x-4 mb-4">
-            @foreach (['Makanan', 'Minuman', 'Promo', 'Snack', 'Populer'] as $item)
-                <button
-                    class="min-w-max px-4 py-2 bg-green-100 text-green-700 font-medium rounded-full hover:bg-green-200 transition">
-                    {{ $item }}
-                </button>
-            @endforeach
+        <!-- Categories Section -->
+        <div class="flex overflow-x-auto pb-3 mb-6 scrollbar-hide">
+            <div class="flex space-x-3">
+                @foreach (['Semua', 'Makanan', 'Minuman', 'Promo', 'Snack', 'Populer'] as $item)
+                    <button
+                        class="px-4 py-2 bg-white border border-gray-200 text-gray-700 font-medium rounded-full hover:bg-gray-50 transition whitespace-nowrap shadow-sm
+                        {{ $loop->first ? '!bg-green-600 !text-white !border-green-600' : '' }}">
+                        {{ $item }}
+                    </button>
+                @endforeach
+            </div>
         </div>
 
         <!-- Promo Banner -->
-        <div class="mb-6">
-            <div class="relative rounded-2xl overflow-hidden">
-                <img src="/storage/menus/avocado-chiken-salad.png" alt="Promo" class="w-full h-40 object-cover">
-                <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
-                    <h3 class="text-white text-xl font-bold">Diskon 50% Hari Ini!</h3>
+        <div class="mb-8">
+            <div class="relative rounded-2xl overflow-hidden shadow-md">
+                <img src="/storage/menus/avocado-chiken-salad.png" alt="Promo" class="w-full h-48 object-cover">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-6">
+                    <div>
+                        <span class="bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full">PROMO</span>
+                        <h3 class="text-white text-xl font-bold mt-2">Diskon 50% Hari Ini!</h3>
+                        <p class="text-white/90 text-sm mt-1">Khusus untuk pembelian pertama</p>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- Recommended -->
+        <!-- Recommended Section -->
         <div>
-            <h2 class="text-lg font-semibold text-gray-700 mb-3">Rekomendasi Untuk Kamu</h2>
+            <div class="flex items-center justify-between mb-4">
+                <h2 class="text-lg font-bold text-gray-800">Rekomendasi Untuk Kamu</h2>
+                <a href="#" class="text-sm text-green-600 font-medium flex items-center">
+                    Lihat Semua
+                    <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                    </svg>
+                </a>
+            </div>
+            
             <div class="grid grid-cols-2 gap-4">
                 @for ($i = 0; $i < 4; $i++)
-                    <div class="bg-white rounded-xl shadow-sm overflow-hidden">
-                        <img src="/storage/menus/avocado-chiken-salad.png" alt="Food" class="w-full h-24 object-cover">
-                        <div class="p-2">
-                            <h3 class="font-medium text-gray-800">Nasi Ayam Geprek</h3>
-                            <p class="text-sm text-green-600 font-semibold">Rp 18.000</p>
+                    <div class="bg-white rounded-xl shadow-sm overflow-hidden hover:shadow-md transition-all">
+                        <div class="relative">
+                            <img src="/storage/menus/avocado-chiken-salad.png" alt="Food" class="w-full h-32 object-cover">
+                            <button class="absolute top-2 right-2 p-1.5 bg-white/80 rounded-full backdrop-blur-sm hover:bg-white transition">
+                                <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                                </svg>
+                            </button>
+                        </div>
+                        <div class="p-3">
+                            <h3 class="font-medium text-gray-800 truncate">Nasi Ayam Geprek</h3>
+                            <div class="flex items-center justify-between mt-2">
+                                <p class="text-green-600 font-semibold">Rp 18.000</p>
+                                <button class="text-green-600 hover:text-green-700">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                                    </svg>
+                                </button>
+                            </div>
                         </div>
                     </div>
                 @endfor
@@ -99,3 +137,15 @@
         </div>
     </div>
 @endsection
+
+@push('styles')
+<style>
+    .scrollbar-hide::-webkit-scrollbar {
+        display: none;
+    }
+    .scrollbar-hide {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+</style>
+@endpush
