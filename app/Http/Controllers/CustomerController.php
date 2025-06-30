@@ -39,9 +39,12 @@ class CustomerController extends Controller
 
     public function orders()
     {
-        $orders = Order::where('customers_id', Auth::guard('customer')->id())
-            ->orderBy('created_at', 'desc')
+        $orders = Order::select('orders.*', 'restaurants.name as restaurant_name')
+            ->join('restaurants', 'orders.restaurants_id', '=', 'restaurants.id')
+            ->where('orders.customers_id', Auth::guard('customer')->id())
+            ->orderBy('orders.created_at', 'desc')
             ->get();
+            // dd($orders);
         return view('customer.orders.index', compact('orders'));
     }
 
