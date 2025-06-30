@@ -15,9 +15,21 @@ class CustomerController extends Controller
 {
     public function dashboard()
     {
-        $orders = [];
         $customer = Customer::where('id', Auth::guard('customer')->id())->first();
-        return view('customer.dashboard', compact('orders', 'customer'));
+        
+        $recommendedMenus = Menu::with('restaurant')
+            ->withCount(['listOrders as sales_count' => function ($query) {
+                
+                $query->whereHas('order', function($q){
+                    $q->where('status', 'completed');
+                });
+            }])
+            ->orderBy('sales_count', 'desc') 
+            ->take(4) 
+            ->get();
+    
+        $orders = []; 
+        return view('customer.dashboard', compact('customer', 'orders', 'recommendedMenus'));
     }
 
     public function orders()

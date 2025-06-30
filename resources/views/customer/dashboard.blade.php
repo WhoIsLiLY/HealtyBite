@@ -85,9 +85,8 @@
         <div class="flex overflow-x-auto pb-3 mb-6 scrollbar-hide">
             <div class="flex space-x-3">
                 @foreach (['Semua', 'Makanan', 'Minuman', 'Promo', 'Snack', 'Populer'] as $item)
-                    <button
-                        class="px-4 py-2 bg-white border border-gray-200 text-gray-700 font-medium rounded-full hover:bg-gray-50 transition whitespace-nowrap shadow-sm
-                        {{ $loop->first ? '!bg-green-600 !text-white !border-green-600' : '' }}">
+                    <button class="px-4 py-2 bg-white border border-gray-200 text-gray-700 font-medium rounded-full hover:bg-gray-50 transition whitespace-nowrap shadow-sm
+                                {{ $loop->first ? '!bg-green-600 !text-white !border-green-600' : '' }}">
                         {{ $item }}
                     </button>
                 @endforeach
@@ -122,10 +121,10 @@
             </div>
 
             <div class="grid grid-cols-2 gap-4">
-                @for ($i = 0; $i < 4; $i++)
+                @forelse ($recommendedMenus as $menu)
                     <div class="bg-white rounded-xl shadow-sm overflow-hidden hover:shadow-md transition-all">
                         <div class="relative">
-                            <img src="/storage/menus/avocado-chiken-salad.png" alt="Food"
+                            <img src="/storage/assets/img/menus/{{ $menu->menu_image }}" alt="{{ $menu->name }}"
                                 class="w-full h-32 object-cover">
                             <button
                                 class="absolute top-2 right-2 p-1.5 bg-white/80 rounded-full backdrop-blur-sm hover:bg-white transition">
@@ -138,9 +137,9 @@
                             </button>
                         </div>
                         <div class="p-3">
-                            <h3 class="font-medium text-gray-800 truncate">Nasi Ayam Geprek</h3>
+                            <h3 class="font-medium text-gray-800 truncate">{{ $menu->name }}</h3>
                             <div class="flex items-center justify-between mt-2">
-                                <p class="text-green-600 font-semibold">Rp 18.000</p>
+                                <p class="text-green-600 font-semibold">Rp {{ number_format($menu->price, 0, ',', '.') }}</p>
                                 <button class="text-green-600 hover:text-green-700">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                                         xmlns="http://www.w3.org/2000/svg">
@@ -151,7 +150,11 @@
                             </div>
                         </div>
                     </div>
-                @endfor
+                @empty
+                    <div class="col-span-2 text-center text-gray-500 py-8">
+                        <p>Saat ini belum ada menu yang direkomendasikan.</p>
+                    </div>
+                @endforelse
             </div>
         </div>
     </div>
