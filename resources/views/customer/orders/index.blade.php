@@ -32,7 +32,7 @@
                                 <div class="flex justify-between items-center start mb-4">
                                     <div>
                                         <div class="flex gap-2">
-                                            <h3 class="text-lg font-bold text-gray-800">Order #{{ $order->id }}</h3>
+                                            <h3 class="text-lg font-bold text-gray-800">Order #{{ $order->id }} - {{ $order->restaurant_name }}</h3>
                                             <span
                                                 class="px-3 py-1 rounded-full text-xs font-medium 
                                             {{ $order->status == 'delivered'
