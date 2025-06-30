@@ -43,7 +43,7 @@
                                     </li>
                                 @endforeach
                             </ul>
-                            <!-- Status Buttons -->
+
                             @if (in_array($order->status, ['preparing', 'ready']))
                                 <div class="flex justify-end space-x-3 pt-4 border-t border-gray-200">
                                     @if ($order->status == 'preparing')
@@ -58,14 +58,14 @@
                                         </form>
 
                                         <form action="{{ route('orders.updateStatus', $order->id) }}" method="POST">
-                                            @csrf
-                                            @method('PATCH')
-                                            <input type="hidden" name="status" value="cancelled">
-                                            <button type="submit"
-                                                class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition">
-                                                Batalkan Pesanan
-                                            </button>
-                                        </form>
+                                        @csrf
+                                        @method('PATCH')
+                                        <input type="hidden" name="status" value="cancelled">
+                                        <button type="submit"
+                                            class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition">
+                                            Batalkan Pesanan
+                                        </button>
+                                    </form>
                                     @endif
 
                                     @if ($order->status == 'ready')
@@ -79,15 +79,19 @@
                                             </button>
                                         </form>
                                     @endif
+
+                                    
                                 </div>
                             @endif
+
                         </div>
+
+
+                    @empty
+                        <p class="text-gray-500">Belum ada pesanan dengan status "{{ ucfirst($status) }}".</p>
+                    @endforelse
                 </div>
-            @empty
-                <p class="text-gray-500">Belum ada pesanan dengan status "{{ ucfirst($status) }}".</p>
-            @endforelse
+            @endforeach
         </div>
-        @endforeach
-    </div>
     </div>
 @endsection
