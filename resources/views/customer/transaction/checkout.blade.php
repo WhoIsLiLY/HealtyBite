@@ -121,6 +121,95 @@
                         </div>
                     @endforeach
                 </div>
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden mb-8">
+                    <div class="p-6 border-b border-gray-100">
+                        <h2 class="text-xl font-semibold text-gray-900">Pilih Metode Layanan</h2>
+                    </div>
+                    <div class="p-6">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <input type="radio" id="order_type_takeaway" name="order_type" value="take-away"
+                                    class="hidden peer" checked>
+                                <label for="order_type_takeaway"
+                                    class="flex flex-col items-center justify-center p-4 border-2 border-gray-200 rounded-lg cursor-pointer peer-checked:border-blue-600 peer-checked:bg-blue-50 hover:bg-gray-50">
+                                    <svg class="w-10 h-10 mb-2 text-gray-500 peer-checked:text-blue-600" fill="none"
+                                        stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+                                    </svg>
+                                    <span class="text-lg font-semibold peer-checked:text-blue-600">Takeaway</span>
+                                    <span class="text-sm text-gray-500">Bawa pulang pesanan Anda</span>
+                                </label>
+                            </div>
+                            <div>
+                                <input type="radio" id="order_type_dine_in" name="order_type" value="dine-in"
+                                    class="hidden peer">
+                                <label for="order_type_dine_in"
+                                    class="flex flex-col items-center justify-center p-4 border-2 border-gray-200 rounded-lg cursor-pointer peer-checked:border-blue-600 peer-checked:bg-blue-50 hover:bg-gray-50">
+                                    <svg class="w-10 h-10 mb-2 text-gray-500 peer-checked:text-blue-600" fill="none"
+                                        stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M12 8v.01M12 12v.01M12 16v.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    <span class="text-lg font-semibold peer-checked:text-blue-600">Dine-In</span>
+                                    <span class="text-sm text-gray-500">Makan di tempat</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden mb-8">
+                    <div class="p-6 border-b border-gray-100">
+                        <h2 class="text-xl font-semibold text-gray-900">Pilih Metode Pembayaran</h2>
+                    </div>
+                    <div class="p-6">
+                        <div class="space-y-4">
+                            @php
+                                $paymentMethods = [
+                                    2 => [
+                                        'name' => 'QRIS (GoPay, OVO, Dana)',
+                                        'logo' => 'https://upload.wikimedia.org/wikipedia/commons/e/e0/QRIS_Logo.svg',
+                                    ],
+                                    3 => [
+                                        'name' => 'Virtual Account',
+                                        'logo' =>
+                                            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRmtR-eUqgVMkC_kSwhNkKdMe9dSKtB8ucAOw&s',
+                                    ],
+                                    1 => [
+                                        'name' => 'Kartu Kredit/Debit',
+                                        'logo' =>
+                                            'https://vccmurah.net/wp-content/uploads/2014/12/visa-vs-mastercard.png',
+                                    ],
+                                    4 => [
+                                        'name' => 'Gerai Retail (Indomaret)',
+                                        'logo' =>
+                                            'https://upload.wikimedia.org/wikipedia/commons/9/9d/Logo_Indomaret.png',
+                                    ],
+                                ];
+                            @endphp
+
+                            @foreach ($paymentMethods as $key => $method)
+                                <div>
+                                    <input type="radio" id="payment_{{ $key }}" name="payment_method"
+                                        value="{{ $key }}" class="hidden peer"
+                                        {{ $loop->first ? 'checked' : '' }}>
+                                    <label for="payment_{{ $key }}"
+                                        class="flex items-center p-4 border-2 border-gray-200 rounded-lg cursor-pointer peer-checked:border-blue-600 hover:bg-gray-50">
+                                        <img src="{{ $method['logo'] }}" alt="{{ $method['name'] }}"
+                                            class="h-8 w-12 object-contain mr-4">
+                                        <span
+                                            class="text-md font-semibold text-gray-900 peer-checked:text-blue-600">{{ $method['name'] }}</span>
+                                        <svg class="w-6 h-6 ml-auto text-blue-600 opacity-0 peer-checked:opacity-100"
+                                            fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
+                                                d="M5 13l4 4L19 7"></path>
+                                        </svg>
+                                    </label>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+                </div>
 
                 <!-- Order Summary Footer -->
                 <div class="bg-gray-50 px-6 py-5">
@@ -130,11 +219,15 @@
                             @php
                                 $subtotal = 0;
                                 foreach ($basket['items'] as $item) {
-                                    $subtotal += $item['menu']['price'] * $item['quantity'];
+                                    $itemTotal = $item['menu']['price'] * $item['quantity'];
                                     foreach ($item['addons'] as $addon) {
-                                        $subtotal += $addon['addon']['price'];
+                                        $itemTotal += $addon['addon']['price'];
                                     }
+                                    $subtotal += $itemTotal;
                                 }
+                                $tax = $subtotal * 0.1;
+                                $deliveryFee = 10000; // Default delivery fee
+                                $total = $subtotal + $tax + $deliveryFee;
                             @endphp
                             <span class="text-sm font-medium text-gray-900">Rp
                                 {{ number_format($subtotal, 0, ',', '.') }}</span>
@@ -161,8 +254,8 @@
                     <div class="mt-6">
                         <button type="submit"
                             class="w-full bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold py-3 px-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 flex items-center justify-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24"
-                                stroke="currentColor">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none"
+                                viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
                             </svg>
@@ -177,57 +270,47 @@
                     </div>
                 </div>
             </div>
-
-            <!-- Delivery Information -->
-            <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden mb-8">
-                <div class="p-6 border-b border-gray-100">
-                    <h2 class="text-xl font-semibold text-gray-900 flex items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-500 mr-2" fill="none"
-                            viewBox="0 0 24 24" stroke="currentColor">
-                            <path d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z" />
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0" />
-                        </svg>
-                        Delivery Information
-                    </h2>
-                </div>
-                <div class="p-6">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div>
-                            <h3 class="text-sm font-medium text-gray-500 mb-2">Delivery Address</h3>
-                            <p class="text-gray-900 font-medium">Jl. Sudirman No. 123</p>
-                            <p class="text-gray-600">Jakarta Selatan, DKI Jakarta 12190</p>
-                            <p class="text-gray-600">Indonesia</p>
-                            <button class="mt-2 text-sm text-blue-500 hover:text-blue-700 font-medium flex items-center">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none"
-                                    viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                                </svg>
-                                Change address
-                            </button>
-                        </div>
-                        <div>
-                            <h3 class="text-sm font-medium text-gray-500 mb-2">Delivery Time</h3>
-                            <div class="flex items-center space-x-2">
-                                <div class="flex-1">
-                                    <select
-                                        class="block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md">
-                                        <option>ASAP (20-30 min)</option>
-                                        <option>Schedule for later</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="mt-4">
-                                <h3 class="text-sm font-medium text-gray-500 mb-2">Delivery Instructions</h3>
-                                <textarea rows="2"
-                                    class="block w-full shadow-sm sm:text-sm focus:ring-blue-500 focus:border-blue-500 border border-gray-300 rounded-md"
-                                    placeholder="Leave at door, call when arrived, etc."></textarea>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </form>
     </div>
 @endsection
+@push('scripts')
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const orderTypeRadios = document.querySelectorAll('input[name="order_type"]');
+            const deliveryInfoSection = document.getElementById('delivery-info-section');
+            const deliveryFeeRow = document.getElementById('delivery-fee-row');
+            const deliveryFeeDisplay = document.getElementById('delivery-fee-display');
+            const totalPriceDisplay = document.getElementById('total-price-display');
+
+            // -- Data Harga dari PHP --
+            const subtotal = {{ $subtotal }};
+            const tax = {{ $tax }};
+            const deliveryFee = {{ $deliveryFee }};
+
+            function updateCheckoutView() {
+                const selectedType = document.querySelector('input[name="order_type"]:checked').value;
+
+                if (selectedType === 'dine-in') {
+                    deliveryInfoSection.style.display = 'none';
+                    deliveryFeeRow.style.display = 'none';
+
+                    const newTotal = subtotal + tax;
+                    totalPriceDisplay.textContent = 'Rp ' + newTotal.toLocaleString('id-ID');
+                } else {
+                    deliveryInfoSection.style.display = 'block';
+                    deliveryFeeRow.style.display = 'flex';
+
+                    const newTotal = subtotal + tax + deliveryFee;
+                    deliveryFeeDisplay.textContent = 'Rp ' + deliveryFee.toLocaleString('id-ID');
+                    totalPriceDisplay.textContent = 'Rp ' + newTotal.toLocaleString('id-ID');
+                }
+            }
+
+            orderTypeRadios.forEach(radio => {
+                radio.addEventListener('change', updateCheckoutView);
+            });
+
+            updateCheckoutView();
+        });
+    </script>
+@endpush

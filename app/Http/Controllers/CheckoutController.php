@@ -21,8 +21,6 @@ class CheckoutController extends Controller
     }
     public function processCheckout(Request $request)
     {
-        // 1. Ambil data keranjang dari database menggunakan model Basket
-        // Menggunakan guard 'customer' sesuai koreksi Anda
         $basket = Basket::with(['items.menu', 'items.addons.addon'])
             ->where('user_id', Auth::guard('customer')->id())
             ->first();
@@ -50,20 +48,20 @@ class CheckoutController extends Controller
                 $subtotal += $itemTotal;
             }
 
-            $deliveryFee = 10000; // Hardcode atau ambil dari konfigurasi
-            $tax = $subtotal * 0.10; // Pajak 10%
+            $deliveryFee = 10000;
+            $tax = $subtotal * 0.10; 
             $totalPrice = $subtotal + $tax + $deliveryFee;
 
             // 3. Buat record Order baru
             $order = Order::create([
-                'customers_id' => Auth::guard('customer')->id(), // Gunakan guard yang benar
-                'restaurants_id' => $basket->restaurant_id, // Ambil langsung dari basket
-                'payment_methods_id' => '1', // TODO: Ganti dengan ID metode pembayaran dari request
+                'customers_id' => Auth::guard('customer')->id(),
+                'restaurants_id' => $basket->restaurant_id,
+                'payment_methods_id' => $request->input('payment_method'),
                 'total_price' => $totalPrice,
-                'order_type' => 'dine-in', // Asumsi berdasarkan konteks delivery
+                'order_type' => $request->input('order_type'),
                 'status' => 'preparing',
-                'created_at' => now(), // Tambahkan timestamp
-                'updated_at' => now(), // Tambahkan timestamp
+                'created_at' => now(),
+                'updated_at' => now(), 
             ]);
 
             // 4. Buat record ListOrder untuk setiap item di keranjang
@@ -91,8 +89,8 @@ class CheckoutController extends Controller
                     'quantity' => $item->quantity,
                     'subtotal' => $itemSubtotal,
                     'detail' => implode(' | ', $detailNotes),
-                    'created_at' => now(), // Tambahkan timestamp
-                    'updated_at' => now(), // Tambahkan timestamp
+                    'created_at' => now(),
+                    'updated_at' => now(),
                 ];
             }
             // Masukkan semua list order sekaligus untuk efisiensi

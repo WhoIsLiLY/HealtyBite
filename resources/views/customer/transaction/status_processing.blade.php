@@ -3,17 +3,20 @@
     $statuses = ['preparing', 'ready', 'completed'];
     $currentStatusIndex = array_search($order->status, $statuses);
 @endphp
-<div class="absolute top-0 left-0 mt-4 ml-4 z-10">
-    <div class="bg-blue-50 border-l-4 border-blue-500 text-blue-800 p-4 my-6 text-left rounded-r-lg" role="alert"
-        style="width: 300px;">
-        <p class="font-bold mb-2">Petunjuk Pengambilan</p>
-        <p>Tunjukkan <span class="font-semibold">Nomor Pesanan</span> berikut ini kepada kasir untuk mengambil
-            pesanan Anda:</p>
-        <div class="text-center bg-blue-100 p-3 mt-3 rounded-lg">
-            <span class="text-3xl font-bold tracking-widest text-blue-900">{{ $order->id }}</span>
+
+@if ($order->status == 'ready')
+    <div class="absolute top-0 left-0 mt-4 ml-4 z-10">
+        <div class="bg-blue-50 border-l-4 border-blue-500 text-blue-800 p-4 my-6 text-left rounded-r-lg" role="alert"
+            style="width: 300px;">
+            <p class="font-bold mb-2">Petunjuk Pengambilan</p>
+            <p>Tunjukkan <span class="font-semibold">Nomor Pesanan</span> berikut ini kepada kasir untuk mengambil
+                pesanan Anda:</p>
+            <div class="text-center bg-blue-100 p-3 mt-3 rounded-lg">
+                <span class="text-3xl font-bold tracking-widest text-blue-900">{{ $order->id }}</span>
+            </div>
         </div>
     </div>
-</div>
+@endif
 
 <div class="bg-white p-8 rounded-2xl shadow-lg text-center">
     @if ($order->status == 'preparing')
