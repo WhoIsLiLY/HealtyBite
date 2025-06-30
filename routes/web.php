@@ -47,7 +47,7 @@ Route::prefix('customer')->middleware('auth-customer')->group(function () {
     Route::post('/checkout/process', [CheckoutController::class, 'processCheckout'])->name('checkout.process');
     Route::get('/orders', [CustomerController::class, 'orders'])->name('orders.index');
     Route::get('/orders/detail/{id}', [CustomerController::class, 'showOrder'])->name('orders.detail');
-    Route::get('/order/process/{order}', [CheckoutController::class, 'index'])->name('order.index');
+    Route::get('/order/process/{order}', [CheckoutController::class, 'showOrderProcessPage'])->name('order.process');
     Route::get('/order/status/{order}', [CheckoutController::class, 'getOrderStatus'])->name('order.status');
     Route::post('/order/cancel/{order}', [CheckoutController::class, 'cancelOrder'])->name('order.cancel');
 });
