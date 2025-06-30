@@ -71,6 +71,7 @@ Route::prefix('restaurant')->middleware('auth-admin')->group(function () {
     Route::get('/{id}/edit', [RestaurantController::class, 'showEditForm'])->name('restaurant.edit');
     Route::put('/{id}', [RestaurantController::class, 'updateRestaurant'])->name('restaurant.update');
     Route::delete('/{id}', [RestaurantController::class, 'destroy'])->name('restaurant.delete');
+    Route::patch('/orders/{id}/status', [RestaurantController::class, 'updateStatus'])->name('orders.updateStatus');
 });
 
 

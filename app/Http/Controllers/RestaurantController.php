@@ -127,6 +127,15 @@ class RestaurantController extends Controller
         return view('restaurant.menus.create');
     }
 
+    public function updateStatus(Request $request, $id)
+    {
+        $order = Order::findOrFail($id);
+        $order->status = $request->input('status');
+        $order->save();
+
+        return back()->with('success', 'Status berhasil diubah.');
+    }
+
     public function menuStore(Request $request)
     {
         // Validasi input
