@@ -28,8 +28,13 @@ class CustomerController extends Controller
             ->take(4) 
             ->get();
     
-        $orders = []; 
-        return view('customer.dashboard', compact('customer', 'orders', 'recommendedMenus'));
+        $activeOrder = Order::where('customers_id', Auth::guard('customer')->id())
+            ->whereIn('status', ['preparing', 'ready'])
+            ->latest()
+            ->first();
+
+        $customer = Customer::where('id', Auth::guard('customer')->id())->first();
+        return view('customer.dashboard', compact('activeOrder', 'customer', 'orders', 'recommendedMenus'));
     }
 
     public function orders()
