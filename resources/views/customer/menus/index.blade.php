@@ -44,13 +44,6 @@
                 </svg>
                 <span>Terbuka • 08:00–22:00</span>
             </div>
-
-            <div class="flex items-center space-x-1">
-                <svg class="w-4 h-4 text-pink-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path d="M9 14l6-6M9 8l6 6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                </svg>
-                <span>Promo ongkir</span>
-            </div>
         </div>
     </div>
 
@@ -67,6 +60,9 @@
                 <div class="flex-1">
                     <h3 class="text-lg font-semibold text-gray-900">{{ $menu->name }}</h3>
                     <p class="text-sm text-gray-500 mb-2">{{ $menu->description ?? 'Tidak ada deskripsi.' }}</p>
+                    <p class="text-sm text-gray-500 mb-2">Nutrition Fact: {{ $menu->nutrition_facts ?? 'Tidak ada deskripsi.' }} -
+                        {{ $menu->calorie }} cal</p>
+
                     <p class="text-green-600 font-semibold">Rp {{ number_format($menu->price, 0, ',', '.') }}</p>
                 </div>
 
@@ -458,29 +454,29 @@
                     </div>
                     
                     ${item.note ? `
-                                            <div class="mt-2 flex items-start">
-                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-green-500 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z" />
-                                                </svg>
-                                                <span class="text-sm text-orange-600 ml-1"><i>${item.note}</i></span>
-                                            </div>` : ''}
+                                                <div class="mt-2 flex items-start">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-green-500 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z" />
+                                                    </svg>
+                                                    <span class="text-sm text-orange-600 ml-1"><i>${item.note}</i></span>
+                                                </div>` : ''}
                     
                     ${item.addons.length > 0 ? `
-                                            <div class="mt-3 pt-2 border-t border-gray-100">
-                                                <h4 class="text-xs font-medium text-gray-500 uppercase tracking-wider mb-1">Tambahan</h4>
-                                                <ul class="space-y-1">
-                                                    ${item.addons.map(addon => {
-                                                        if (addon) {
-                                                            totalPrice += parseFloat(addon.addon.price);
-                                                            return `
+                                                <div class="mt-3 pt-2 border-t border-gray-100">
+                                                    <h4 class="text-xs font-medium text-gray-500 uppercase tracking-wider mb-1">Tambahan</h4>
+                                                    <ul class="space-y-1">
+                                                        ${item.addons.map(addon => {
+                                                            if (addon) {
+                                                                totalPrice += parseFloat(addon.addon.price);
+                                                                return `
                                     <li class="flex justify-between text-sm">
                                         <span class="text-green-600">+ ${addon.addon.name}</span>
                                         <span class="text-green-900 font-medium">Rp ${Number(addon.addon.price).toLocaleString('id-ID')}</span>
                                     </li>`;
-                                                        }
-                                                    }).join('')}
-                                                </ul>
-                                            </div>` : ''}
+                                                            }
+                                                        }).join('')}
+                                                    </ul>
+                                                </div>` : ''}
                 </div>
             </div>
         </div>`;

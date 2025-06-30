@@ -15,9 +15,9 @@
                 </div>
                 
                 <!-- Info Cards -->
-                <div class="flex-1 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="flex gap-4">
                     <!-- Detail Button -->
-                    <div class="bg-gradient-to-r from-green-50 to-emerald-50 border border-green-100 rounded-xl p-4 flex items-center justify-between shadow-sm">
+                    <div class="px-4 bg-gradient-to-r from-green-50 to-emerald-50 border border-green-100 rounded-xl p-4 flex items-center shadow-sm">
                         <p class="text-sm text-gray-700">Detail Restoran</p>
                         <button @click="showModal = true"
                             class="bg-green-600 text-white px-3 py-1.5 text-xs rounded-lg hover:bg-green-700 transition-all shadow-sm">
@@ -31,9 +31,6 @@
                             <p class="text-xs text-gray-600 font-medium">Lokasi</p>
                             <p class="text-sm font-medium text-gray-800 mt-1 truncate">{{$restaurant->location}}</p>
                         </div>
-                        <button class="bg-blue-600 text-white px-3 py-1.5 text-xs rounded-lg hover:bg-blue-700 transition-all shadow-sm">
-                            Edit
-                        </button>
                     </div>
 
                     <!-- Phone -->
@@ -42,25 +39,6 @@
                             <p class="text-xs text-gray-600 font-medium">Telepon</p>
                             <p class="text-sm font-medium text-gray-800 mt-1">{{$restaurant->phone_number}}</p>
                         </div>
-                        <button class="bg-purple-600 text-white px-3 py-1.5 text-xs rounded-lg hover:bg-purple-700 transition-all shadow-sm">
-                            Edit
-                        </button>
-                    </div>
-
-                    <!-- Notifications -->
-                    <div class="bg-white border border-gray-200 rounded-xl p-4 flex items-center justify-between shadow-sm">
-                        <div>
-                            <p class="text-xs text-gray-600 font-medium">Notifikasi</p>
-                            <p class="text-sm font-semibold text-gray-800 mt-1">3 Pesan Baru</p>
-                        </div>
-                        <button class="relative">
-                            <div class="relative">
-                                <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0"></path>
-                                </svg>
-                                <span class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">3</span>
-                            </div>
-                        </button>
                     </div>
                 </div>
             </div>

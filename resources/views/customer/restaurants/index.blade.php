@@ -41,7 +41,7 @@
                             <img src="/storage/assets/img/restaurants/{{ $restaurant->restaurant_image }}" alt="{{ $restaurant->name }}"
                                 class="w-full h-full object-cover transition-transform duration-500 hover:scale-110">
                             <div class="absolute top-4 left-4 bg-white bg-opacity-90 px-3 py-1 rounded-full shadow-sm">
-                                <span class="text-sm font-medium text-gray-800">{{ $restaurant->delivery_time }} min</span>
+                                <span class="text-sm font-medium text-gray-800">{{ $restaurant->category->name }}</span>
                             </div>
                             <div class="absolute top-4 right-4">
                                 <button class="heart-btn p-2 bg-white bg-opacity-80 rounded-full shadow-sm hover:bg-red-100 transition">
