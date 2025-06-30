@@ -24,7 +24,8 @@
                             <p class="text-lg font-bold text-gray-800 mt-1">{{ $customer->balance }}</p>
                         </div>
                         <button
-                            class="bg-green-600 text-white px-3 py-1.5 text-xs rounded-lg hover:bg-green-700 transition-all shadow-sm">
+                            class="bg-green-600 text-white px-3 py-1.5 text-xs rounded-lg hover:bg-green-700 transition-all shadow-sm"
+                            onclick="OpenModal()">
                             Top Up
                         </button>
                     </div>
@@ -96,7 +97,8 @@
         <div class="flex overflow-x-auto pb-3 mb-6 scrollbar-hide">
             <div class="flex space-x-3">
                 @foreach (['Semua', 'Makanan', 'Minuman', 'Promo', 'Snack', 'Populer'] as $item)
-                    <button class="px-4 py-2 bg-white border border-gray-200 text-gray-700 font-medium rounded-full hover:bg-gray-50 transition whitespace-nowrap shadow-sm
+                    <button
+                        class="px-4 py-2 bg-white border border-gray-200 text-gray-700 font-medium rounded-full hover:bg-gray-50 transition whitespace-nowrap shadow-sm
                                 {{ $loop->first ? '!bg-green-600 !text-white !border-green-600' : '' }}">
                         {{ $item }}
                     </button>
@@ -150,7 +152,8 @@
                         <div class="p-3">
                             <h3 class="font-medium text-gray-800 truncate">{{ $menu->name }}</h3>
                             <div class="flex items-center justify-between mt-2">
-                                <p class="text-green-600 font-semibold">Rp {{ number_format($menu->price, 0, ',', '.') }}</p>
+                                <p class="text-green-600 font-semibold">Rp {{ number_format($menu->price, 0, ',', '.') }}
+                                </p>
                                 <button class="text-green-600 hover:text-green-700">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                                         xmlns="http://www.w3.org/2000/svg">
@@ -169,7 +172,55 @@
             </div>
         </div>
     </div>
+
+    <!-- Modal Top Up -->
+    <div id="topUpModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white p-6 rounded-lg max-w-3xl max-h-xl w-full relative">
+            <button id="closeModal" class="absolute top-2 right-4 text-gray-500 hover:text-gray-800">×</button>
+            <div id="modalContent">
+                <form action="{{ route('customer.topup') }}" method="POST" class="space-y-4">
+                    @csrf
+                    <div class="mb-6">
+                        <label for="balance" class="block text-sm font-medium text-gray-700 mb-2">Top-Up Amount</label>
+                        <div class="relative rounded-md shadow-sm">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <span class="text-gray-500">Rp</span>
+                            </div>
+                            <input type="number" name="balance" id="balance" min="10000" step="10000" required
+                                placeholder="Enter amount"
+                                class="block w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                                oninput="this.value = this.value.replace(/[^0-9]/g, '');">
+                            <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                                <span class="text-gray-500">IDR</span>
+                            </div>
+                        </div>
+                        <p class="mt-2 text-sm text-gray-500">Minimum top-up: Rp 10,000</p>
+                    </div>
+
+                    <div class="flex justify-end">
+                        <button type="submit"
+                            class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition">
+                            Top Up
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 @endsection
+
+@push('scripts')
+    <script>
+        function OpenModal() {
+            $('#topUpModal').removeClass('hidden');
+        }
+
+        $('#closeModal').on('click', function() {
+            $('#topUpModal').addClass('hidden');
+        });
+    </script>
+@endpush
+
 
 @push('styles')
     <style>

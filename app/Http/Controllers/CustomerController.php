@@ -34,7 +34,7 @@ class CustomerController extends Controller
             ->first();
 
         $customer = Customer::where('id', Auth::guard('customer')->id())->first();
-        return view('customer.dashboard', compact('activeOrder', 'customer', 'orders', 'recommendedMenus'));
+        return view('customer.dashboard', compact('activeOrder', 'customer', 'recommendedMenus'));
     }
 
     public function orders()
@@ -92,6 +92,13 @@ class CustomerController extends Controller
         return response()->json([
             'basket' => $basket
         ]);
+    }
+
+    public function topUp(Request $request){
+         $customer = Customer::where('id', Auth::guard('customer')->id())->first();
+         $customer->balance += $request->balance;
+         $customer->save();
+          return redirect()->route('customer.dashboard')->with('success', 'Top-up successful!');
     }
 
     public function insertDataBasket(Request $request)

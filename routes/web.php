@@ -50,6 +50,7 @@ Route::prefix('customer')->middleware('auth-customer')->group(function () {
     Route::get('/order/process/{order}', [CheckoutController::class, 'showOrderProcessPage'])->name('order.process');
     Route::get('/order/status/{order}', [CheckoutController::class, 'getOrderStatus'])->name('order.status');
     Route::post('/order/cancel/{order}', [CheckoutController::class, 'cancelOrder'])->name('order.cancel');
+    Route::post('/topup', [CustomerController::class, 'topUp'])->name('customer.topup');
 });
 
 // ======= RESTAURANT ROUTES ======= //
