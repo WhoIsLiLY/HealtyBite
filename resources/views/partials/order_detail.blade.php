@@ -28,7 +28,7 @@
                 <div class="flex justify-between">
                     <div class="flex">
                         <div class="h-16 w-16 rounded-md overflow-hidden border border-gray-200 flex-shrink-0">
-                            <img src="/storage/assets/img/restaurants/{{ $item->menu->menu_image }} : '/images/food-placeholder.jpg' }}" 
+                            <img src="/storage/assets/img/menus/{{ $item->menu->menu_image }}" 
                                  alt="{{ $item->menu->name }}" 
                                  class="h-full w-full object-cover">
                         </div>

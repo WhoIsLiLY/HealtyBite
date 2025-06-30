@@ -7,7 +7,7 @@
 
             <!-- Tabs -->
             <div class="flex space-x-2 mb-6">
-                @foreach (['preparing', 'delivering', 'ready', 'completed', 'cancelled'] as $status)
+                @foreach (['preparing', 'ready', 'completed', 'cancelled'] as $status)
                     <button class="px-4 py-2 rounded-full text-sm font-medium transition 
                                         focus:outline-none" :class="tab === '{{ $status }}'
                     ? 'bg-green-600 text-white'
@@ -18,7 +18,7 @@
             </div>
 
             <!-- Order Containers -->
-            @foreach (['preparing', 'delivering', 'ready', 'completed', 'cancelled'] as $status)
+            @foreach (['preparing','ready', 'completed', 'cancelled'] as $status)
                 <div x-show="tab === '{{ $status }}'">
                     @forelse($orders[$status] ?? [] as $order)
                         <div class="mb-6 p-4 bg-white shadow rounded-xl">

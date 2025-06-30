@@ -22,7 +22,9 @@ class CustomerController extends Controller
 
     public function orders()
     {
-        $orders = Order::where('customers_id', Auth::guard('customer')->id())->get();
+        $orders = Order::where('customers_id', Auth::guard('customer')->id())
+            ->orderBy('created_at', 'desc')
+            ->get();
         return view('customer.orders.index', compact('orders'));
     }
 

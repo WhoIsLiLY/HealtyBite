@@ -9,34 +9,38 @@
                 <div class="flex-1">
                     <h2 class="text-sm text-gray-500 font-medium">Selamat Datang,</h2>
                     <div class="flex items-center mt-1">
-                        <h1 class="text-2xl font-bold text-gray-800">{{$customer->name}}</h1>
+                        <h1 class="text-2xl font-bold text-gray-800">{{ $customer->name }}</h1>
                         <span class="ml-2 text-2xl">👋</span>
                     </div>
                 </div>
-                
+
                 <!-- Wallet Info Cards -->
                 <div class="flex-1 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                     <!-- Balance Card -->
-                    <div class="bg-gradient-to-r from-green-50 to-emerald-50 border border-green-100 rounded-xl p-4 flex items-center justify-between shadow-sm">
+                    <div
+                        class="bg-gradient-to-r from-green-50 to-emerald-50 border border-green-100 rounded-xl p-4 flex items-center justify-between shadow-sm">
                         <div>
                             <p class="text-xs text-gray-600 font-medium">Saldo</p>
-                            <p class="text-lg font-bold text-gray-800 mt-1">{{$customer->balance}}</p>
+                            <p class="text-lg font-bold text-gray-800 mt-1">{{ $customer->balance }}</p>
                         </div>
-                        <button class="bg-green-600 text-white px-3 py-1.5 text-xs rounded-lg hover:bg-green-700 transition-all shadow-sm">
+                        <button
+                            class="bg-green-600 text-white px-3 py-1.5 text-xs rounded-lg hover:bg-green-700 transition-all shadow-sm">
                             Top Up
                         </button>
                     </div>
 
                     <!-- Points Card -->
-                    <div class="bg-gradient-to-r from-amber-50 to-yellow-50 border border-amber-100 rounded-xl p-4 flex items-center justify-between shadow-sm">
+                    <div
+                        class="bg-gradient-to-r from-amber-50 to-yellow-50 border border-amber-100 rounded-xl p-4 flex items-center justify-between shadow-sm">
                         <div>
                             <p class="text-xs text-gray-600 font-medium">Poin</p>
-                            <p class="text-lg font-bold text-gray-800 mt-1">{{$customer->point}}</p>
+                            <p class="text-lg font-bold text-gray-800 mt-1">{{ $customer->point }}</p>
                         </div>
-                        <button class="bg-amber-500 text-white px-3 py-1.5 text-xs rounded-lg hover:bg-amber-600 transition-all shadow-sm">
+                        <button
+                            class="bg-amber-500 text-white px-3 py-1.5 text-xs rounded-lg hover:bg-amber-600 transition-all shadow-sm">
                             Tukar
                         </button>
-                    </div>  
+                    </div>
 
                     <!-- Notification Card -->
                     <div class="bg-white border border-gray-200 rounded-xl p-4 flex items-center justify-between shadow-sm">
@@ -44,7 +48,20 @@
                             <p class="text-xs text-gray-600 font-medium">Order</p>
                             <p class="text-lg font-semibold text-gray-800 mt-1">Tidak ada order</p>
                         </div>
+                        <button class="relative">
+                            <div class="relative">
+                                <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" stroke-width="1.5"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0">
+                                    </path>
+                                </svg>
+                                <span
+                                    class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">3</span>
+                            </div>
+                        </button>
                     </div>
+
                 </div>
             </div>
         </div>
@@ -55,8 +72,10 @@
                 <input type="text" placeholder="Cari makanan atau minuman..."
                     class="w-full p-4 pr-12 rounded-xl border border-gray-200 focus:ring-2 focus:ring-green-400 focus:border-green-400 focus:outline-none bg-white shadow-sm transition-all">
                 <button type="submit" class="absolute right-3 top-3.5 text-gray-400 hover:text-green-600">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                     </svg>
                 </button>
             </form>
@@ -95,20 +114,26 @@
                 <h2 class="text-lg font-bold text-gray-800">Rekomendasi Untuk Kamu</h2>
                 <a href="#" class="text-sm text-green-600 font-medium flex items-center">
                     Lihat Semua
-                    <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
                     </svg>
                 </a>
             </div>
-            
+
             <div class="grid grid-cols-2 gap-4">
                 @for ($i = 0; $i < 4; $i++)
                     <div class="bg-white rounded-xl shadow-sm overflow-hidden hover:shadow-md transition-all">
                         <div class="relative">
-                            <img src="/storage/menus/avocado-chiken-salad.png" alt="Food" class="w-full h-32 object-cover">
-                            <button class="absolute top-2 right-2 p-1.5 bg-white/80 rounded-full backdrop-blur-sm hover:bg-white transition">
-                                <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                            <img src="/storage/menus/avocado-chiken-salad.png" alt="Food"
+                                class="w-full h-32 object-cover">
+                            <button
+                                class="absolute top-2 right-2 p-1.5 bg-white/80 rounded-full backdrop-blur-sm hover:bg-white transition">
+                                <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                        d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z">
+                                    </path>
                                 </svg>
                             </button>
                         </div>
@@ -117,8 +142,10 @@
                             <div class="flex items-center justify-between mt-2">
                                 <p class="text-green-600 font-semibold">Rp 18.000</p>
                                 <button class="text-green-600 hover:text-green-700">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
                                     </svg>
                                 </button>
                             </div>
@@ -131,13 +158,14 @@
 @endsection
 
 @push('styles')
-<style>
-    .scrollbar-hide::-webkit-scrollbar {
-        display: none;
-    }
-    .scrollbar-hide {
-        -ms-overflow-style: none;
-        scrollbar-width: none;
-    }
-</style>
+    <style>
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+
+        .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
 @endpush
