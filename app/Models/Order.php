@@ -25,7 +25,7 @@ class Order extends Model
 
     public function restaurant()
     {
-        return $this->belongsTo(Restaurant::class);
+        return $this->belongsTo(Restaurant::class, 'restaurants_id', 'id');
     }
 
     public function listOrders()

@@ -8,6 +8,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Customer extends Authenticatable
 {
+
+    protected $fillable = ['name', 'email', 'password', 'phone_number', 'description', 'image', 'balance', 'point', 'card_number'];
+
     use HasFactory;
 
     public function orders()

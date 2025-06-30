@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Menu;
 use App\Models\Basket;
 use App\Models\Customer;
+use App\Models\Order;
 use Illuminate\Http\Request;
 use Carbon\Traits\ToStringFormat;
 use Illuminate\Support\Facades\Auth;
@@ -15,21 +16,20 @@ class CustomerController extends Controller
     public function dashboard()
     {
         $orders = [];
-        // $orders = Auth::user()->orders;
-        // session()->flush();
-        return view('customer.dashboard', compact('orders'));
+        $customer = Customer::where('id', Auth::guard('customer')->id())->first();
+        return view('customer.dashboard', compact('orders', 'customer'));
     }
 
     public function orders()
     {
-        $orders = Auth::user()->orders;
+        $orders = Order::where('customers_id', Auth::guard('customer')->id())->get();
         return view('customer.orders.index', compact('orders'));
     }
 
     public function showOrder($id)
     {
-        $order = Auth::user()->orders->findOrFail($id);
-        return view('customer.orders.show', compact('order'));
+        $order = Order::with('listOrders.menu')->where('id', $id)->firstOrFail();
+        return view('partials.order_detail', compact('order'));
     }
     public function showRegisterForm()
     {
@@ -42,8 +42,8 @@ class CustomerController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:customers,email',
             'password' => 'required|string',
-            'balance' => 'required|numeric',
-            'point' => 'required|numeric',
+            // 'balance' => 'required|numeric',
+            // 'point' => 'required|numeric',
             'phone_number' => 'required|string|max:20',
             'description' => 'nullable|string',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
@@ -53,8 +53,9 @@ class CustomerController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'phone_number' => $request->phone_number,
-            'balance' => $request->balance,
-            'point' => $request->point,
+            'balance' => 0,
+            'point' => 0,
+            'card_number' => "",
             'password' => Hash::make($request->password),
             'created_at' => now(),
         ]);
