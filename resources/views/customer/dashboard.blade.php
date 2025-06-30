@@ -9,7 +9,7 @@
                 <div class="flex-1">
                     <h2 class="text-sm text-gray-500 font-medium">Selamat Datang,</h2>
                     <div class="flex items-center mt-1">
-                        <h1 class="text-2xl font-bold text-gray-800">Willy</h1>
+                        <h1 class="text-2xl font-bold text-gray-800">{{$customer->name}}</h1>
                         <span class="ml-2 text-2xl">👋</span>
                     </div>
                 </div>
@@ -20,7 +20,7 @@
                     <div class="bg-gradient-to-r from-green-50 to-emerald-50 border border-green-100 rounded-xl p-4 flex items-center justify-between shadow-sm">
                         <div>
                             <p class="text-xs text-gray-600 font-medium">Saldo</p>
-                            <p class="text-lg font-bold text-gray-800 mt-1">Rp 125.000</p>
+                            <p class="text-lg font-bold text-gray-800 mt-1">{{$customer->balance}}</p>
                         </div>
                         <button class="bg-green-600 text-white px-3 py-1.5 text-xs rounded-lg hover:bg-green-700 transition-all shadow-sm">
                             Top Up
@@ -31,27 +31,19 @@
                     <div class="bg-gradient-to-r from-amber-50 to-yellow-50 border border-amber-100 rounded-xl p-4 flex items-center justify-between shadow-sm">
                         <div>
                             <p class="text-xs text-gray-600 font-medium">Poin</p>
-                            <p class="text-lg font-bold text-gray-800 mt-1">320 Poin</p>
+                            <p class="text-lg font-bold text-gray-800 mt-1">{{$customer->point}}</p>
                         </div>
                         <button class="bg-amber-500 text-white px-3 py-1.5 text-xs rounded-lg hover:bg-amber-600 transition-all shadow-sm">
                             Tukar
                         </button>
-                    </div>
+                    </div>  
 
                     <!-- Notification Card -->
                     <div class="bg-white border border-gray-200 rounded-xl p-4 flex items-center justify-between shadow-sm">
                         <div>
-                            <p class="text-xs text-gray-600 font-medium">Notifikasi</p>
-                            <p class="text-lg font-semibold text-gray-800 mt-1">3 Pesan Baru</p>
+                            <p class="text-xs text-gray-600 font-medium">Order</p>
+                            <p class="text-lg font-semibold text-gray-800 mt-1">Tidak ada order</p>
                         </div>
-                        <button class="relative">
-                            <div class="relative">
-                                <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0"></path>
-                                </svg>
-                                <span class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">3</span>
-                            </div>
-                        </button>
                     </div>
                 </div>
             </div>
