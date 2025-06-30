@@ -22,7 +22,7 @@
                     <span
                         class="absolute bottom-0 left-0 w-0 h-0.5 bg-green-600 transition-all duration-300 group-hover:w-full"></span>
                 </a>
-                <a href="/orders"
+                <a href="/customer/orders"
                     class="text-gray-700 hover:text-green-600 font-medium transition duration-300 relative group">
                     Orders
                     <span
