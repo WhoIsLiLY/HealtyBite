@@ -1,4 +1,4 @@
-<nav class="sticky z-50 py-6 px-6 md:px-12 flex justify-between items-center bg-gradient-to-br from-white to-green-50">
+<nav class="sticky z-50 py-6 px-6 md:px-12 flex justify-between items-center bg-gradient-to-br from-white to-green-200">
     <!-- Logo/Brand -->
     <div class="flex-shrink-0 flex items-center">
         <a href="/" class="flex items-center space-x-2">
