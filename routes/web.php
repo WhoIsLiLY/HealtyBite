@@ -65,6 +65,7 @@ Route::prefix('restaurant')->middleware('auth-admin')->group(function () {
     Route::delete('/menu/{id}', [RestaurantController::class, 'menuDelete'])->name('restaurant.menus.delete');
     Route::get('/review', [RestaurantController::class, 'getReview'])->name('restaurant.reviews');
     Route::get('/revenue', [RestaurantController::class, 'DailyRevenue'])->name('restaurant.revenue');
+    Route::get('/report', [RestaurantController::class, 'showReportPage'])->name('restaurant.report');
     Route::get('/{id}/edit', [RestaurantController::class, 'showEditForm'])->name('restaurant.edit');
     Route::put('/{id}', [RestaurantController::class, 'updateRestaurant'])->name('restaurant.update');
     Route::delete('/{id}', [RestaurantController::class, 'destroy'])->name('restaurant.delete');

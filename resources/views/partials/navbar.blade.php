@@ -70,6 +70,12 @@
                     <span
                         class="absolute bottom-0 left-0 w-0 h-0.5 bg-green-600 transition-all duration-300 group-hover:w-full"></span>
                 </a>
+                <a href="/restaurant/report"
+                    class="text-gray-700 hover:text-green-600 font-medium transition duration-300 relative group">
+                    Reports
+                    <span
+                        class="absolute bottom-0 left-0 w-0 h-0.5 bg-green-600 transition-all duration-300 group-hover:w-full"></span>
+                </a>
                 <!-- User Dropdown -->
                 <div class="relative ml-4">
                     <button id="user-menu-button" class="flex items-center space-x-2 focus:outline-none">

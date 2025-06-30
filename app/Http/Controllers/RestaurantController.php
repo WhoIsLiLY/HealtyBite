@@ -483,6 +483,71 @@ class RestaurantController extends Controller
         return view('restaurant.edit', compact('restaurant'));
     }
 
+    public function showReportPage()
+    {
+        $restaurantId = Auth::guard('admin')->id();
+
+        // 1. Total Omzet (dari pesanan yang sudah selesai)
+        $totalOmzet = Order::where('restaurants_id', $restaurantId)
+                           ->where('status', 'completed')
+                           ->sum('total_price');
+
+        // 2. Transaksi Terbanyak (jumlah pesanan yang selesai)
+        $totalTransaksi = Order::where('restaurants_id', $restaurantId)
+                               ->where('status', 'completed')
+                               ->count();
+
+        // 3. Member Teraktif (berdasarkan jumlah order)
+        $memberTeraktif = Order::where('restaurants_id', $restaurantId)
+            ->select('customers_id', DB::raw('count(id) as total_orders'))
+            ->groupBy('customers_id')
+            ->orderBy('total_orders', 'desc')
+            ->with('customer') // Eager load data customer
+            ->take(5) // Ambil 5 teratas
+            ->get();
+
+        // 4. Member Terbanyak Membeli (berdasarkan total belanja)
+        $memberTopSpender = Order::where('restaurants_id', $restaurantId)
+            ->where('status', 'completed')
+            ->select('customers_id', DB::raw('sum(total_price) as total_spent'))
+            ->groupBy('customers_id')
+            ->orderBy('total_spent', 'desc')
+            ->with('customer')
+            ->take(5) // Ambil 5 teratas
+            ->get();
+
+        // 5. Produk Terlaris
+        $produkTerlaris = Menu::where('restaurants_id', $restaurantId)
+            ->withCount(['listOrders as sales_count' => function ($query) {
+                $query->whereHas('order', function($q){
+                    $q->where('status', 'completed');
+                });
+            }])
+            ->orderBy('sales_count', 'desc')
+            ->take(5)
+            ->get();
+
+        // 6. Produk yang Perlu Diendorse (Paling sedikit terjual)
+        $produkPerluEndorse = Menu::where('restaurants_id', $restaurantId)
+            ->withCount(['listOrders as sales_count' => function ($query) {
+                $query->whereHas('order', function($q){
+                    $q->where('status', 'completed');
+                });
+            }])
+            ->orderBy('sales_count', 'asc')
+            ->take(5)
+            ->get();
+
+        return view('restaurant.report', compact(
+            'totalOmzet',
+            'totalTransaksi',
+            'memberTeraktif',
+            'memberTopSpender',
+            'produkTerlaris',
+            'produkPerluEndorse'
+        ));
+    }
+
     public function updateRestaurant(Request $request, $id)
     {
         $restaurant = Restaurant::findOrFail($id);

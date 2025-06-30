@@ -19,7 +19,7 @@ class ListOrder extends Model
 
     public function order()
     {
-        return $this->belongsTo(Order::class);
+        return $this->belongsTo(Order::class, 'orders_id');
     }
 
     public function menu()
