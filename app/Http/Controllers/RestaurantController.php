@@ -61,7 +61,7 @@ class RestaurantController extends Controller
         return view('restaurant.dashboard', compact('restaurant', 'dailyRevenue', 'menus', 'orders'));
     }
 
-    public function orders()
+    public function orders(Request $request)
     {
         // $orders = Auth::guard('admin')->user()->orders;
         // return view('restaurant.orders.index', compact('orders'));
@@ -80,7 +80,25 @@ class RestaurantController extends Controller
             ->get()
             ->groupBy('status');
 
-        return view('restaurant.orders.index', compact('orders'));
+        $perPage = $request->per_page ?? 10;
+
+        $query = Order::with(['customer', 'listOrders.menu'])
+            ->where('restaurants_id', Auth::guard('admin')->id())
+            ->latest(); 
+
+        if ($request->has('search')) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('id', 'like', "%{$search}%")
+                ->orWhereHas('customer', function($q) use ($search) {
+                    $q->where('name', 'like', "%{$search}%");
+                });
+            });
+        }
+
+        $allOrders = $query->paginate($perPage);
+        
+        return view('restaurant.orders.index', compact('allOrders','orders'));
     }
 
     public function topOrders()
