@@ -181,8 +181,8 @@
                     <div
                         class="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition duration-300 transform hover:-translate-y-2">
                         <div class="w-14 h-14 bg-purple-100 rounded-xl flex items-center justify-center mb-6">
-                            <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor"
-                                viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                xmlns="http://www.w3.org/2000/svg">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z">
                                 </path>
@@ -207,30 +207,36 @@
 
                 <div class="relative">
                     <div class="flex overflow-x-auto pb-8 scrollbar-hide space-x-6 px-2">
-                        @foreach ($menus as $menu)
+                        @forelse ($menus as $menu)
                             <div
                                 class="flex-shrink-0 w-72 bg-white rounded-2xl shadow-lg overflow-hidden transform hover:scale-105 transition duration-300">
                                 <div class="relative h-48 overflow-hidden">
-                                    <img src="/storage/menus/avocado-chiken-salad.png" alt=" $menu['title'] }}"
-                                        class="w-full h-full object-cover">
+                                    <img src="{{ asset('storage/assets/img/menus/' . $menu->menu_image) }}"
+                                        alt="{{ $menu->name }}" class="w-full h-full object-cover">
+                                    class="w-full h-full object-cover">
                                     <div
                                         class="absolute top-4 right-4 bg-green-500 text-white text-xs font-bold px-2 py-1 rounded-full">
                                         BESTSELLER</div>
                                 </div>
                                 <div class="p-6">
-                                    <h3 class="font-bold text-lg text-gray-800 mb-1"> $menu['title'] }}</h3>
-                                    <p class="text-gray-600 text-sm mb-4"> $menu['desc'] }}</p>
+                                    <h3 class="font-bold text-lg text-gray-800 mb-1">{{ $menu->name }}</h3>
+                                    <p class="text-gray-600 text-sm mb-4">Calories: {{ $menu->calorie }}</p>
+                                    <p class="text-gray-600 text-sm mb-4">Nutrition Facts: {{ $menu->nutrition_facts }}</p>
                                     <div class="flex justify-between items-center">
-                                        <span class="font-bold text-green-600">Rp number_format($menu['price'], 0, ',',
-                                            '.') }}</span>
-                                        <button
-                                            class="text-white bg-green-500 hover:bg-green-600 px-4 py-2 rounded-full text-sm font-medium transition">
-                                            + Tambah
-                                        </button>
+                                        <span class="font-bold text-green-600">Rp
+                                            {{number_format($menu->price, 0, ',', '.') }}</span>
+                                        <!-- <button
+                                                    class="text-white bg-green-500 hover:bg-green-600 px-4 py-2 rounded-full text-sm font-medium transition">
+                                                    + Tambah
+                                                </button> -->
                                     </div>
                                 </div>
                             </div>
-                        @endforeach
+                        @empty
+                            <div class="w-full text-center text-gray-500 py-8">
+                                <p>Belum ada menu populer untuk ditampilkan saat ini.</p>
+                            </div>
+                        @endforelse
                     </div>
                 </div>
             </div>
@@ -374,8 +380,8 @@
                                     d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
                                 </path>
                             </svg>
-                            <svg class="w-5 h-5 text-yellow-400" fill="none" stroke="currentColor"
-                                viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <svg class="w-5 h-5 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                xmlns="http://www.w3.org/2000/svg">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z">
                                 </path>
@@ -488,15 +494,16 @@
                         <h3 class="text-white text-lg font-bold mb-4">Kontak</h3>
                         <ul class="space-y-2">
                             <li class="flex items-start">
-                                <svg class="w-5 h-5 mr-2 mt-0.5" fill="none" stroke="currentColor"
-                                    viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <svg class="w-5 h-5 mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                    xmlns="http://www.w3.org/2000/svg">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z">
                                     </path>
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
                                 </svg>
-                                <span>Jl. Jl. Raya Kalirungkut, Kali Rungkut, Kec. Rungkut, Surabaya, Jawa Timur 60293</span>
+                                <span>Jl. Jl. Raya Kalirungkut, Kali Rungkut, Kec. Rungkut, Surabaya, Jawa Timur
+                                    60293</span>
                             </li>
                             <li class="flex items-center">
                                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"
@@ -585,116 +592,119 @@
             scrollbar-width: none;
         }
     </style>
-    <div id="overlay" class="fixed inset-0 bg-black bg-opacity-30 backdrop-blur-sm z-[9999] hidden overlay transition-opacity duration-300"></div>
+    <div id="overlay"
+        class="fixed inset-0 bg-black bg-opacity-30 backdrop-blur-sm z-[9999] hidden overlay transition-opacity duration-300">
+    </div>
 
-<div id="loginUI"
-    class="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-[10000] hidden
-    w-full max-w-md bg-white rounded-xl shadow-2xl overflow-hidden p-0">
-    
-    <!-- Close Button -->
-    <button id="closeLoginModal"
-        class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors duration-200
-        rounded-full p-1 bg-gray-100 hover:bg-gray-200">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-        </svg>
-    </button>
+    <div id="loginUI" class="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-[10000] hidden
+        w-full max-w-md bg-white rounded-xl shadow-2xl overflow-hidden p-0">
 
-    <!-- Login Content -->
-    <div class="flex flex-col w-full">
-        <!-- Header with gradient -->
-        <div class="bg-gradient-to-r from-green-500 to-blue-500 py-6 px-8 text-center">
-            <img class="mx-auto h-16 w-auto" src="/assets/img/logo.png" alt="HealthyBite">
-            <h1 class="mt-4 text-2xl font-bold text-white">Welcome Back!</h1>
-            <p class="mt-1 text-white/90">Sign in to continue your healthy journey</p>
-        </div>
+        <!-- Close Button -->
+        <button id="closeLoginModal" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors duration-200
+            rounded-full p-1 bg-gray-100 hover:bg-gray-200">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+        </button>
 
-        <!-- Form Container -->
-        <div class="px-8 py-8">
-            <form id="customerLoginForm" class="space-y-6" action="#" method="POST">
-                @csrf
+        <!-- Login Content -->
+        <div class="flex flex-col w-full">
+            <!-- Header with gradient -->
+            <div class="bg-gradient-to-r from-green-500 to-blue-500 py-6 px-8 text-center">
+                <img class="mx-auto h-16 w-auto" src="/assets/img/logo.png" alt="HealthyBite">
+                <h1 class="mt-4 text-2xl font-bold text-white">Welcome Back!</h1>
+                <p class="mt-1 text-white/90">Sign in to continue your healthy journey</p>
+            </div>
 
-                <!-- Email Input -->
-                <div>
-                    <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email address</label>
-                    <div class="relative">
-                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
-                                <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
-                            </svg>
+            <!-- Form Container -->
+            <div class="px-8 py-8">
+                <form id="customerLoginForm" class="space-y-6" action="#" method="POST">
+                    @csrf
+
+                    <!-- Email Input -->
+                    <div>
+                        <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email address</label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
+                                    fill="currentColor">
+                                    <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
+                                    <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
+                                </svg>
+                            </div>
+                            <input type="email" id="email" name="email" autocomplete="email" class="block w-full pl-10 pr-3 py-3 bg-white border border-gray-300 rounded-lg 
+                                focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500
+                                transition duration-200" placeholder="your@email.com" required>
                         </div>
-                        <input type="email" id="email" name="email" autocomplete="email"
-                            class="block w-full pl-10 pr-3 py-3 bg-white border border-gray-300 rounded-lg 
-                            focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500
-                            transition duration-200"
-                            placeholder="your@email.com" required>
                     </div>
-                </div>
 
-                <!-- Password Input -->
-                <div>
-                    <div class="flex items-center justify-between mb-1">
-                        <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
-                        <a href="#" class="text-sm font-medium text-green-600 hover:text-green-500 transition-colors">
-                            Forgot password?
+                    <!-- Password Input -->
+                    <div>
+                        <div class="flex items-center justify-between mb-1">
+                            <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+                            <a href="#" class="text-sm font-medium text-green-600 hover:text-green-500 transition-colors">
+                                Forgot password?
+                            </a>
+                        </div>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
+                                    fill="currentColor">
+                                    <path fill-rule="evenodd"
+                                        d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
+                                        clip-rule="evenodd" />
+                                </svg>
+                            </div>
+                            <input type="password" id="password" name="password" autocomplete="current-password" class="block w-full pl-10 pr-3 py-3 bg-white border border-gray-300 rounded-lg 
+                                focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500
+                                transition duration-200" placeholder="••••••••" required>
+                        </div>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div>
+                        <button type="submit" id="loginButton" class="w-full flex justify-center items-center py-3 px-4 border border-transparent rounded-lg
+                            shadow-sm text-white bg-gradient-to-r from-green-600 to-green-500
+                            hover:from-green-700 hover:to-green-600
+                            focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500
+                            transition-all duration-200 font-medium">
+                            <span class="mr-2">Sign in</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd"
+                                    d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z"
+                                    clip-rule="evenodd" />
+                            </svg>
+                        </button>
+                    </div>
+                </form>
+
+                <!-- Alternative Login -->
+                <div class="mt-6">
+                    <div class="relative">
+                        <div class="absolute inset-0 flex items-center">
+                            <div class="w-full border-t border-gray-300"></div>
+                        </div>
+                        <div class="relative flex justify-center text-sm">
+                            <span class="px-2 bg-white text-gray-500">Or login as</span>
+                        </div>
+                    </div>
+
+                    <div class="mt-4 text-center">
+                        <a href="/restaurant/login" class="inline-flex items-center text-green-600 hover:text-green-700 font-medium
+                            transition-colors duration-200">
+                            <span>Restaurant Partner</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-1" viewBox="0 0 20 20"
+                                fill="currentColor">
+                                <path fill-rule="evenodd"
+                                    d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z"
+                                    clip-rule="evenodd" />
+                            </svg>
                         </a>
                     </div>
-                    <div class="relative">
-                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd" />
-                            </svg>
-                        </div>
-                        <input type="password" id="password" name="password" autocomplete="current-password"
-                            class="block w-full pl-10 pr-3 py-3 bg-white border border-gray-300 rounded-lg 
-                            focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500
-                            transition duration-200"
-                            placeholder="••••••••" required>
-                    </div>
-                </div>
-
-                <!-- Submit Button -->
-                <div>
-                    <button type="submit" id="loginButton"
-                        class="w-full flex justify-center items-center py-3 px-4 border border-transparent rounded-lg
-                        shadow-sm text-white bg-gradient-to-r from-green-600 to-green-500
-                        hover:from-green-700 hover:to-green-600
-                        focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500
-                        transition-all duration-200 font-medium">
-                        <span class="mr-2">Sign in</span>
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                            <path fill-rule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
-                        </svg>
-                    </button>
-                </div>
-            </form>
-
-            <!-- Alternative Login -->
-            <div class="mt-6">
-                <div class="relative">
-                    <div class="absolute inset-0 flex items-center">
-                        <div class="w-full border-t border-gray-300"></div>
-                    </div>
-                    <div class="relative flex justify-center text-sm">
-                        <span class="px-2 bg-white text-gray-500">Or login as</span>
-                    </div>
-                </div>
-
-                <div class="mt-4 text-center">
-                    <a href="/restaurant/login" 
-                        class="inline-flex items-center text-green-600 hover:text-green-700 font-medium
-                        transition-colors duration-200">
-                        <span>Restaurant Partner</span>
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-1" viewBox="0 0 20 20" fill="currentColor">
-                            <path fill-rule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
-                        </svg>
-                    </a>
                 </div>
             </div>
         </div>
     </div>
-</div>
 @endsection
 
 @push('scripts')
@@ -703,29 +713,29 @@
             $('#overlay').fadeToggle();
             $('#loginUI').fadeToggle();
         }
-        $(document).ready(function() {
-            $('#openLoginModal').click(function() {
+        $(document).ready(function () {
+            $('#openLoginModal').click(function () {
                 toggleUI();
             });
-            $('#openLoginModal2').click(function() {
-                toggleUI();
-            });
-
-            $('#closeLoginModal').click(function() {
+            $('#openLoginModal2').click(function () {
                 toggleUI();
             });
 
-            $('#loginModal').click(function(e) {
+            $('#closeLoginModal').click(function () {
+                toggleUI();
+            });
+
+            $('#loginModal').click(function (e) {
                 if (e.target === this) {
                     $(this).fadeOut();
                 }
             });
-            $('#customerLoginForm').on('submit', function(e) {
+            $('#customerLoginForm').on('submit', function (e) {
                 e.preventDefault();
 
                 var formArray = $(this).serializeArray();
                 var formData = {};
-                formArray.forEach(function(item) {
+                formArray.forEach(function (item) {
                     formData[item.name] = item.value;
                 });
 
@@ -735,11 +745,11 @@
                 var originalText = $signInBtn.html();
 
                 $signInBtn.html(`
-                    <svg class="animate-spin h-5 w-5 mx-auto text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4l3-3-3-3v4a8 8 0 00-8 8h4z"></path>
-                    </svg>
-                `).attr('disabled', true);
+                        <svg class="animate-spin h-5 w-5 mx-auto text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4l3-3-3-3v4a8 8 0 00-8 8h4z"></path>
+                        </svg>
+                    `).attr('disabled', true);
 
                 $.ajax({
                     url: '/customer/login',
@@ -750,11 +760,11 @@
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
-                    success: function(response) {
+                    success: function (response) {
                         console.log(response);
                         window.location.href = response.redirect_url;
                     },
-                    error: function(jqXHR) {
+                    error: function (jqXHR) {
                         if (jqXHR.responseText) {
                             console.error(jqXHR.responseText);
                         }
@@ -768,8 +778,8 @@
 
                             if (!$('#errMessage').is(':Visible')) {
                                 $('form').prepend(errorMessageCss);
-                                setTimeout(function() {
-                                    $('#errMessage').fadeOut('slow', function() {
+                                setTimeout(function () {
+                                    $('#errMessage').fadeOut('slow', function () {
                                         $('#errMessage').remove();
                                         errorMessageCss = null;
                                     });
@@ -777,7 +787,7 @@
                             }
                         }
                     },
-                    complete: function() {
+                    complete: function () {
                         // Kembalikan tombol ke kondisi semula
                         $signInBtn.html(originalText).attr('disabled', false);
                     }

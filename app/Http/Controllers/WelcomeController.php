@@ -3,15 +3,22 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Menu;
 
 class WelcomeController extends Controller
 {
     function index(){
-        $menus = [
-            ['title' => 'Avocado Chicken Salad', 'desc' => 'Ayam panggang, alpukat, dan sayur organik.', 'img' => 'salad'],
-            ['title' => 'Berry Smoothie', 'desc' => 'Buah beri segar tanpa gula tambahan.', 'img' => 'smoothie'],
-            ['title' => 'Salmon Rice Bowl', 'desc' => 'Salmon panggang, nasi merah & sayuran kukus.', 'img' => 'bowl']
-        ];
+        $menus = Menu::query()
+            ->with('restaurant')
+            ->withCount(['listOrders as sales_count' => function ($query) {
+                $query->whereHas('order', function($q) {
+                    $q->where('status', 'completed');
+                });
+            }])
+            ->orderByDesc('sales_count')
+            ->take(4)
+            ->get();
+        
         return view('welcome', compact('menus'));
     }
 }
