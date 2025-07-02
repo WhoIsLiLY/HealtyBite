@@ -37,10 +37,10 @@
                             <p class="text-xs text-gray-600 font-medium">Poin</p>
                             <p class="text-lg font-bold text-gray-800 mt-1">{{ $customer->point }}</p>
                         </div>
-                        <button
+                        {{-- <button
                             class="bg-amber-500 text-white px-3 py-1.5 text-xs rounded-lg hover:bg-amber-600 transition-all shadow-sm">
                             Tukar
-                        </button>
+                        </button> --}}
                     </div>
 
                     <!-- Notification Card -->
@@ -94,7 +94,7 @@
         </div>
 
         <!-- Categories Section -->
-        <div class="flex overflow-x-auto pb-3 mb-6 scrollbar-hide">
+        {{-- <div class="flex overflow-x-auto pb-3 mb-6 scrollbar-hide">
             <div class="flex space-x-3">
                 @foreach (['Semua', 'Makanan', 'Minuman', 'Promo', 'Snack', 'Populer'] as $item)
                     <button
@@ -104,7 +104,7 @@
                     </button>
                 @endforeach
             </div>
-        </div>
+        </div> --}}
 
         <!-- Promo Banner -->
         <div class="mb-8">
