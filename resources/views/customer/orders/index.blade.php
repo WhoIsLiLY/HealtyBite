@@ -59,7 +59,7 @@
                                 </div>
 
                                 <button onclick="showOrderDetails('{{ $order->id }}')"
-                                    class="open-modal-btn px-4 py-2 bg-blue-600 hover:bg-gray-200 rounded-full text-sm font-medium transition text-white">
+                                    class="open-modal-btn px-4 py-2 bg-gradient-to-r from-green-500 to-blue-500 hover:bg-gray-200 rounded-full text-sm font-medium transition text-white">
                                     View Details
                                 </button>
                             </div>
