@@ -9,17 +9,13 @@
         data-initial-status="{{ $order->status }}"
         data-status-url="{{ route('order.status', $order->id) }}"
     >
-        {{-- Kita akan menggunakan Blade @include untuk merapikan kode --}}
-        
-        {{-- Tampilan A: Pesanan sedang diproses (preparing, delivering, ready) --}}
+
         @if(in_array($order->status, ['preparing', 'ready']))
             @include('customer.transaction.status_processing', ['order' => $order])
         
-        {{-- Tampilan B: Pesanan Selesai (completed) --}}
         @elseif($order->status == 'completed')
             @include('customer.transaction.status_completed', ['order' => $order])
 
-        {{-- Tampilan C: Pesanan Dibatalkan (cancelled) --}}
         @elseif($order->status == 'cancelled')
             @include('customer.transaction.status_cancelled', ['order' => $order])
         @endif
@@ -36,7 +32,6 @@ document.addEventListener('DOMContentLoaded', function () {
     const initialStatus = container.dataset.initialStatus;
     const statusUrl = container.dataset.statusUrl;
 
-    // Fungsi untuk memeriksa status ke server
     const checkOrderStatus = async () => {
         try {
             const response = await fetch(statusUrl);
@@ -47,11 +42,8 @@ document.addEventListener('DOMContentLoaded', function () {
             const data = await response.json();
             const newStatus = data.status;
 
-            // Jika status berubah dari status awal, muat ulang halaman
-            // Ini adalah cara paling sederhana dan andal untuk menampilkan UI yang benar-benar baru
             if (newStatus !== window.currentStatus) {
                 console.log(`Status changed from ${window.currentStatus} to ${newStatus}. Reloading page...`);
-                // Hentikan interval dan muat ulang halaman untuk mendapatkan view baru dari server
                 clearInterval(pollingInterval);
                 window.location.reload();
             }
@@ -60,14 +52,11 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     };
 
-    // Simpan status saat ini di scope global window agar bisa diakses di dalam interval
     window.currentStatus = initialStatus;
     let pollingInterval;
 
-    // Mulai polling HANYA jika status awal adalah 'processing'
-    if (['preparing', 'delivering', 'ready'].includes(initialStatus)) {
+    if (['preparing', 'ready'].includes(initialStatus)) {
         console.log('Starting real-time status check...');
-        // Periksa setiap 7 detik (7000 milidetik)
         pollingInterval = setInterval(checkOrderStatus, 7000);
     } else {
         console.log('Order is already completed or cancelled. No need for real-time checks.');

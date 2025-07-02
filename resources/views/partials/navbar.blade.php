@@ -11,7 +11,7 @@
                 class="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-green-600 to-blue-500">HealthyBite</span>
         </a>
     </div>
-    <!-- Desktop Navigation -->
+
     <div class="hidden md:flex items-center space-x-8">
         @if (auth('customer')->check() || auth('admin')->check())
             <!-- Authenticated Links -->
@@ -115,7 +115,6 @@
         @endif
     </div>
 
-    <!-- Mobile menu button -->
     <div class="md:hidden flex items-center">
         <button id="mobile-menu-button" class="text-gray-700 hover:text-green-600 focus:outline-none">
             <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">

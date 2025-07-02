@@ -10,13 +10,6 @@
             <p class="text-lg md:text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
                 Order nutritious meals from our partner restaurants that care about your health and wellbeing.
             </p>
-            <div class="relative max-w-md mx-auto">
-                <input type="text" placeholder="Search restaurants..." 
-                       class="w-full py-3 px-5 pr-12 rounded-full border border-gray-200 focus:outline-none focus:ring-2 focus:ring-green-400 shadow-sm">
-                <svg class="absolute right-4 top-3.5 h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                </svg>
-            </div>
         </div>
     </section>
 
@@ -82,12 +75,6 @@
                         </div>
                     </div>
                 @endforeach
-            </div>
-
-            <div class="mt-12 text-center">
-                <button class="px-6 py-3 bg-white border border-gray-200 rounded-full text-gray-700 font-medium hover:bg-gray-50 hover:shadow-sm transition">
-                    Load More Restaurants
-                </button>
             </div>
         </div>
     </section>
