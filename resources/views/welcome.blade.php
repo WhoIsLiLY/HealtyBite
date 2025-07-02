@@ -211,9 +211,9 @@
                             <div
                                 class="flex-shrink-0 w-72 bg-white rounded-2xl shadow-lg overflow-hidden transform hover:scale-105 transition duration-300">
                                 <div class="relative h-48 overflow-hidden">
-                                    <img src="{{ asset('storage/assets/img/menus/' . $menu->menu_image) }}"
+                                    <img src="/storage/assets/img/menus/{{ $menu->menu_image }}"
                                         alt="{{ $menu->name }}" class="w-full h-full object-cover">
-                                    class="w-full h-full object-cover">
+
                                     <div
                                         class="absolute top-4 right-4 bg-green-500 text-white text-xs font-bold px-2 py-1 rounded-full">
                                         BESTSELLER</div>
@@ -502,7 +502,7 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
                                 </svg>
-                                <span>Jl. Jl. Raya Kalirungkut, Kali Rungkut, Kec. Rungkut, Surabaya, Jawa Timur
+                                <span>Jl. Raya Kalirungkut, Kali Rungkut, Kec. Rungkut, Surabaya, Jawa Timur
                                     60293</span>
                             </li>
                             <li class="flex items-center">
